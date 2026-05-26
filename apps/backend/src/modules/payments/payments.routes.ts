@@ -36,4 +36,16 @@ paypalWebhookRouter.post(
   asyncHandler(paymentsController.paypalWebhook),
 );
 
+/**
+ * Paystack signs the raw request body with HMAC-SHA512. We need express.raw
+ * here so the verification HMAC matches byte-for-byte; json middleware would
+ * re-serialize and break the signature.
+ */
+export const paystackWebhookRouter: Router = Router();
+paystackWebhookRouter.post(
+  '/paystack',
+  express.raw({ type: 'application/json', limit: '2mb' }),
+  asyncHandler(paymentsController.paystackWebhook),
+);
+
 export default router;

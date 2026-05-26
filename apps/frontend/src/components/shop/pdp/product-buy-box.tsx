@@ -60,15 +60,15 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps): React.JSX.Elemen
     <div className="flex flex-col gap-5">
       <div>
         {product.brandName && (
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
             {product.brandName}
           </p>
         )}
-        <h1 className="mt-1 font-display text-2xl font-bold tracking-tight md:text-3xl">
+        <h1 className="font-display mt-1 text-2xl font-bold tracking-tight md:text-3xl">
           {product.name}
         </h1>
         {product.shortDescription && (
-          <p className="mt-2 text-muted-foreground">{product.shortDescription}</p>
+          <p className="text-muted-foreground mt-2">{product.shortDescription}</p>
         )}
       </div>
 
@@ -116,21 +116,22 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps): React.JSX.Elemen
         </Button>
       </div>
 
-      <div className="grid gap-3 rounded-lg border border-border bg-muted/40 p-4 text-sm">
+      <div className="border-border bg-muted/40 grid gap-3 rounded-lg border p-4 text-sm">
         <div className="flex items-start gap-3">
-          <Truck className="mt-0.5 size-4 text-primary" aria-hidden />
+          <Truck className="text-primary mt-0.5 size-4" aria-hidden />
           <div>
-            <p className="font-medium text-foreground">Free 2-day delivery</p>
-            <p className="text-xs text-muted-foreground">
-              Order in the next 4 hours for next-day delivery to most US zip codes.
+            <p className="text-foreground font-medium">Free delivery in Ghana</p>
+            <p className="text-muted-foreground text-xs">
+              In stock at our Accra store. We&apos;ll call after payment to arrange same-day
+              delivery in Greater Accra, 2–4 days nationwide.
             </p>
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <ShieldCheck className="mt-0.5 size-4 text-success" aria-hidden />
+          <ShieldCheck className="text-success mt-0.5 size-4" aria-hidden />
           <div>
-            <p className="font-medium text-foreground">2-year TwinSpire warranty</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-foreground font-medium">2-year TwinSpire warranty</p>
+            <p className="text-muted-foreground text-xs">
               Includes accidental damage protection on every order, free of charge.
             </p>
           </div>
@@ -140,7 +141,7 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps): React.JSX.Elemen
       <button
         type="button"
         onClick={handleShare}
-        className="inline-flex w-fit items-center gap-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+        className="text-muted-foreground hover:text-foreground inline-flex w-fit items-center gap-2 text-xs font-medium transition-colors"
       >
         <Share2 className="size-3.5" aria-hidden />
         Share this product

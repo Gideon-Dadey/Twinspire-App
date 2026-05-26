@@ -1,57 +1,104 @@
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Clock, Facebook, Instagram, MapPin, Phone, Twitter } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-import { NewsletterForm } from './newsletter-form';
+import { siteConfig } from '@/lib/site-config';
 
-import { footerNav, siteConfig } from '@/lib/site-config';
+/**
+ * Site footer
+ * -----------
+ * Five-column layout at `lg+`:
+ *   1. Brand        (col-span-2) — logo, mission, primary phone, hours, CTA, socials
+ *   2. Quick Links  — top-level navigation reference
+ *   3. Support      — customer-facing post-sale resources
+ *   4. Official Info — registered address + main line + opening note
+ *   5. Opening Hours — explicit weekday/Saturday breakdown
+ *
+ * The legal/copyright bar lives in its own bottom band so it survives any
+ * future column reshuffle without affecting the visual rhythm above.
+ */
 
-const groups: { title: string; items: ReadonlyArray<{ href: string; label: string }> }[] = [
-  { title: 'Shop', items: footerNav.shop },
-  { title: 'Customer service', items: footerNav.service },
-  { title: 'Company', items: footerNav.company },
-  { title: 'Legal', items: footerNav.legal },
-];
+const PRIMARY_PHONE = '+233 550645804';
+const PRIMARY_PHONE_HREF = 'tel:+233550645804';
+const ADDRESS_LINE_1 = '59 OSRAM AVE, GT-362-2834,';
+const ADDRESS_LINE_2 = 'Tema Metropolis, Greater Accra Region';
+
+const quickLinks = [
+  { href: '/about', label: 'Company' },
+  { href: '/help/faq', label: "How it's Work" },
+  { href: '/products', label: 'Service' },
+  { href: '/blog', label: 'Case Studies' },
+  { href: '/legal/privacy', label: 'Privacy Policy' },
+] as const;
+
+const supportLinks = [
+  { href: '/help/faq', label: 'Help Centre' },
+  { href: '/account/orders', label: 'Track Order' },
+  { href: '/help/returns', label: 'Returns & Refunds' },
+  { href: '/help/warranty', label: 'Warranty' },
+  { href: '/help/contact', label: 'Contact' },
+] as const;
+
+const openingHours = [
+  { label: 'Monday – Friday', value: '9:00 am – 10:00 pm' },
+  { label: 'Saturday', value: '9:00 am – 10:00 pm' },
+  { label: 'Sunday', value: 'Closed' },
+] as const;
 
 const socials = [
   { href: siteConfig.links.twitter, label: 'Twitter', icon: Twitter },
   { href: siteConfig.links.instagram, label: 'Instagram', icon: Instagram },
   { href: siteConfig.links.facebook, label: 'Facebook', icon: Facebook },
-];
+] as const;
+
+function ColumnHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="text-foreground text-xs font-semibold uppercase tracking-[0.14em]">
+      {children}
+    </h3>
+  );
+}
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-secondary text-secondary-foreground">
+    <footer className="border-border bg-background text-foreground border-t">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid gap-10 border-b border-secondary-foreground/10 pb-12 lg:grid-cols-[1fr,1.2fr] lg:items-center">
-          <div className="max-w-md">
-            <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-              Join the TwinSpire insider list.
-            </h2>
-            <p className="mt-2 text-sm text-secondary-foreground/70">
-              Early access to launches, sale alerts, and our editor's reviews — straight to your
-              inbox. No spam, ever.
-            </p>
-          </div>
-          <NewsletterForm />
-        </div>
-
-        <div className="grid gap-12 pt-12 md:grid-cols-2 lg:grid-cols-5">
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2" aria-label={siteConfig.name}>
-              <span
-                aria-hidden
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-base font-bold text-primary-foreground shadow-sm"
-              >
-                T
-              </span>
-              <span className="font-display text-lg font-semibold tracking-tight">
-                {siteConfig.name}
-              </span>
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-6">
+          {/* ── Brand column ─────────────────────────────────────────── */}
+          <div className="md:col-span-2 lg:col-span-2">
+            <Link href="/" className="inline-flex items-center" aria-label={siteConfig.name}>
+              <Image
+                src="/twinspire-logo.png"
+                alt={siteConfig.name}
+                width={1280}
+                height={426}
+                className="h-10 w-auto"
+                priority={false}
+              />
             </Link>
-            <p className="mt-4 max-w-xs text-sm text-secondary-foreground/70">
-              {siteConfig.description}
+
+            <p className="text-muted-foreground mt-5 max-w-[20rem] text-balance text-sm leading-relaxed">
+              We work with a passion of taking challenges
+              <br className="hidden sm:inline" /> and creating new ones in advertising sector.
             </p>
-            <ul className="mt-6 flex items-center gap-2">
+
+            <ul className="mt-6 space-y-3 text-sm">
+              <li className="flex items-start gap-3">
+                <Phone className="text-primary mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                <a
+                  href={PRIMARY_PHONE_HREF}
+                  className="text-foreground hover:text-primary font-medium transition-colors"
+                >
+                  {PRIMARY_PHONE}
+                </a>
+              </li>
+              <li className="text-muted-foreground flex items-start gap-3">
+                <Clock className="text-primary mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                <span>Mon – Sun: 9:00 am – 10:00 pm</span>
+              </li>
+            </ul>
+
+            <ul className="mt-7 flex items-center gap-2">
               {socials.map(({ href, label, icon: Icon }) => (
                 <li key={label}>
                   <a
@@ -59,7 +106,7 @@ export function SiteFooter() {
                     rel="noopener noreferrer"
                     target="_blank"
                     aria-label={label}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-secondary-foreground/15 text-secondary-foreground/70 transition-colors hover:border-secondary-foreground/40 hover:text-secondary-foreground"
+                    className="border-border text-muted-foreground hover:border-primary/40 hover:text-primary inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors"
                   >
                     <Icon className="h-4 w-4" aria-hidden />
                   </a>
@@ -68,43 +115,117 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {groups.map((group) => (
-            <div key={group.title}>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-secondary-foreground/60">
-                {group.title}
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {group.items.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-secondary-foreground/80 transition-colors hover:text-secondary-foreground"
+          {/* ── Quick Links ─────────────────────────────────────────── */}
+          <nav aria-labelledby="footer-quick-links">
+            <ColumnHeading>
+              <span id="footer-quick-links">Quick Links</span>
+            </ColumnHeading>
+            <ul className="mt-5 space-y-3">
+              {quickLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* ── Support ────────────────────────────────────────────── */}
+          <nav aria-labelledby="footer-support">
+            <ColumnHeading>
+              <span id="footer-support">Support</span>
+            </ColumnHeading>
+            <ul className="mt-5 space-y-3">
+              {supportLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* ── Official Info ──────────────────────────────────────── */}
+          <div>
+            <ColumnHeading>Official Info</ColumnHeading>
+            <address className="mt-5 space-y-3 text-sm not-italic">
+              <div className="text-muted-foreground flex items-start gap-3">
+                <MapPin className="text-primary mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                <span>
+                  {ADDRESS_LINE_1}
+                  <br />
+                  {ADDRESS_LINE_2}
+                </span>
+              </div>
+              <div className="flex items-start gap-3">
+                <Phone className="text-primary mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                <a
+                  href={PRIMARY_PHONE_HREF}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {PRIMARY_PHONE}
+                </a>
+              </div>
+            </address>
+          </div>
+
+          {/* ── Opening Hours ───────────────────────────────────────── */}
+          <div>
+            <ColumnHeading>Opening Hours</ColumnHeading>
+            <dl className="mt-5 space-y-4 text-sm">
+              {openingHours.map((row) => {
+                const closed = row.value.toLowerCase() === 'closed';
+                return (
+                  <div key={row.label} className="space-y-0.5">
+                    <dt className="text-foreground font-medium">{row.label}</dt>
+                    <dd
+                      className={
+                        closed ? 'text-muted-foreground/80 italic' : 'text-muted-foreground'
+                      }
                     >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                      {row.value}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
         </div>
       </div>
 
-      <div className="border-t border-secondary-foreground/10">
-        <div className="container mx-auto flex flex-col gap-2 px-4 py-6 text-xs text-secondary-foreground/60 sm:flex-row sm:items-center sm:justify-between">
+      {/* ── Legal bar ─────────────────────────────────────────────── */}
+      <div className="border-border bg-muted/30 border-t">
+        <div className="text-muted-foreground container mx-auto flex flex-col gap-2 px-4 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <p>
-            <Link href="/legal/privacy" className="underline-offset-2 hover:underline">
+          <p className="flex items-center gap-2">
+            <Link
+              href="/legal/privacy"
+              className="hover:text-foreground underline-offset-2 hover:underline"
+            >
               Privacy
-            </Link>{' '}
-            ·{' '}
-            <Link href="/legal/terms" className="underline-offset-2 hover:underline">
+            </Link>
+            <span aria-hidden>·</span>
+            <Link
+              href="/legal/terms"
+              className="hover:text-foreground underline-offset-2 hover:underline"
+            >
               Terms
-            </Link>{' '}
-            ·{' '}
-            <Link href="/legal/accessibility" className="underline-offset-2 hover:underline">
+            </Link>
+            <span aria-hidden>·</span>
+            <Link
+              href="/legal/accessibility"
+              className="hover:text-foreground underline-offset-2 hover:underline"
+            >
               Accessibility
             </Link>
           </p>

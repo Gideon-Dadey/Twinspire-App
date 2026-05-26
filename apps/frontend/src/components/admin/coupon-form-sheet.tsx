@@ -34,9 +34,23 @@ const couponSchema = z.object({
   type: z.enum(['percentage', 'fixed', 'free_shipping', 'bogo']),
   value: z.coerce.number().min(0),
   currency: z.string().length(3).optional().or(z.literal('')),
-  minSubtotal: z.coerce.number().min(0).optional().or(z.literal('').transform(() => undefined)),
-  usageLimit: z.coerce.number().int().min(1).optional().or(z.literal('').transform(() => undefined)),
-  usageLimitPerUser: z.coerce.number().int().min(1).optional().or(z.literal('').transform(() => undefined)),
+  minSubtotal: z.coerce
+    .number()
+    .min(0)
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
+  usageLimit: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
+  usageLimitPerUser: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
   startsAt: z.string().optional().or(z.literal('')),
   expiresAt: z.string().optional().or(z.literal('')),
   isActive: z.boolean(),
@@ -57,7 +71,11 @@ export interface CouponFormSheetProps {
 const TYPE_OPTIONS: Array<{ value: Coupon['type']; label: string; help: string }> = [
   { value: 'percentage', label: 'Percentage off', help: 'Value is % (1-100).' },
   { value: 'fixed', label: 'Fixed amount off', help: 'Value is in the chosen currency.' },
-  { value: 'free_shipping', label: 'Free shipping', help: 'Value is ignored.' },
+  {
+    value: 'free_shipping',
+    label: 'Free delivery (legacy)',
+    help: 'Delivery is always free in Ghana — this type is kept for back-compat only.',
+  },
   { value: 'bogo', label: 'Buy one, get one', help: 'Value applies to discounted item.' },
 ];
 
@@ -66,7 +84,13 @@ function toDateInput(iso?: string): string {
   return iso.slice(0, 10);
 }
 
-export function CouponFormSheet({ open, onOpenChange, coupon, submitting, onSubmit }: CouponFormSheetProps) {
+export function CouponFormSheet({
+  open,
+  onOpenChange,
+  coupon,
+  submitting,
+  onSubmit,
+}: CouponFormSheetProps) {
   const form = useForm<CouponFormValues>({
     resolver: zodResolver(couponSchema),
     defaultValues: {
@@ -74,7 +98,7 @@ export function CouponFormSheet({ open, onOpenChange, coupon, submitting, onSubm
       description: '',
       type: 'percentage',
       value: 10,
-      currency: 'USD',
+      currency: 'GHS',
       minSubtotal: undefined,
       usageLimit: undefined,
       usageLimitPerUser: undefined,
@@ -93,7 +117,7 @@ export function CouponFormSheet({ open, onOpenChange, coupon, submitting, onSubm
       description: coupon?.description ?? '',
       type: coupon?.type ?? 'percentage',
       value: coupon?.value ?? 10,
-      currency: coupon?.currency ?? 'USD',
+      currency: coupon?.currency ?? 'GHS',
       minSubtotal: coupon?.minSubtotal?.amount,
       usageLimit: coupon?.usageLimit,
       usageLimitPerUser: coupon?.usageLimitPerUser,
@@ -135,12 +159,20 @@ export function CouponFormSheet({ open, onOpenChange, coupon, submitting, onSubm
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormField id="type" label="Type" description={TYPE_OPTIONS.find((t) => t.value === field.value)?.help}>
+                <FormField
+                  id="type"
+                  label="Type"
+                  description={TYPE_OPTIONS.find((t) => t.value === field.value)?.help}
+                >
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
                       {TYPE_OPTIONS.map((o) => (
-                        <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                        <SelectItem key={o.value} value={o.value}>
+                          {o.label}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -150,17 +182,34 @@ export function CouponFormSheet({ open, onOpenChange, coupon, submitting, onSubm
           </div>
 
           <FormField id="description" label="Description">
-            <Textarea rows={2} placeholder="What is this coupon for?" {...form.register('description')} />
+            <Textarea
+              rows={2}
+              placeholder="What is this coupon for?"
+              {...form.register('description')}
+            />
           </FormField>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <FormField id="value" label="Value" required error={form.formState.errors.value?.message}>
+            <FormField
+              id="value"
+              label="Value"
+              required
+              error={form.formState.errors.value?.message}
+            >
               <Input type="number" min={0} step="0.01" {...form.register('value')} />
             </FormField>
             <FormField id="currency" label="Currency" description="3 letter ISO code">
-              <Input maxLength={3} disabled={watchType === 'free_shipping' || watchType === 'percentage'} {...form.register('currency')} />
+              <Input
+                maxLength={3}
+                disabled={watchType === 'free_shipping' || watchType === 'percentage'}
+                {...form.register('currency')}
+              />
             </FormField>
-            <FormField id="minSubtotal" label="Min subtotal" description="Applies to total before discounts">
+            <FormField
+              id="minSubtotal"
+              label="Min subtotal"
+              description="Applies to total before discounts"
+            >
               <Input type="number" min={0} step="0.01" {...form.register('minSubtotal')} />
             </FormField>
           </div>
@@ -183,7 +232,7 @@ export function CouponFormSheet({ open, onOpenChange, coupon, submitting, onSubm
             </FormField>
           </div>
 
-          <div className="grid gap-3 rounded-lg border border-border bg-card/60 p-3">
+          <div className="border-border bg-card/60 grid gap-3 rounded-lg border p-3">
             {[
               { key: 'isActive', label: 'Active' },
               { key: 'stackable', label: 'Stackable with other coupons' },

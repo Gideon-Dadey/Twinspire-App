@@ -49,7 +49,12 @@ export function CouponsPageContent() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'active' | 'inactive'>('all');
 
   const isActiveValue = activeFilter === 'all' ? undefined : activeFilter === 'active';
-  const { data, isLoading } = useAdminCoupons({ page, perPage: PER_PAGE, q: q || undefined, isActive: isActiveValue });
+  const { data, isLoading } = useAdminCoupons({
+    page,
+    perPage: PER_PAGE,
+    q: q || undefined,
+    isActive: isActiveValue,
+  });
 
   const createMutation = useCreateAdminCoupon();
   const [editing, setEditing] = useState<Coupon | null>(null);
@@ -68,18 +73,22 @@ export function CouponsPageContent() {
   }
 
   async function handleSubmit(values: CouponFormValues) {
-    const currency = (values.currency ? values.currency.toUpperCase() : undefined) as CurrencyCode | undefined;
+    const currency = (values.currency ? values.currency.toUpperCase() : undefined) as
+      | CurrencyCode
+      | undefined;
     const payload = {
       code: values.code,
       description: values.description || undefined,
       type: values.type,
       value: values.value,
       currency,
-      minSubtotal: typeof values.minSubtotal === 'number'
-        ? { amount: values.minSubtotal, currency: (currency ?? 'USD') as CurrencyCode }
-        : undefined,
+      minSubtotal:
+        typeof values.minSubtotal === 'number'
+          ? { amount: values.minSubtotal, currency: (currency ?? 'GHS') as CurrencyCode }
+          : undefined,
       usageLimit: typeof values.usageLimit === 'number' ? values.usageLimit : undefined,
-      usageLimitPerUser: typeof values.usageLimitPerUser === 'number' ? values.usageLimitPerUser : undefined,
+      usageLimitPerUser:
+        typeof values.usageLimitPerUser === 'number' ? values.usageLimitPerUser : undefined,
       startsAt: values.startsAt ? new Date(values.startsAt).toISOString() : undefined,
       expiresAt: values.expiresAt ? new Date(values.expiresAt).toISOString() : null,
       isActive: values.isActive,
@@ -96,9 +105,12 @@ export function CouponsPageContent() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4 sm:flex-row sm:items-end">
+      <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-end">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+          <Search
+            className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2"
+            aria-hidden
+          />
           <Input
             aria-label="Search coupons"
             value={q}
@@ -141,9 +153,9 @@ export function CouponsPageContent() {
             header: 'Code',
             cell: (c) => (
               <div className="min-w-0">
-                <p className="font-mono text-sm font-semibold text-foreground">{c.code}</p>
+                <p className="text-foreground font-mono text-sm font-semibold">{c.code}</p>
                 {c.description ? (
-                  <p className="truncate text-xs text-muted-foreground">{c.description}</p>
+                  <p className="text-muted-foreground truncate text-xs">{c.description}</p>
                 ) : null}
               </div>
             ),
@@ -158,12 +170,15 @@ export function CouponsPageContent() {
             header: 'Usage',
             cell: (c) => (
               <div className="min-w-[120px]">
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {c.usedCount.toLocaleString()}
                   {c.usageLimit ? ` / ${c.usageLimit.toLocaleString()}` : ''}
                 </p>
                 {c.usageLimit ? (
-                  <Progress value={Math.min(100, (c.usedCount / c.usageLimit) * 100)} className="mt-1 h-1.5" />
+                  <Progress
+                    value={Math.min(100, (c.usedCount / c.usageLimit) * 100)}
+                    className="mt-1 h-1.5"
+                  />
                 ) : null}
               </div>
             ),
@@ -183,7 +198,10 @@ export function CouponsPageContent() {
             cell: (c) => (
               <div className="flex flex-wrap gap-1">
                 {c.isActive ? (
-                  <Badge variant="outline" className="border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
+                  <Badge
+                    variant="outline"
+                    className="border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                  >
                     Active
                   </Badge>
                 ) : (
@@ -200,7 +218,12 @@ export function CouponsPageContent() {
             align: 'right',
             cell: (c) => (
               <div className="flex justify-end gap-1">
-                <Button variant="ghost" size="sm" onClick={() => openEdit(c)} aria-label={`Edit ${c.code}`}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => openEdit(c)}
+                  aria-label={`Edit ${c.code}`}
+                >
                   <Pencil className="size-4" aria-hidden />
                 </Button>
                 <AlertDialog>
@@ -219,7 +242,8 @@ export function CouponsPageContent() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Delete coupon {c.code}?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Past redemptions will be preserved, but new orders won&apos;t be able to use this code.
+                        Past redemptions will be preserved, but new orders won&apos;t be able to use
+                        this code.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -264,11 +288,14 @@ function formatType(coupon: Coupon) {
     case 'fixed':
       return (
         <span className="text-foreground">
-          <Money value={{ amount: coupon.value, currency: (coupon.currency ?? 'USD') as CurrencyCode }} /> off
+          <Money
+            value={{ amount: coupon.value, currency: (coupon.currency ?? 'GHS') as CurrencyCode }}
+          />{' '}
+          off
         </span>
       );
     case 'free_shipping':
-      return <span className="text-foreground">Free shipping</span>;
+      return <span className="text-foreground">Free delivery</span>;
     case 'bogo':
       return <span className="text-foreground">Buy 1, get 1 ({coupon.value}% off)</span>;
     default:

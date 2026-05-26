@@ -45,8 +45,8 @@ export const DEMO_USER: MockUserRecord = {
   twoFactorEnabled: false,
   lastLoginAt: new Date().toISOString(),
   preferences: {
-    locale: 'en-US',
-    currency: 'USD',
+    locale: 'en-GH',
+    currency: 'GHS',
     theme: 'system',
     marketingOptIn: true,
     newsletter: true,
@@ -66,15 +66,15 @@ export const DEMO_ADDRESSES: Address[] = [
     kind: 'both',
     firstName: 'Demo',
     lastName: 'Buyer',
-    phone: '+1 555 010 1234',
+    phone: '+233 24 555 0123',
     email: 'demo@twinspire.dev',
-    line1: '1421 Lakeshore Blvd',
-    line2: 'Apt 4B',
-    city: 'Portland',
-    state: 'OR',
-    postalCode: '97214',
-    country: 'United States',
-    countryCode: 'US',
+    line1: '12 Independence Ave',
+    line2: 'Flat 4B',
+    city: 'Accra',
+    state: 'Greater Accra',
+    postalCode: 'GA-184-8888',
+    country: 'Ghana',
+    countryCode: 'GH',
     isDefault: true,
     createdAt: new Date('2026-03-21T18:11:00Z').toISOString(),
     updatedAt: new Date('2026-03-21T18:11:00Z').toISOString(),
@@ -87,15 +87,15 @@ export const DEMO_ADDRESSES: Address[] = [
     kind: 'shipping',
     firstName: 'Demo',
     lastName: 'Buyer',
-    phone: '+1 555 010 1234',
+    phone: '+233 24 555 0123',
     company: 'TwinSpire HQ',
-    line1: '800 Pike St',
+    line1: '24 Liberation Rd',
     line2: 'Suite 1100',
-    city: 'Seattle',
-    state: 'WA',
-    postalCode: '98101',
-    country: 'United States',
-    countryCode: 'US',
+    city: 'Kumasi',
+    state: 'Ashanti',
+    postalCode: 'AK-039-5028',
+    country: 'Ghana',
+    countryCode: 'GH',
     isDefault: false,
     createdAt: new Date('2026-04-04T09:42:00Z').toISOString(),
     updatedAt: new Date('2026-04-04T09:42:00Z').toISOString(),
@@ -104,7 +104,7 @@ export const DEMO_ADDRESSES: Address[] = [
 ];
 
 function money(amount: number): Money {
-  return { amount, currency: 'USD' };
+  return { amount, currency: 'GHS' };
 }
 
 function buildDemoOrders(): Order[] {
@@ -148,16 +148,24 @@ function buildDemoOrders(): Order[] {
       },
     ],
     totals: {
+      // Discount + tax scaled to the GHS regime (USD figures multiplied by ~12).
+      // Shipping is permanently zero — TwinSpire is in-store + phone-coordinated
+      // local delivery, not carrier-driven shipping.
       subtotal: money(a.price.amount + b.price.amount * 2),
-      discount: money(20),
+      discount: money(240),
       shipping: money(0),
-      tax: money(28.4),
-      total: money(a.price.amount + b.price.amount * 2 - 20 + 28.4),
+      tax: money(341),
+      total: money(a.price.amount + b.price.amount * 2 - 240 + 341),
     },
-    currency: 'USD',
+    currency: 'GHS',
     shippingAddress: ship,
     billingAddress: ship,
-    shippingMethod: { id: 'std', name: 'Standard', carrier: 'UPS', trackingNumber: '1Z999AA10123456784' },
+    shippingMethod: {
+      id: 'local',
+      name: 'Accra metro delivery',
+      carrier: 'TwinSpire Logistics',
+      trackingNumber: 'TS-DEL-0042',
+    },
     paymentMethod: { id: 'pm-1', provider: 'stripe', last4: '4242' },
     couponCodes: ['WELCOME10'],
     timeline: [
@@ -198,14 +206,19 @@ function buildDemoOrders(): Order[] {
     totals: {
       subtotal: c.price,
       discount: money(0),
-      shipping: money(9.99),
-      tax: money(c.price.amount * 0.08),
-      total: money(c.price.amount + 9.99 + c.price.amount * 0.08),
+      shipping: money(0),
+      tax: money(c.price.amount * 0.125), // Ghana VAT 12.5%
+      total: money(c.price.amount + c.price.amount * 0.125),
     },
-    currency: 'USD',
+    currency: 'GHS',
     shippingAddress: ship,
     billingAddress: ship,
-    shippingMethod: { id: 'exp', name: 'Express', carrier: 'FedEx', trackingNumber: '7942 0123 4567' },
+    shippingMethod: {
+      id: 'local',
+      name: 'Accra metro delivery',
+      carrier: 'TwinSpire Logistics',
+      trackingNumber: 'TS-DEL-0058',
+    },
     paymentMethod: { id: 'pm-1', provider: 'stripe', last4: '4242' },
     couponCodes: [],
     timeline: [
@@ -245,10 +258,10 @@ function buildDemoOrders(): Order[] {
       subtotal: d.price,
       discount: money(0),
       shipping: money(0),
-      tax: money(d.price.amount * 0.08),
-      total: money(d.price.amount + d.price.amount * 0.08),
+      tax: money(d.price.amount * 0.125), // Ghana VAT 12.5%
+      total: money(d.price.amount + d.price.amount * 0.125),
     },
-    currency: 'USD',
+    currency: 'GHS',
     shippingAddress: ship,
     billingAddress: ship,
     paymentMethod: { id: 'pm-1', provider: 'stripe', last4: '4242' },

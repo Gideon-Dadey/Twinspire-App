@@ -14,12 +14,7 @@ export type OrderStatus =
   | 'on_hold'
   | 'failed';
 
-export type FulfillmentStatus =
-  | 'unfulfilled'
-  | 'partial'
-  | 'fulfilled'
-  | 'returned'
-  | 'restocked';
+export type FulfillmentStatus = 'unfulfilled' | 'partial' | 'fulfilled' | 'returned' | 'restocked';
 
 export type PaymentStatus =
   | 'pending'
@@ -73,7 +68,13 @@ export interface Order extends BaseEntity {
   shippingAddress: Address;
   billingAddress: Address;
   shippingMethod?: { id: ID; name: string; carrier?: string; trackingNumber?: string };
-  paymentMethod?: { id: ID; provider: 'stripe' | 'paypal' | 'cash' | 'transfer'; last4?: string };
+  paymentMethod?: {
+    id: ID;
+    provider: 'stripe' | 'paypal' | 'paystack' | 'cash' | 'transfer' | 'local';
+    last4?: string;
+    /** For paystack: which channel the customer used (`momo`/`card`/`bank`). */
+    paystackChannel?: 'momo' | 'card' | 'bank';
+  };
   couponCodes: string[];
   notes?: string;
   invoiceUrl?: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FormField, Input, RadioGroup, RadioGroupItem, Label } from '@twinspire/ui';
+import { Button, FormField, Input, Textarea } from '@twinspire/ui';
 import { useForm } from 'react-hook-form';
 
 import { shippingSchema, type ShippingFormValues } from './checkout-schemas';
@@ -11,18 +11,40 @@ export interface ShippingFormProps {
   onSubmit: (values: ShippingFormValues) => void | Promise<void>;
 }
 
-const SHIPPING_OPTIONS = [
-  { id: 'standard', label: 'Standard (2-3 business days)', price: 'Free over $99' },
-  { id: 'express', label: 'Express (next business day)', price: '$14.95' },
-  { id: 'overnight', label: 'Overnight (by 12pm tomorrow)', price: '$24.95' },
+/**
+ * Delivery details — collected so our team can call the customer after payment
+ * and arrange local delivery anywhere in Ghana. Intentionally has no shipping-
+ * rate picker (the Ghana operating model: in-store stock, phone-coordinated
+ * delivery, no carriers).
+ *
+ * The component is still named `ShippingForm` for source-compatibility with the
+ * checkout flow; all UI copy says "delivery".
+ */
+const GHANA_REGIONS = [
+  'Greater Accra',
+  'Ashanti',
+  'Western',
+  'Western North',
+  'Central',
+  'Eastern',
+  'Volta',
+  'Oti',
+  'Northern',
+  'Savannah',
+  'North East',
+  'Upper East',
+  'Upper West',
+  'Bono',
+  'Bono East',
+  'Ahafo',
 ] as const;
 
 export function ShippingForm({ defaultValues, onSubmit }: ShippingFormProps) {
   const form = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
     defaultValues: {
-      country: 'United States',
-      shippingMethod: 'standard',
+      country: 'Ghana',
+      state: 'Greater Accra',
       ...defaultValues,
     },
   });
@@ -30,17 +52,13 @@ export function ShippingForm({ defaultValues, onSubmit }: ShippingFormProps) {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = form;
-
-  const shippingMethod = watch('shippingMethod');
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
       <fieldset className="space-y-4">
-        <legend className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <legend className="text-muted-foreground text-sm font-semibold uppercase tracking-wide">
           Contact
         </legend>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -53,68 +71,83 @@ export function ShippingForm({ defaultValues, onSubmit }: ShippingFormProps) {
           <FormField id="email" label="Email" error={errors.email?.message}>
             <Input type="email" autoComplete="email" {...register('email')} />
           </FormField>
-          <FormField id="phone" label="Phone" error={errors.phone?.message}>
-            <Input type="tel" autoComplete="tel" {...register('phone')} />
+          <FormField
+            id="phone"
+            label="Phone (Ghana)"
+            description="We'll call this number to confirm your order and arrange delivery."
+            error={errors.phone?.message}
+          >
+            <Input
+              type="tel"
+              autoComplete="tel"
+              placeholder="+233 24 555 0123"
+              {...register('phone')}
+            />
           </FormField>
         </div>
       </fieldset>
 
       <fieldset className="space-y-4">
-        <legend className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Shipping address
+        <legend className="text-muted-foreground text-sm font-semibold uppercase tracking-wide">
+          Delivery address
         </legend>
-        <FormField id="line1" label="Street address" error={errors.line1?.message}>
+        <FormField
+          id="line1"
+          label="Street, GhanaPostGPS, or landmark"
+          description="Plot number and street, your GhanaPostGPS code, or a clear nearby landmark."
+          error={errors.line1?.message}
+        >
           <Input autoComplete="address-line1" {...register('line1')} />
         </FormField>
         <FormField
           id="line2"
-          label="Apartment, suite, etc. (optional)"
+          label="Apartment, suite, or directions (optional)"
           error={errors.line2?.message}
         >
-          <Input autoComplete="address-line2" {...register('line2')} />
+          <Textarea
+            rows={2}
+            placeholder="e.g. House on the right after the blue gate, ring the bell."
+            {...register('line2')}
+          />
         </FormField>
         <div className="grid gap-4 sm:grid-cols-3">
-          <FormField id="city" label="City" error={errors.city?.message}>
+          <FormField id="city" label="City / Town" error={errors.city?.message}>
             <Input autoComplete="address-level2" {...register('city')} />
           </FormField>
-          <FormField id="state" label="State / Region" error={errors.state?.message}>
-            <Input autoComplete="address-level1" {...register('state')} />
+          <FormField id="state" label="Region" error={errors.state?.message}>
+            <select
+              {...register('state')}
+              autoComplete="address-level1"
+              className="border-input bg-background focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2"
+            >
+              {GHANA_REGIONS.map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
+            </select>
           </FormField>
-          <FormField id="postalCode" label="Postal code" error={errors.postalCode?.message}>
-            <Input autoComplete="postal-code" {...register('postalCode')} />
+          <FormField
+            id="postalCode"
+            label="Digital address (optional)"
+            error={errors.postalCode?.message}
+          >
+            <Input
+              autoComplete="postal-code"
+              placeholder="GA-184-8888"
+              {...register('postalCode')}
+            />
           </FormField>
         </div>
-        <FormField id="country" label="Country" error={errors.country?.message}>
-          <Input autoComplete="country-name" {...register('country')} />
-        </FormField>
+        {/* Country is locked — Twinspire operates only in Ghana. */}
+        <input type="hidden" value="Ghana" {...register('country')} />
       </fieldset>
 
-      <fieldset className="space-y-3">
-        <legend className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Shipping method
-        </legend>
-        <RadioGroup
-          value={shippingMethod}
-          onValueChange={(value) =>
-            setValue('shippingMethod', value as ShippingFormValues['shippingMethod'])
-          }
-          className="space-y-2"
-        >
-          {SHIPPING_OPTIONS.map((option) => (
-            <Label
-              key={option.id}
-              htmlFor={`shipping-${option.id}`}
-              className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 has-[input:checked]:border-primary"
-            >
-              <div className="flex items-center gap-3">
-                <RadioGroupItem id={`shipping-${option.id}`} value={option.id} />
-                <span className="text-sm font-medium">{option.label}</span>
-              </div>
-              <span className="text-sm text-muted-foreground">{option.price}</span>
-            </Label>
-          ))}
-        </RadioGroup>
-      </fieldset>
+      <p className="border-primary/15 bg-primary/5 text-muted-foreground rounded-md border p-3 text-xs">
+        After payment our team will call you on the number above to confirm the order and arrange
+        delivery anywhere in Ghana. Pickup at our Accra store is also available — just let the agent
+        know on the call.
+      </p>
 
       <div className="flex justify-end">
         <Button type="submit" size="lg" loading={isSubmitting}>

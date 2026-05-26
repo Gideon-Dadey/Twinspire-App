@@ -9,15 +9,13 @@ import { CartLineItem } from './cart-line-item';
 import { CartSummary } from './cart-summary';
 import { CouponForm } from './coupon-form';
 
-import { cartConstants, computeTotals } from '@/lib/helpers/cart-math';
+import { computeTotals } from '@/lib/helpers/cart-math';
 import { useCartStore } from '@/lib/stores/cart-store';
 
 export function CartPageContent(): React.JSX.Element {
   const items = useCartStore((s) => s.items);
   const couponCode = useCartStore((s) => s.couponCode);
   const totals = React.useMemo(() => computeTotals(items, { couponCode }), [items, couponCode]);
-
-  const remainingForFreeShip = Math.max(0, cartConstants.FREE_SHIPPING_THRESHOLD - totals.subtotal.amount);
 
   if (items.length === 0) {
     return (
@@ -38,20 +36,18 @@ export function CartPageContent(): React.JSX.Element {
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
       <section className="space-y-4">
-        {remainingForFreeShip > 0 && (
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-medium text-primary">
-            <Truck className="size-3.5" aria-hidden />
-            ${remainingForFreeShip.toFixed(2)} away from free shipping
-          </div>
-        )}
+        <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium">
+          <Truck className="size-3.5" aria-hidden />
+          Free delivery across Ghana · we&apos;ll call to arrange
+        </div>
 
-        <ul className="divide-y divide-border">
+        <ul className="divide-border divide-y">
           {items.map((item) => (
             <CartLineItem key={item.id} item={item} />
           ))}
         </ul>
 
-        <div className="rounded-lg border border-border bg-card p-5">
+        <div className="border-border bg-card rounded-lg border p-5">
           <p className="mb-3 text-sm font-semibold">Have a code?</p>
           <CouponForm />
         </div>

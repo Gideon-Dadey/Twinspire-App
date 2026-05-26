@@ -27,23 +27,25 @@ describe('PricingService.quote', () => {
     expect(result.itemCount).toBe(3);
   });
 
-  it('returns 0 shipping when subtotal meets the free-shipping threshold', async () => {
-    // Default FREE_SHIPPING_THRESHOLD is 75
+  it('returns 0 shipping above any subtotal — Ghana operating model has free delivery', async () => {
     const result = await pricingService.quote({
-      currency: 'USD',
+      currency: 'GHS',
       items: [makeItem(80, 1)],
       couponCodes: [],
     });
     expect(result.shipping).toBe(0);
   });
 
-  it('charges the flat shipping rate below the threshold', async () => {
+  it('returns 0 shipping below any subtotal — Ghana operating model has free delivery', async () => {
+    // Previously charged a flat rate below the free-shipping threshold; under
+    // the Ghana model TwinSpire never charges shipping (in-store stock,
+    // phone-coordinated delivery).
     const result = await pricingService.quote({
-      currency: 'USD',
+      currency: 'GHS',
       items: [makeItem(20, 1)],
       couponCodes: [],
     });
-    expect(result.shipping).toBeGreaterThan(0);
+    expect(result.shipping).toBe(0);
   });
 
   it('rounds totals to two decimals', async () => {

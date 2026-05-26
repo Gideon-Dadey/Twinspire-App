@@ -32,6 +32,10 @@ interface PasswordStrengthMeterProps {
 
 export function PasswordStrengthMeter({ password, className }: PasswordStrengthMeterProps) {
   const strength = scorePassword(password);
+  // Only the strength bars + label render here. The explicit checklist of
+  // requirements (12+ chars, uppercase, lowercase, number, symbol) was removed
+  // per design — Zod validation still enforces the same rules at submit time,
+  // and the bar color + label communicate progress without nagging the user.
   return (
     <div className={cn('space-y-2', className)}>
       <div className="flex items-center gap-2">
@@ -62,16 +66,6 @@ export function PasswordStrengthMeter({ password, className }: PasswordStrengthM
           {strength.label}
         </span>
       </div>
-      {strength.hints.length > 0 ? (
-        <ul className="grid gap-0.5 text-xs text-muted-foreground">
-          {strength.hints.map((hint) => (
-            <li key={hint} className="flex items-center gap-2">
-              <span aria-hidden className="size-1.5 rounded-full bg-muted-foreground/60" />
-              {hint}
-            </li>
-          ))}
-        </ul>
-      ) : null}
     </div>
   );
 }

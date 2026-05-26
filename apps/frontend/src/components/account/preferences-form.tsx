@@ -25,21 +25,13 @@ interface Values {
 }
 
 const LOCALES = [
+  { value: 'en-GH', label: 'English (Ghana)' },
   { value: 'en-US', label: 'English (US)' },
   { value: 'en-GB', label: 'English (UK)' },
   { value: 'fr-FR', label: 'Français' },
-  { value: 'de-DE', label: 'Deutsch' },
-  { value: 'es-ES', label: 'Español' },
-  { value: 'ja-JP', label: '日本語' },
 ];
 
-const CURRENCIES = [
-  { value: 'USD', label: 'US Dollar (USD)' },
-  { value: 'EUR', label: 'Euro (EUR)' },
-  { value: 'GBP', label: 'British Pound (GBP)' },
-  { value: 'JPY', label: 'Japanese Yen (JPY)' },
-  { value: 'CAD', label: 'Canadian Dollar (CAD)' },
-];
+const CURRENCIES = [{ value: 'GHS', label: 'Ghana Cedi (₵)' }];
 
 export function PreferencesForm() {
   const { user } = useSession();
@@ -52,8 +44,8 @@ export function PreferencesForm() {
     formState: { isDirty, isSubmitting },
   } = useForm<Values>({
     defaultValues: {
-      locale: 'en-US',
-      currency: 'USD',
+      locale: 'en-GH',
+      currency: 'GHS',
       marketingOptIn: false,
       newsletter: false,
     },
@@ -115,29 +107,31 @@ export function PreferencesForm() {
         </FormField>
       </div>
 
-      <div className="space-y-3 border-t border-border pt-4">
-        <p className="text-sm font-semibold text-foreground">Notifications</p>
-        <div className="flex items-start justify-between gap-3 rounded-lg border border-border p-4">
+      <div className="border-border space-y-3 border-t pt-4">
+        <p className="text-foreground text-sm font-semibold">Notifications</p>
+        <div className="border-border flex items-start justify-between gap-3 rounded-lg border p-4">
           <div>
             <Label className="text-sm font-medium" htmlFor="pref-marketing">
               Marketing emails
             </Label>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               New launches, sale events, and special offers.
             </p>
           </div>
           <Switch
             id="pref-marketing"
             checked={values.marketingOptIn}
-            onCheckedChange={(checked) => setValue('marketingOptIn', checked, { shouldDirty: true })}
+            onCheckedChange={(checked) =>
+              setValue('marketingOptIn', checked, { shouldDirty: true })
+            }
           />
         </div>
-        <div className="flex items-start justify-between gap-3 rounded-lg border border-border p-4">
+        <div className="border-border flex items-start justify-between gap-3 rounded-lg border p-4">
           <div>
             <Label className="text-sm font-medium" htmlFor="pref-newsletter">
               Newsletter
             </Label>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Monthly editorial highlights, buying guides, and product reviews.
             </p>
           </div>
@@ -149,7 +143,7 @@ export function PreferencesForm() {
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
+      <div className="border-border flex items-center justify-end gap-2 border-t pt-4">
         <Button
           type="button"
           variant="ghost"

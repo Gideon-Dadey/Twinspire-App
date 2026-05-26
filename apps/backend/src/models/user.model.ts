@@ -99,7 +99,7 @@ const userSchema = new Schema<UserDoc, UserModelType, UserMethods>(
     lockedUntil: { type: Date, default: null },
     preferences: {
       locale: { type: String, default: 'en-US' },
-      currency: { type: String, default: 'USD', uppercase: true },
+      currency: { type: String, default: 'GHS', uppercase: true },
       theme: { type: String, enum: ['light', 'dark', 'system'], default: 'system' },
       marketingOptIn: { type: Boolean, default: false },
       newsletter: { type: Boolean, default: false },
@@ -125,7 +125,10 @@ const SENSITIVE_USER_FIELDS = [
   'lastLoginIp',
 ] as const;
 
-function scrubSensitiveUserFields(_doc: unknown, ret: Record<string, unknown>): Record<string, unknown> {
+function scrubSensitiveUserFields(
+  _doc: unknown,
+  ret: Record<string, unknown>,
+): Record<string, unknown> {
   for (const key of SENSITIVE_USER_FIELDS) delete ret[key];
   return ret;
 }

@@ -82,7 +82,10 @@ export class PricingService {
   }
 
   /** Stand-alone validation API used by `POST /coupons/validate`. */
-  async validateCoupon(code: string, ctx: PricingContext): Promise<{ valid: boolean; reason?: string; preview?: AppliedCoupon }> {
+  async validateCoupon(
+    code: string,
+    ctx: PricingContext,
+  ): Promise<{ valid: boolean; reason?: string; preview?: AppliedCoupon }> {
     const coupon = await Coupon.findOne({ code: code.toUpperCase() });
     if (!coupon) return { valid: false, reason: 'NOT_FOUND' };
     const eligibility = await this.checkEligibility(coupon, ctx);
@@ -100,11 +103,17 @@ export class PricingService {
 
   /* ---------- private helpers ---------- */
 
-  private calculateShipping(subtotalAfterDiscount: number, freeShipping: boolean): number {
-    if (freeShipping) return 0;
-    if (subtotalAfterDiscount === 0) return 0;
-    if (subtotalAfterDiscount >= env.FREE_SHIPPING_THRESHOLD) return 0;
-    return round2(env.SHIPPING_FLAT_RATE);
+  /**
+   * Shipping is permanently free in the Ghana operating model — TwinSpire is
+   * in-store + phone-coordinated delivery, not carrier-driven fulfilment. The
+   * legacy `FREE_SHIPPING_THRESHOLD` / `SHIPPING_FLAT_RATE` env vars are kept
+   * on the schema for backward compatibility but are no longer consulted.
+   *
+   * The `freeShipping` and `subtotalAfterDiscount` parameters are accepted to
+   * preserve the existing call site, but the return value is always 0.
+   */
+  private calculateShipping(_subtotalAfterDiscount: number, _freeShipping: boolean): number {
+    return 0;
   }
 
   private calculateTax(subtotalAfterDiscount: number, _country?: string): number {
@@ -164,7 +173,12 @@ export class PricingService {
     );
 
     if (eligibleSubtotal === 0 && coupon.type !== 'free_shipping') {
-      return { code: coupon.code, type: coupon.type, discountAmount: 0, reason: 'NO_ELIGIBLE_ITEMS' };
+      return {
+        code: coupon.code,
+        type: coupon.type,
+        discountAmount: 0,
+        reason: 'NO_ELIGIBLE_ITEMS',
+      };
     }
 
     let discountAmount = 0;
@@ -207,13 +221,18 @@ export class PricingService {
 
     if (coupon.excludedProductIds?.some((id) => String(id) === productId)) return false;
 
-    const hasProductRestriction = coupon.applicableProductIds && coupon.applicableProductIds.length > 0;
+    const hasProductRestriction =
+      coupon.applicableProductIds && coupon.applicableProductIds.length > 0;
     const hasBrandRestriction = coupon.applicableBrandIds && coupon.applicableBrandIds.length > 0;
-    const hasCategoryRestriction = coupon.applicableCategoryIds && coupon.applicableCategoryIds.length > 0;
+    const hasCategoryRestriction =
+      coupon.applicableCategoryIds && coupon.applicableCategoryIds.length > 0;
 
     if (!hasProductRestriction && !hasBrandRestriction && !hasCategoryRestriction) return true;
 
-    if (hasProductRestriction && coupon.applicableProductIds!.some((id) => String(id) === productId)) {
+    if (
+      hasProductRestriction &&
+      coupon.applicableProductIds!.some((id) => String(id) === productId)
+    ) {
       return true;
     }
     if (hasBrandRestriction && coupon.applicableBrandIds!.some((id) => String(id) === brandId)) {

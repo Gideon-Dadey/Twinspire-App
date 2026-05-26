@@ -4,7 +4,7 @@ import { applyBasePlugins, type PaginatedModel } from '../db/plugins';
 
 import { moneySchema, type MoneySchemaShape } from './common.schemas';
 
-export type PaymentProvider = 'stripe' | 'paypal' | 'cash' | 'transfer' | 'local';
+export type PaymentProvider = 'stripe' | 'paypal' | 'paystack' | 'cash' | 'transfer' | 'local';
 export type PaymentIntentStatus =
   | 'requires_action'
   | 'requires_confirmation'
@@ -46,7 +46,7 @@ const paymentSchema = new Schema<PaymentDoc, PaymentModelType>(
     userId: { type: Schema.Types.ObjectId, ref: 'User', default: null, index: true },
     provider: {
       type: String,
-      enum: ['stripe', 'paypal', 'cash', 'transfer', 'local'],
+      enum: ['stripe', 'paypal', 'paystack', 'cash', 'transfer', 'local'],
       required: true,
       index: true,
     },

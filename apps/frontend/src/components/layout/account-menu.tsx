@@ -1,5 +1,7 @@
 'use client';
 
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
   AvatarFallback,
@@ -19,7 +21,6 @@ import {
   MapPin,
   Package,
   ShieldCheck,
-  User,
   UserRound,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -48,10 +49,10 @@ export function AccountMenu() {
     return (
       <Link
         href="/login"
-        className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        className="text-muted-foreground hover:bg-muted hover:text-foreground inline-flex size-10 items-center justify-center rounded-lg transition-colors"
         aria-label="Account"
       >
-        <User className="h-5 w-5" aria-hidden />
+        <FontAwesomeIcon icon={faUser} className="h-[18px] w-[18px]" aria-hidden />
       </Link>
     );
   }
@@ -61,9 +62,9 @@ export function AccountMenu() {
       <Link
         href="/login"
         aria-label="Sign in"
-        className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        className="text-muted-foreground hover:bg-muted hover:text-foreground inline-flex size-10 items-center justify-center rounded-lg transition-colors"
       >
-        <User className="h-5 w-5" aria-hidden />
+        <FontAwesomeIcon icon={faUser} className="h-[18px] w-[18px]" aria-hidden />
       </Link>
     );
   }
@@ -74,7 +75,7 @@ export function AccountMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="inline-flex items-center gap-2 rounded-full p-0.5 transition-colors hover:bg-muted"
+        className="hover:bg-muted inline-flex items-center gap-2 rounded-full p-0.5 transition-colors"
         aria-label="Account menu"
       >
         <Avatar className="size-9">
@@ -85,7 +86,7 @@ export function AccountMenu() {
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel className="space-y-0.5">
           <p className="text-sm font-semibold">{displayName}</p>
-          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+          <p className="text-muted-foreground truncate text-xs">{user.email}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

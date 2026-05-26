@@ -7,7 +7,11 @@ import { errorHandler } from './middleware/error-handler';
 import { notFound } from './middleware/not-found';
 import { requestId } from './middleware/request-id';
 import { applySecurity } from './middleware/security';
-import { paypalWebhookRouter, stripeWebhookRouter } from './modules/payments';
+import {
+  paypalWebhookRouter,
+  paystackWebhookRouter,
+  stripeWebhookRouter,
+} from './modules/payments';
 import v1Router from './routes';
 
 export function createApp(): Express {
@@ -41,6 +45,7 @@ export function createApp(): Express {
   // otherwise consume the stream).
   app.use(`${env.API_PREFIX}/webhooks`, stripeWebhookRouter);
   app.use(`${env.API_PREFIX}/webhooks`, paypalWebhookRouter);
+  app.use(`${env.API_PREFIX}/webhooks`, paystackWebhookRouter);
 
   applySecurity(app);
 

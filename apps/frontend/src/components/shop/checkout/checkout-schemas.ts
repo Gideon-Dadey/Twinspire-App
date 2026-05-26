@@ -1,23 +1,41 @@
 import { z } from 'zod';
 
+/**
+ * Delivery details collected at checkout.
+ *
+ * TwinSpire is a Ghana-only storefront with phone-coordinated local delivery,
+ * so this form intentionally omits any shipping rate/method picker — the
+ * customer just gives us where to deliver and we call to confirm.
+ *
+ * The field is kept named `shippingSchema` (and the type `ShippingFormValues`)
+ * for source-compatibility with the existing checkout flow plumbing; the user-
+ * facing copy says "delivery" everywhere.
+ */
 export const shippingSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Enter a valid email address'),
-  phone: z.string().min(7, 'Enter a phone number'),
-  line1: z.string().min(2, 'Street address is required'),
+  phone: z.string().min(7, 'Enter your Ghana phone number so we can call to confirm'),
+  line1: z.string().min(2, 'Street or landmark is required'),
   line2: z.string().optional(),
-  city: z.string().min(1, 'City is required'),
-  state: z.string().min(1, 'State or region is required'),
-  postalCode: z.string().min(2, 'Postal code is required'),
+  city: z.string().min(1, 'City or town is required'),
+  // Ghana region: Greater Accra, Ashanti, Western, Eastern, …
+  state: z.string().min(1, 'Region is required'),
+  postalCode: z.string().optional(),
   country: z.string().min(2, 'Country is required'),
-  shippingMethod: z.enum(['standard', 'express', 'overnight']),
 });
 
 export type ShippingFormValues = z.infer<typeof shippingSchema>;
 
+/**
+ * Payment selection. Three providers: `card` (Stripe) covers Visa/Mastercard,
+ * `paypal` for international customers, `paystack` for Ghana mobile money
+ * (MTN MoMo, Vodafone Cash, AirtelTigo Money) plus local card rails.
+ */
 export const paymentSchema = z.object({
-  method: z.enum(['card', 'paypal']),
+  method: z.enum(['card', 'paypal', 'paystack']),
+  /** Paystack channel — only meaningful when `method === 'paystack'`. */
+  paystackChannel: z.enum(['momo', 'card', 'bank']).optional(),
   cardHolder: z.string().optional(),
   cardNumber: z
     .string()

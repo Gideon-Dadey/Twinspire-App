@@ -12,13 +12,23 @@ const dateFormatterCache = new Map<string, Intl.DateTimeFormat>();
 const numberFormatterCache = new Map<string, Intl.NumberFormat>();
 
 function getMoneyFormatter(currency: string, opts: FormatMoneyOptions): Intl.NumberFormat {
-  const locale = opts.locale ?? 'en-US';
+  // Default locale is `en-GH` so GHS amounts render with Ghana conventions
+  // (digit grouping, decimal separator) without callers having to pass
+  // `locale` explicitly. Other currencies (USD, EUR, …) still format
+  // correctly under this locale; callers can override with `opts.locale`
+  // for legacy admin tooling if needed.
+  //
+  // We force `currencyDisplay: 'narrowSymbol'` so that GHS renders as just
+  // `₵` instead of `GH₵`. ICU's default for `en-GH`/GHS includes the country
+  // prefix, but the brand-approved presentation is the cedi sign alone.
+  const locale = opts.locale ?? 'en-GH';
   const key = `${locale}-${currency}-${opts.minimumFractionDigits ?? ''}-${opts.maximumFractionDigits ?? ''}-${opts.signDisplay ?? ''}`;
   let fmt = moneyFormatterCache.get(key);
   if (!fmt) {
     fmt = new Intl.NumberFormat(locale, {
       style: 'currency',
       currency,
+      currencyDisplay: 'narrowSymbol',
       minimumFractionDigits: opts.minimumFractionDigits,
       maximumFractionDigits: opts.maximumFractionDigits,
       signDisplay: opts.signDisplay,
@@ -28,9 +38,18 @@ function getMoneyFormatter(currency: string, opts: FormatMoneyOptions): Intl.Num
   return fmt;
 }
 
+/**
+ * Post-process the formatter output: even under `narrowSymbol` some ICU
+ * builds still emit `GH₵` for GHS. We strip the `GH` (and any whitespace
+ * between it and the `₵`) so the storefront consistently shows `₵1,234.56`.
+ */
+function stripGhPrefix(formatted: string): string {
+  return formatted.replace(/GH\s*₵/g, '₵');
+}
+
 /** Format a Money value to a localized currency string. */
 export function formatMoney(money: Money, opts: FormatMoneyOptions = {}): string {
-  return getMoneyFormatter(money.currency, opts).format(money.amount);
+  return stripGhPrefix(getMoneyFormatter(money.currency, opts).format(money.amount));
 }
 
 /** Format a raw amount with explicit currency. */
@@ -39,10 +58,14 @@ export function formatCurrency(
   currency: string,
   opts: FormatMoneyOptions = {},
 ): string {
-  return getMoneyFormatter(currency, opts).format(amount);
+  return stripGhPrefix(getMoneyFormatter(currency, opts).format(amount));
 }
 
-export function formatNumber(value: number, locale = 'en-US', options?: Intl.NumberFormatOptions): string {
+export function formatNumber(
+  value: number,
+  locale = 'en-GH',
+  options?: Intl.NumberFormatOptions,
+): string {
   const key = `${locale}-${JSON.stringify(options ?? {})}`;
   let fmt = numberFormatterCache.get(key);
   if (!fmt) {
@@ -52,7 +75,7 @@ export function formatNumber(value: number, locale = 'en-US', options?: Intl.Num
   return fmt.format(value);
 }
 
-export function formatPercent(value: number, locale = 'en-US', fractionDigits = 0): string {
+export function formatPercent(value: number, locale = 'en-GH', fractionDigits = 0): string {
   return formatNumber(value, locale, {
     style: 'percent',
     minimumFractionDigits: fractionDigits,
@@ -65,7 +88,7 @@ export interface FormatDateOptions extends Intl.DateTimeFormatOptions {
 }
 
 export function formatDate(date: Date | string | number, opts: FormatDateOptions = {}): string {
-  const { locale = 'en-US', ...dateOpts } = opts;
+  const { locale = 'en-GH', ...dateOpts } = opts;
   const key = `${locale}-${JSON.stringify(dateOpts)}`;
   let fmt = dateFormatterCache.get(key);
   if (!fmt) {
@@ -90,7 +113,7 @@ const RELATIVE_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
 
 export function formatRelativeTime(
   date: Date | string | number,
-  locale = 'en-US',
+  locale = 'en-GH',
   now: Date = new Date(),
 ): string {
   const target = new Date(date).getTime();

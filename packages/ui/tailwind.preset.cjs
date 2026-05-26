@@ -50,17 +50,22 @@ module.exports = {
         primary: {
           DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
           foreground: 'hsl(var(--primary-foreground) / <alpha-value>)',
-          50: '#FFF7ED',
-          100: '#FFEDD5',
-          200: '#FED7AA',
-          300: '#FDBA74',
-          400: '#FB923C',
-          500: '#F97316',
-          600: '#EA580C',
-          700: '#C2410C',
-          800: '#9A3412',
-          900: '#7C2D12',
-          950: '#431407',
+          // Twinspire Brand Red scale (brand 500 = #E91B25 / hsl(357, 82%, 51%)).
+          // Pulled the exact red from the official logo (47k pixels sampled),
+          // then derived 50–950 by sweeping lightness while holding hue ~357°.
+          // 50–200 stay as pale rose tints (great for soft-fill backgrounds);
+          // 700–950 deepen into burgundy/oxblood for serious surfaces.
+          50: '#FEF1F2',
+          100: '#FEE0E2',
+          200: '#FDC1C5',
+          300: '#FB97A0',
+          400: '#F65F6C',
+          500: '#E91B25',
+          600: '#C81118',
+          700: '#A60C14',
+          800: '#861014',
+          900: '#6F1014',
+          950: '#3A0608',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
@@ -137,7 +142,7 @@ module.exports = {
         lg: '0 10px 20px -4px rgba(17, 24, 39, 0.10), 0 4px 8px -4px rgba(17, 24, 39, 0.06)',
         xl: '0 20px 40px -8px rgba(17, 24, 39, 0.14), 0 8px 16px -8px rgba(17, 24, 39, 0.08)',
         '2xl': '0 32px 64px -16px rgba(17, 24, 39, 0.20)',
-        glow: '0 0 0 4px rgba(249, 115, 22, 0.20)',
+        glow: '0 0 0 4px rgba(233, 27, 37, 0.20)',
       },
       keyframes: {
         'accordion-down': {
@@ -202,8 +207,7 @@ module.exports = {
       backgroundImage: {
         'gradient-hero':
           'radial-gradient(at 80% 0%, hsl(var(--primary) / 0.18), transparent 50%), radial-gradient(at 0% 100%, hsl(var(--accent) / 0.15), transparent 50%)',
-        'gradient-card':
-          'linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+        'gradient-card': 'linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
         'shimmer-bg':
           'linear-gradient(90deg, transparent 0%, hsl(var(--muted-foreground) / 0.08) 50%, transparent 100%)',
       },
@@ -213,6 +217,29 @@ module.exports = {
       aspectRatio: {
         product: '4 / 5',
         banner: '21 / 9',
+      },
+      /**
+       * z-index scale — mirrors `tokens.ts > zIndex` so semantic class names
+       * like `z-sticky`, `z-toast`, `z-modal` actually compile.
+       *
+       * Without this extension, `z-sticky` is silently dropped by Tailwind's
+       * JIT compiler and the affected element ends up with `z-index: auto`,
+       * which lets any descendant stacking context (e.g. a product-card badge
+       * with `z-10`) render *over* the sticky header.
+       */
+      zIndex: {
+        hide: '-1',
+        base: '0',
+        raised: '10',
+        dropdown: '1000',
+        sticky: '1100',
+        banner: '1200',
+        overlay: '1300',
+        modal: '1400',
+        popover: '1500',
+        skipLink: '1600',
+        toast: '1700',
+        tooltip: '1800',
       },
     },
   },

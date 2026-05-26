@@ -86,12 +86,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <TabsTrigger value="reviews">
                 Reviews <span className="ml-1.5 text-xs opacity-70">{reviews.length}</span>
               </TabsTrigger>
-              <TabsTrigger value="shipping">Shipping &amp; returns</TabsTrigger>
+              <TabsTrigger value="shipping">Delivery &amp; returns</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="prose-tight max-w-3xl">
               <h2 className="font-display text-xl font-bold tracking-tight">Description</h2>
-              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+              <p className="text-muted-foreground mt-2 whitespace-pre-line text-sm leading-relaxed">
                 {product.description}
               </p>
               {product.attributes.length > 0 && (
@@ -99,10 +99,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   {product.attributes.map((attr) => (
                     <div
                       key={attr.attributeId}
-                      className="rounded-lg border border-border bg-card p-3 text-sm"
+                      className="border-border bg-card rounded-lg border p-3 text-sm"
                     >
-                      <p className="text-xs text-muted-foreground">{attr.name}</p>
-                      <p className="font-medium text-foreground">{String(attr.value)}</p>
+                      <p className="text-muted-foreground text-xs">{attr.name}</p>
+                      <p className="text-foreground font-medium">{String(attr.value)}</p>
                     </div>
                   ))}
                 </div>
@@ -117,18 +117,23 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <ProductReviews rating={product.rating} reviews={reviews} />
             </TabsContent>
 
-            <TabsContent value="shipping" className="max-w-3xl space-y-4 text-sm text-muted-foreground">
-              <h2 className="font-display text-xl font-bold tracking-tight text-foreground">
-                Shipping &amp; returns
+            <TabsContent
+              value="shipping"
+              className="text-muted-foreground max-w-3xl space-y-4 text-sm"
+            >
+              <h2 className="font-display text-foreground text-xl font-bold tracking-tight">
+                Delivery &amp; returns
               </h2>
               <p>
-                Orders ship within 1 business day from our US warehouse. Free 2-day shipping on orders
-                over $99 — express overnight is available for $19 at checkout.
+                Every product is in stock at our Accra store. After payment our team calls you to
+                confirm your order and arrange delivery — same-day or next-day across Greater Accra,
+                2–4 working days elsewhere in Ghana. Delivery is always free, anywhere in the
+                country.
               </p>
               <p>
-                Returns are free within 30 days of delivery. Refurbished and open-box items are
-                covered by a 14-day money-back guarantee. Defective items are replaced under the
-                manufacturer's warranty.
+                Returns are free within 7 days of delivery on unopened items. Bring the item to our
+                Accra store or arrange a pickup with our team. Defective products are replaced under
+                the manufacturer&apos;s warranty.
               </p>
             </TabsContent>
           </Tabs>

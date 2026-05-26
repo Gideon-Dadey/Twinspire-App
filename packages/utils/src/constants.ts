@@ -3,11 +3,16 @@ export const APP_NAME = 'TwinSpire' as const;
 export const DEFAULT_PAGE_SIZE = 24;
 export const MAX_PAGE_SIZE = 100;
 
+/**
+ * `GHS` is listed first so it's the default for any picker that lazily takes
+ * the first entry. The other ISO currencies remain in the union to preserve
+ * back-compat with historical orders and admin tooling.
+ */
 export const SUPPORTED_CURRENCIES = [
+  'GHS',
   'USD',
   'EUR',
   'GBP',
-  'GHS',
   'NGN',
   'CAD',
   'AUD',
@@ -16,7 +21,11 @@ export const SUPPORTED_CURRENCIES = [
   'CNY',
 ] as const;
 
-export const SUPPORTED_LOCALES = ['en-US', 'en-GB', 'en-GH', 'fr-FR', 'es-ES', 'de-DE'] as const;
+export const DEFAULT_CURRENCY = 'GHS' as const;
+
+export const SUPPORTED_LOCALES = ['en-GH', 'en-US', 'en-GB', 'fr-FR', 'es-ES', 'de-DE'] as const;
+
+export const DEFAULT_LOCALE = 'en-GH' as const;
 
 export const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

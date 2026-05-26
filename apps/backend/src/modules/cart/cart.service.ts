@@ -9,7 +9,7 @@ import { HttpError } from '../../utils/http-error';
 import type { Request, Response } from 'express';
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
-const DEFAULT_CURRENCY = 'USD';
+const DEFAULT_CURRENCY = 'GHS';
 
 export interface CartIdentity {
   userId?: string;
@@ -22,7 +22,9 @@ export class CartService {
   resolveIdentity(req: Request, res: Response): CartIdentity {
     if (req.auth?.userId) return { userId: req.auth.userId };
     const cookieName = env.GUEST_CART_COOKIE;
-    let sessionId = (req.signedCookies?.[cookieName] ?? req.cookies?.[cookieName]) as string | undefined;
+    let sessionId = (req.signedCookies?.[cookieName] ?? req.cookies?.[cookieName]) as
+      | string
+      | undefined;
     if (!sessionId) {
       sessionId = new Types.ObjectId().toHexString();
       res.cookie(cookieName, sessionId, {
@@ -99,7 +101,10 @@ export class CartService {
         image: snapshot.image,
         unitPrice: { amount: snapshot.unitPriceAmount, currency: snapshot.currency },
         quantity: input.quantity,
-        lineTotal: { amount: round2(snapshot.unitPriceAmount * input.quantity), currency: snapshot.currency },
+        lineTotal: {
+          amount: round2(snapshot.unitPriceAmount * input.quantity),
+          currency: snapshot.currency,
+        },
         addedAt: new Date(),
       });
     }
@@ -107,7 +112,11 @@ export class CartService {
     return this.recalculate(cart);
   }
 
-  async updateItem(identity: CartIdentity, itemId: string, quantity: number): Promise<CartDocument> {
+  async updateItem(
+    identity: CartIdentity,
+    itemId: string,
+    quantity: number,
+  ): Promise<CartDocument> {
     const cart = await this.findOrCreate(identity);
     const item = cart.items.find((i) => String(i._id) === itemId);
     if (!item) throw HttpError.notFound('Cart item not found');
@@ -198,7 +207,10 @@ export class CartService {
 
   /* ---------- Internal ---------- */
 
-  private async findOrCreate(identity: CartIdentity, currency = DEFAULT_CURRENCY): Promise<CartDocument> {
+  private async findOrCreate(
+    identity: CartIdentity,
+    currency = DEFAULT_CURRENCY,
+  ): Promise<CartDocument> {
     if (!identity.userId && !identity.sessionId) {
       throw HttpError.badRequest('Missing cart identity');
     }
@@ -211,13 +223,23 @@ export class CartService {
       currency,
       items: [],
       couponCodes: [],
-      totals: { subtotal: zero, discount: zero, shipping: zero, tax: zero, total: zero, itemCount: 0 },
+      totals: {
+        subtotal: zero,
+        discount: zero,
+        shipping: zero,
+        tax: zero,
+        total: zero,
+        itemCount: 0,
+      },
       expiresAt: new Date(Date.now() + env.ORDER_CART_TTL_DAYS * 24 * 60 * 60 * 1000),
     });
     return cart;
   }
 
-  private async recalculate(cart: CartDocument, overrideCouponCodes?: string[]): Promise<CartDocument> {
+  private async recalculate(
+    cart: CartDocument,
+    overrideCouponCodes?: string[],
+  ): Promise<CartDocument> {
     const productIds = cart.items.map((i) => i.productId);
     const products = productIds.length
       ? await Product.find({ _id: { $in: productIds } }, { brandId: 1, categoryIds: 1 }).lean()

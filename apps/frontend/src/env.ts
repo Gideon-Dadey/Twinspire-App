@@ -8,8 +8,8 @@ const clientSchema = z.object({
   NEXT_PUBLIC_APP_NAME: z.string().default('TwinSpire'),
   NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:3000'),
   NEXT_PUBLIC_API_URL: z.string().url().default('http://localhost:4000/api/v1'),
-  NEXT_PUBLIC_DEFAULT_CURRENCY: z.string().default('USD'),
-  NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('en-US'),
+  NEXT_PUBLIC_DEFAULT_CURRENCY: z.string().default('GHS'),
+  NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('en-GH'),
   /**
    * Flip to `false` once the backend is reachable; Phase 7 ships with a
    * client-only mock backend so the auth + dashboard surfaces are fully
@@ -18,6 +18,7 @@ const clientSchema = z.object({
   NEXT_PUBLIC_USE_MOCK_API: booleanish.default(true),
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
   NEXT_PUBLIC_PAYPAL_CLIENT_ID: z.string().optional(),
+  NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY: z.string().optional(),
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().optional(),
   NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
 });
@@ -31,6 +32,7 @@ const parsed = clientSchema.safeParse({
   NEXT_PUBLIC_USE_MOCK_API: process.env.NEXT_PUBLIC_USE_MOCK_API,
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   NEXT_PUBLIC_PAYPAL_CLIENT_ID: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+  NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
 });

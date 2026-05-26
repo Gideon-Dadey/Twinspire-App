@@ -16,13 +16,14 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
   return (
     <AuthCard
+      width="lg"
       eyebrow="New here?"
       title="Create your TwinSpire account"
       description="Track orders, save addresses, and pick up where you left off."
       footer={
         <p>
           Already have an account?{' '}
-          <Link href="/login" className="font-medium text-primary hover:underline">
+          <Link href="/login" className="text-primary font-medium hover:underline">
             Sign in
           </Link>
         </p>

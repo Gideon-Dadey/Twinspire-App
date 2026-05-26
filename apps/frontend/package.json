@@ -15,6 +15,11 @@
     "clean": "rimraf .next .turbo coverage out playwright-report test-results"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-brands-svg-icons": "^7.2.0",
+    "@fortawesome/free-regular-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^3.3.1",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@tanstack/react-query": "^5.59.16",
@@ -28,6 +33,7 @@
     "lucide-react": "^0.453.0",
     "next": "^15.0.2",
     "next-themes": "^0.3.0",
+    "nextjs-toploader": "^3.9.17",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.53.1",

@@ -22,9 +22,7 @@ const envSchema = z.object({
 
   TRUST_PROXY: z.coerce.number().int().min(0).max(10).default(1),
 
-  LOG_LEVEL: z
-    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
-    .default('info'),
+  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   LOG_PRETTY: z
     .string()
     .default('false')
@@ -110,6 +108,10 @@ const envSchema = z.object({
   PAYPAL_ENV: z.enum(['sandbox', 'live']).default('sandbox'),
   PAYPAL_WEBHOOK_ID: z.string().optional(),
 
+  PAYSTACK_SECRET_KEY: z.string().optional(),
+  PAYSTACK_PUBLIC_KEY: z.string().optional(),
+  PAYSTACK_WEBHOOK_SECRET: z.string().optional(),
+
   ELASTICSEARCH_URL: z.string().optional(),
   ELASTICSEARCH_USERNAME: z.string().optional(),
   ELASTICSEARCH_PASSWORD: z.string().optional(),
@@ -120,9 +122,17 @@ const envSchema = z.object({
     .default('true')
     .transform((v) => v === 'true' || v === '1'),
 
-  TAX_RATE_DEFAULT: z.coerce.number().min(0).max(1).default(0),
-  FREE_SHIPPING_THRESHOLD: z.coerce.number().min(0).default(75),
-  SHIPPING_FLAT_RATE: z.coerce.number().min(0).default(8.99),
+  // Ghana VAT effective rate (NHIL + GETFund + VAT combined). Override via env
+  // for B2B / exempt regions / promotional pricing.
+  TAX_RATE_DEFAULT: z.coerce.number().min(0).max(1).default(0.125),
+  /**
+   * Legacy shipping knobs. Kept on the schema for backward compatibility with
+   * older pricing-service builds; both are forced to `0` in production because
+   * TwinSpire is in-store + phone-coordinated delivery, no carrier rates.
+   * @deprecated Always 0 in the Ghana operating model.
+   */
+  FREE_SHIPPING_THRESHOLD: z.coerce.number().min(0).default(0),
+  SHIPPING_FLAT_RATE: z.coerce.number().min(0).default(0),
   ORDER_CART_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(30),
   GUEST_CART_COOKIE: z.string().default('ts_cart'),
 });

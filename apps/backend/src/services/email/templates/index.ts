@@ -2,7 +2,6 @@ import { escapeHtml, renderButton, renderLayout } from './layout';
 
 import type { EmailMessage } from '../transport';
 
-
 export interface NameAndEmail {
   email: string;
   firstName: string;
@@ -12,13 +11,15 @@ export interface VerifyEmailVars extends NameAndEmail {
   verifyUrl: string;
 }
 
-export function verifyEmailTemplate(vars: VerifyEmailVars): Pick<EmailMessage, 'subject' | 'html' | 'text'> {
+export function verifyEmailTemplate(
+  vars: VerifyEmailVars,
+): Pick<EmailMessage, 'subject' | 'html' | 'text'> {
   const subject = 'Verify your TwinSpire email';
   const body = `
     <h1 style="margin:0 0 16px;font-size:22px;">Welcome, ${escapeHtml(vars.firstName)}!</h1>
     <p style="margin:0 0 16px;line-height:1.6;">Confirm your email so we know it's really you. This link expires in 24 hours.</p>
     <p style="margin:0 0 24px;">${renderButton('Verify email', vars.verifyUrl)}</p>
-    <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;">Or paste this URL into your browser:<br/><span style="word-break:break-all;color:#f97316;">${escapeHtml(vars.verifyUrl)}</span></p>
+    <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;">Or paste this URL into your browser:<br/><span style="word-break:break-all;color:#e91b25;">${escapeHtml(vars.verifyUrl)}</span></p>
   `;
   const html = renderLayout({
     title: subject,
@@ -59,7 +60,9 @@ export function resetPasswordTemplate(
   };
 }
 
-export function welcomeTemplate(vars: NameAndEmail): Pick<EmailMessage, 'subject' | 'html' | 'text'> {
+export function welcomeTemplate(
+  vars: NameAndEmail,
+): Pick<EmailMessage, 'subject' | 'html' | 'text'> {
   const subject = 'Welcome to TwinSpire';
   const body = `
     <h1 style="margin:0 0 16px;font-size:22px;">Welcome, ${escapeHtml(vars.firstName)}!</h1>
@@ -71,7 +74,11 @@ export function welcomeTemplate(vars: NameAndEmail): Pick<EmailMessage, 'subject
     preheader: "You're in. Start exploring TwinSpire.",
     body,
   });
-  return { subject, html, text: `Welcome to TwinSpire, ${vars.firstName}! Visit https://twinspire.dev to get started.` };
+  return {
+    subject,
+    html,
+    text: `Welcome to TwinSpire, ${vars.firstName}! Visit https://twinspire.dev to get started.`,
+  };
 }
 
 export interface PasswordChangedVars extends NameAndEmail {

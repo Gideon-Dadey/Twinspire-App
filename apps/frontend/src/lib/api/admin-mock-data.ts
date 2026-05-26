@@ -11,9 +11,15 @@ import { brands } from '@/data/brands';
 import { products } from '@/data/products';
 import { reviews } from '@/data/reviews';
 
-import { DEMO_ADDRESSES, DEMO_ORDERS, DEMO_USER, DEMO_USER_ID, type MockUserRecord } from './mock-data';
+import {
+  DEMO_ADDRESSES,
+  DEMO_ORDERS,
+  DEMO_USER,
+  DEMO_USER_ID,
+  type MockUserRecord,
+} from './mock-data';
 
-function money(amount: number, currency: CurrencyCode = 'USD'): Money {
+function money(amount: number, currency: CurrencyCode = 'GHS'): Money {
   return { amount, currency };
 }
 
@@ -48,7 +54,7 @@ export const ADMIN_USER: MockUserRecord = {
   lastLoginAt: isoDaysAgo(0, 2),
   preferences: {
     locale: 'en-US',
-    currency: 'USD',
+    currency: 'GHS',
     theme: 'system',
     marketingOptIn: false,
     newsletter: false,
@@ -74,7 +80,7 @@ export const MANAGER_USER: MockUserRecord = {
   lastLoginAt: isoDaysAgo(0, 5),
   preferences: {
     locale: 'en-US',
-    currency: 'USD',
+    currency: 'GHS',
     theme: 'dark',
     marketingOptIn: false,
     newsletter: true,
@@ -86,20 +92,94 @@ export const MANAGER_USER: MockUserRecord = {
 
 export const ADMIN_PASSWORD = 'TwinSpire!2026';
 
-const EXTRA_CUSTOMER_SEEDS: Array<Pick<MockUserRecord,
-  'id' | 'email' | 'firstName' | 'lastName' | 'phone' | 'avatarUrl'> & {
-  loyaltyPoints: number;
-  daysAgo: number;
-  status?: MockUserRecord['status'];
-}> = [
-  { id: 'cust-2', email: 'lena.ito@example.com', firstName: 'Lena', lastName: 'Ito', phone: '+1 555 010 1102', avatarUrl: 'https://i.pravatar.cc/200?img=20', loyaltyPoints: 2400, daysAgo: 220 },
-  { id: 'cust-3', email: 'marcus.holt@example.com', firstName: 'Marcus', lastName: 'Holt', phone: '+1 555 010 1103', avatarUrl: 'https://i.pravatar.cc/200?img=11', loyaltyPoints: 870, daysAgo: 60 },
-  { id: 'cust-4', email: 'priya.shah@example.com', firstName: 'Priya', lastName: 'Shah', phone: '+1 555 010 1104', avatarUrl: 'https://i.pravatar.cc/200?img=44', loyaltyPoints: 4100, daysAgo: 410 },
-  { id: 'cust-5', email: 'thiago.alves@example.com', firstName: 'Thiago', lastName: 'Alves', phone: '+1 555 010 1105', avatarUrl: 'https://i.pravatar.cc/200?img=15', loyaltyPoints: 0, daysAgo: 14 },
-  { id: 'cust-6', email: 'amelia.brookes@example.com', firstName: 'Amelia', lastName: 'Brookes', phone: '+1 555 010 1106', avatarUrl: 'https://i.pravatar.cc/200?img=24', loyaltyPoints: 1620, daysAgo: 320 },
-  { id: 'cust-7', email: 'rashid.khan@example.com', firstName: 'Rashid', lastName: 'Khan', phone: '+1 555 010 1107', avatarUrl: 'https://i.pravatar.cc/200?img=58', loyaltyPoints: 380, daysAgo: 31 },
-  { id: 'cust-8', email: 'mei.tanaka@example.com', firstName: 'Mei', lastName: 'Tanaka', phone: '+1 555 010 1108', avatarUrl: 'https://i.pravatar.cc/200?img=49', loyaltyPoints: 5230, daysAgo: 540, status: 'suspended' },
-  { id: 'cust-9', email: 'oluwaseun.ade@example.com', firstName: 'Seun', lastName: 'Ade', phone: '+1 555 010 1109', avatarUrl: 'https://i.pravatar.cc/200?img=53', loyaltyPoints: 2010, daysAgo: 190 },
+const EXTRA_CUSTOMER_SEEDS: Array<
+  Pick<MockUserRecord, 'id' | 'email' | 'firstName' | 'lastName' | 'phone' | 'avatarUrl'> & {
+    loyaltyPoints: number;
+    daysAgo: number;
+    status?: MockUserRecord['status'];
+  }
+> = [
+  {
+    id: 'cust-2',
+    email: 'lena.ito@example.com',
+    firstName: 'Lena',
+    lastName: 'Ito',
+    phone: '+1 555 010 1102',
+    avatarUrl: 'https://i.pravatar.cc/200?img=20',
+    loyaltyPoints: 2400,
+    daysAgo: 220,
+  },
+  {
+    id: 'cust-3',
+    email: 'marcus.holt@example.com',
+    firstName: 'Marcus',
+    lastName: 'Holt',
+    phone: '+1 555 010 1103',
+    avatarUrl: 'https://i.pravatar.cc/200?img=11',
+    loyaltyPoints: 870,
+    daysAgo: 60,
+  },
+  {
+    id: 'cust-4',
+    email: 'priya.shah@example.com',
+    firstName: 'Priya',
+    lastName: 'Shah',
+    phone: '+1 555 010 1104',
+    avatarUrl: 'https://i.pravatar.cc/200?img=44',
+    loyaltyPoints: 4100,
+    daysAgo: 410,
+  },
+  {
+    id: 'cust-5',
+    email: 'thiago.alves@example.com',
+    firstName: 'Thiago',
+    lastName: 'Alves',
+    phone: '+1 555 010 1105',
+    avatarUrl: 'https://i.pravatar.cc/200?img=15',
+    loyaltyPoints: 0,
+    daysAgo: 14,
+  },
+  {
+    id: 'cust-6',
+    email: 'amelia.brookes@example.com',
+    firstName: 'Amelia',
+    lastName: 'Brookes',
+    phone: '+1 555 010 1106',
+    avatarUrl: 'https://i.pravatar.cc/200?img=24',
+    loyaltyPoints: 1620,
+    daysAgo: 320,
+  },
+  {
+    id: 'cust-7',
+    email: 'rashid.khan@example.com',
+    firstName: 'Rashid',
+    lastName: 'Khan',
+    phone: '+1 555 010 1107',
+    avatarUrl: 'https://i.pravatar.cc/200?img=58',
+    loyaltyPoints: 380,
+    daysAgo: 31,
+  },
+  {
+    id: 'cust-8',
+    email: 'mei.tanaka@example.com',
+    firstName: 'Mei',
+    lastName: 'Tanaka',
+    phone: '+1 555 010 1108',
+    avatarUrl: 'https://i.pravatar.cc/200?img=49',
+    loyaltyPoints: 5230,
+    daysAgo: 540,
+    status: 'suspended',
+  },
+  {
+    id: 'cust-9',
+    email: 'oluwaseun.ade@example.com',
+    firstName: 'Seun',
+    lastName: 'Ade',
+    phone: '+1 555 010 1109',
+    avatarUrl: 'https://i.pravatar.cc/200?img=53',
+    loyaltyPoints: 2010,
+    daysAgo: 190,
+  },
 ];
 
 export const EXTRA_CUSTOMERS: MockUserRecord[] = EXTRA_CUSTOMER_SEEDS.map((seed) => ({
@@ -117,8 +197,8 @@ export const EXTRA_CUSTOMERS: MockUserRecord[] = EXTRA_CUSTOMER_SEEDS.map((seed)
   twoFactorEnabled: seed.loyaltyPoints > 3000,
   lastLoginAt: isoDaysAgo(clamp(seed.daysAgo / 10, 0, 60)),
   preferences: {
-    locale: 'en-US',
-    currency: 'USD',
+    locale: 'en-GH',
+    currency: 'GHS',
     theme: 'system',
     marketingOptIn: seed.loyaltyPoints > 1000,
     newsletter: seed.loyaltyPoints > 500,
@@ -128,7 +208,12 @@ export const EXTRA_CUSTOMERS: MockUserRecord[] = EXTRA_CUSTOMER_SEEDS.map((seed)
   updatedAt: isoDaysAgo(clamp(seed.daysAgo / 10, 0, 60)),
 }));
 
-export const ALL_MOCK_USERS: MockUserRecord[] = [DEMO_USER, ADMIN_USER, MANAGER_USER, ...EXTRA_CUSTOMERS];
+export const ALL_MOCK_USERS: MockUserRecord[] = [
+  DEMO_USER,
+  ADMIN_USER,
+  MANAGER_USER,
+  ...EXTRA_CUSTOMERS,
+];
 
 /* -------------------------------------------------------------------------- */
 /* Extra orders across all customers                                          */
@@ -178,8 +263,12 @@ function makeOrder(opts: {
 
   const subtotalAmt = items.reduce((sum, it) => sum + it.lineTotal.amount, 0);
   const discount = opts.discount ?? 0;
-  const shipping = opts.shippingPrice ?? (subtotalAmt > 99 ? 0 : 9.99);
-  const tax = Number(((subtotalAmt - discount) * 0.08).toFixed(2));
+  // Shipping is permanently 0 — Twinspire is a Ghana storefront with phone-
+  // coordinated local delivery, not carrier-driven fulfilment. The opts param
+  // is still honoured for any future override but defaults to free.
+  const shipping = opts.shippingPrice ?? 0;
+  // Ghana VAT (NHIL + GETFund + VAT effective rate is ~12.5% combined).
+  const tax = Number(((subtotalAmt - discount) * 0.125).toFixed(2));
   const total = Number((subtotalAmt - discount + shipping + tax).toFixed(2));
 
   const placedAt = isoDaysAgo(opts.placedDaysAgo);
@@ -188,8 +277,10 @@ function makeOrder(opts: {
       ? isoDaysAgo(opts.placedDaysAgo, 1)
       : undefined;
   const shippedAt = opts.shippedDaysAgo !== undefined ? isoDaysAgo(opts.shippedDaysAgo) : undefined;
-  const deliveredAt = opts.deliveredDaysAgo !== undefined ? isoDaysAgo(opts.deliveredDaysAgo) : undefined;
-  const cancelledAt = opts.cancelledDaysAgo !== undefined ? isoDaysAgo(opts.cancelledDaysAgo) : undefined;
+  const deliveredAt =
+    opts.deliveredDaysAgo !== undefined ? isoDaysAgo(opts.deliveredDaysAgo) : undefined;
+  const cancelledAt =
+    opts.cancelledDaysAgo !== undefined ? isoDaysAgo(opts.cancelledDaysAgo) : undefined;
 
   const timeline: Order['timeline'] = [{ status: 'pending', occurredAt: placedAt }];
   if (paidAt) timeline.push({ status: 'paid', occurredAt: paidAt });
@@ -216,11 +307,16 @@ function makeOrder(opts: {
       tax: money(tax),
       total: money(total),
     },
-    currency: 'USD',
+    currency: 'GHS',
     shippingAddress: baseAddress,
     billingAddress: baseAddress,
     shippingMethod: shippedAt
-      ? { id: 'std', name: 'Standard', carrier: opts.carrier ?? 'UPS', trackingNumber: opts.tracking ?? '1Z999AA10123456784' }
+      ? {
+          id: 'local',
+          name: 'Ghana metro delivery',
+          carrier: opts.carrier ?? 'TwinSpire Logistics',
+          trackingNumber: opts.tracking ?? 'TS-DEL-0001',
+        }
       : undefined,
     paymentMethod: { id: 'pm-mock', provider: 'stripe', last4: '4242' },
     couponCodes: opts.coupons ?? [],
@@ -238,57 +334,127 @@ function makeOrder(opts: {
 }
 
 const productIds = products.slice(0, 12).map((p) => p.id);
-const pid = (i: number) => productIds[i % productIds.length] ?? productIds[0] ?? products[0]?.id ?? '';
+const pid = (i: number) =>
+  productIds[i % productIds.length] ?? productIds[0] ?? products[0]?.id ?? '';
 
 export const ADMIN_EXTRA_ORDERS: Order[] = [
   makeOrder({
-    id: 'ord-A', orderNumber: 'TS-26-0102', userId: 'cust-2', productIds: [pid(0), pid(3)],
-    status: 'delivered', fulfillmentStatus: 'fulfilled', paymentStatus: 'captured',
-    placedDaysAgo: 5, shippedDaysAgo: 3, deliveredDaysAgo: 1, coupons: ['SPRING15'],
+    id: 'ord-A',
+    orderNumber: 'TS-26-0102',
+    userId: 'cust-2',
+    productIds: [pid(0), pid(3)],
+    status: 'delivered',
+    fulfillmentStatus: 'fulfilled',
+    paymentStatus: 'captured',
+    placedDaysAgo: 5,
+    shippedDaysAgo: 3,
+    deliveredDaysAgo: 1,
+    coupons: ['SPRING15'],
   }),
   makeOrder({
-    id: 'ord-B', orderNumber: 'TS-26-0103', userId: 'cust-3', productIds: [pid(1)],
-    status: 'shipped', fulfillmentStatus: 'partial', paymentStatus: 'captured',
-    placedDaysAgo: 3, shippedDaysAgo: 1, carrier: 'FedEx', tracking: '7942 0123 4501',
+    id: 'ord-B',
+    orderNumber: 'TS-26-0103',
+    userId: 'cust-3',
+    productIds: [pid(1)],
+    status: 'shipped',
+    fulfillmentStatus: 'partial',
+    paymentStatus: 'captured',
+    placedDaysAgo: 3,
+    shippedDaysAgo: 1,
+    carrier: 'FedEx',
+    tracking: '7942 0123 4501',
   }),
   makeOrder({
-    id: 'ord-C', orderNumber: 'TS-26-0104', userId: 'cust-4', productIds: [pid(2), pid(7), pid(11)], quantities: [1, 2, 1],
-    status: 'processing', fulfillmentStatus: 'unfulfilled', paymentStatus: 'captured',
+    id: 'ord-C',
+    orderNumber: 'TS-26-0104',
+    userId: 'cust-4',
+    productIds: [pid(2), pid(7), pid(11)],
+    quantities: [1, 2, 1],
+    status: 'processing',
+    fulfillmentStatus: 'unfulfilled',
+    paymentStatus: 'captured',
     placedDaysAgo: 2,
   }),
   makeOrder({
-    id: 'ord-D', orderNumber: 'TS-26-0105', userId: 'cust-5', productIds: [pid(5)],
-    status: 'paid', fulfillmentStatus: 'unfulfilled', paymentStatus: 'captured', placedDaysAgo: 1,
+    id: 'ord-D',
+    orderNumber: 'TS-26-0105',
+    userId: 'cust-5',
+    productIds: [pid(5)],
+    status: 'paid',
+    fulfillmentStatus: 'unfulfilled',
+    paymentStatus: 'captured',
+    placedDaysAgo: 1,
   }),
   makeOrder({
-    id: 'ord-E', orderNumber: 'TS-26-0106', userId: 'cust-6', productIds: [pid(8), pid(9)],
-    status: 'pending', fulfillmentStatus: 'unfulfilled', paymentStatus: 'pending',
+    id: 'ord-E',
+    orderNumber: 'TS-26-0106',
+    userId: 'cust-6',
+    productIds: [pid(8), pid(9)],
+    status: 'pending',
+    fulfillmentStatus: 'unfulfilled',
+    paymentStatus: 'pending',
     placedDaysAgo: 0,
   }),
   makeOrder({
-    id: 'ord-F', orderNumber: 'TS-26-0107', userId: 'cust-7', productIds: [pid(4)],
-    status: 'cancelled', fulfillmentStatus: 'unfulfilled', paymentStatus: 'refunded',
-    placedDaysAgo: 7, cancelledDaysAgo: 6, note: 'Customer changed mind.',
+    id: 'ord-F',
+    orderNumber: 'TS-26-0107',
+    userId: 'cust-7',
+    productIds: [pid(4)],
+    status: 'cancelled',
+    fulfillmentStatus: 'unfulfilled',
+    paymentStatus: 'refunded',
+    placedDaysAgo: 7,
+    cancelledDaysAgo: 6,
+    note: 'Customer changed mind.',
   }),
   makeOrder({
-    id: 'ord-G', orderNumber: 'TS-26-0108', userId: 'cust-8', productIds: [pid(6), pid(10)],
-    status: 'delivered', fulfillmentStatus: 'fulfilled', paymentStatus: 'captured',
-    placedDaysAgo: 14, shippedDaysAgo: 12, deliveredDaysAgo: 10,
+    id: 'ord-G',
+    orderNumber: 'TS-26-0108',
+    userId: 'cust-8',
+    productIds: [pid(6), pid(10)],
+    status: 'delivered',
+    fulfillmentStatus: 'fulfilled',
+    paymentStatus: 'captured',
+    placedDaysAgo: 14,
+    shippedDaysAgo: 12,
+    deliveredDaysAgo: 10,
   }),
   makeOrder({
-    id: 'ord-H', orderNumber: 'TS-26-0109', userId: 'cust-9', productIds: [pid(0)],
-    status: 'refunded', fulfillmentStatus: 'returned', paymentStatus: 'refunded',
-    placedDaysAgo: 18, shippedDaysAgo: 16, deliveredDaysAgo: 14, note: 'Wrong size — refunded in full.',
+    id: 'ord-H',
+    orderNumber: 'TS-26-0109',
+    userId: 'cust-9',
+    productIds: [pid(0)],
+    status: 'refunded',
+    fulfillmentStatus: 'returned',
+    paymentStatus: 'refunded',
+    placedDaysAgo: 18,
+    shippedDaysAgo: 16,
+    deliveredDaysAgo: 14,
+    note: 'Wrong size — refunded in full.',
   }),
   makeOrder({
-    id: 'ord-I', orderNumber: 'TS-26-0110', userId: null, guestEmail: 'guest@example.com', productIds: [pid(2)],
-    status: 'paid', fulfillmentStatus: 'unfulfilled', paymentStatus: 'captured',
+    id: 'ord-I',
+    orderNumber: 'TS-26-0110',
+    userId: null,
+    guestEmail: 'guest@example.com',
+    productIds: [pid(2)],
+    status: 'paid',
+    fulfillmentStatus: 'unfulfilled',
+    paymentStatus: 'captured',
     placedDaysAgo: 0,
   }),
   makeOrder({
-    id: 'ord-J', orderNumber: 'TS-26-0111', userId: 'cust-2', productIds: [pid(5), pid(1)],
-    status: 'delivered', fulfillmentStatus: 'fulfilled', paymentStatus: 'captured',
-    placedDaysAgo: 21, shippedDaysAgo: 19, deliveredDaysAgo: 17, coupons: ['WELCOME10'],
+    id: 'ord-J',
+    orderNumber: 'TS-26-0111',
+    userId: 'cust-2',
+    productIds: [pid(5), pid(1)],
+    status: 'delivered',
+    fulfillmentStatus: 'fulfilled',
+    paymentStatus: 'captured',
+    placedDaysAgo: 21,
+    shippedDaysAgo: 19,
+    deliveredDaysAgo: 17,
+    coupons: ['WELCOME10'],
   }),
 ];
 
@@ -299,7 +465,10 @@ export const ALL_ADMIN_ORDERS: Order[] = [...ADMIN_EXTRA_ORDERS, ...DEMO_ORDERS]
 /* Coupons                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function buildCoupon(seed: Partial<Coupon> & Pick<Coupon, 'id' | 'code' | 'type' | 'value' | 'isActive' | 'stackable' | 'firstOrderOnly'>): Coupon {
+function buildCoupon(
+  seed: Partial<Coupon> &
+    Pick<Coupon, 'id' | 'code' | 'type' | 'value' | 'isActive' | 'stackable' | 'firstOrderOnly'>,
+): Coupon {
   return {
     description: seed.description,
     currency: seed.currency,
@@ -324,48 +493,75 @@ function buildCoupon(seed: Partial<Coupon> & Pick<Coupon, 'id' | 'code' | 'type'
 
 export const ADMIN_COUPONS: Coupon[] = [
   buildCoupon({
-    id: 'cpn-1', code: 'WELCOME10', type: 'percentage', value: 10,
+    id: 'cpn-1',
+    code: 'WELCOME10',
+    type: 'percentage',
+    value: 10,
     description: 'Welcome offer — 10% off your first order.',
-    usageLimit: 5000, usageLimitPerUser: 1, usedCount: 1284,
-    isActive: true, stackable: false, firstOrderOnly: true,
+    usageLimit: 5000,
+    usageLimitPerUser: 1,
+    usedCount: 1284,
+    isActive: true,
+    stackable: false,
+    firstOrderOnly: true,
     expiresAt: isoDaysAgo(-60),
   }),
   buildCoupon({
-    id: 'cpn-2', code: 'SPRING15', type: 'percentage', value: 15,
+    id: 'cpn-2',
+    code: 'SPRING15',
+    type: 'percentage',
+    value: 15,
     description: 'Spring 2026 sale.',
-    usageLimit: 10_000, usageLimitPerUser: 2, usedCount: 412,
-    isActive: true, stackable: false, firstOrderOnly: false,
+    usageLimit: 10_000,
+    usageLimitPerUser: 2,
+    usedCount: 412,
+    isActive: true,
+    stackable: false,
+    firstOrderOnly: false,
     expiresAt: isoDaysAgo(-20),
-    minSubtotal: money(99),
+    minSubtotal: money(1188), // ~99 USD × 12 = 1,188 GHS
   }),
   buildCoupon({
-    id: 'cpn-3', code: 'FREESHIP', type: 'free_shipping', value: 0,
-    description: 'Free shipping over $50.',
-    minSubtotal: money(50), usedCount: 980, isActive: true,
-    stackable: true, firstOrderOnly: false,
-    expiresAt: undefined,
-  }),
-  buildCoupon({
-    id: 'cpn-4', code: 'AUDIO50', type: 'fixed', value: 50, currency: 'USD',
-    description: '$50 off premium headphones.',
+    id: 'cpn-4',
+    code: 'AUDIO50',
+    type: 'fixed',
+    value: 600,
+    currency: 'GHS',
+    description: '₵600 off premium headphones.',
     applicableCategoryIds: ['cat-audio'],
-    usedCount: 67, usageLimit: 500, isActive: true,
-    stackable: false, firstOrderOnly: false,
+    usedCount: 67,
+    usageLimit: 500,
+    isActive: true,
+    stackable: false,
+    firstOrderOnly: false,
     expiresAt: isoDaysAgo(-12),
   }),
   buildCoupon({
-    id: 'cpn-5', code: 'BFCM2025', type: 'percentage', value: 25,
+    id: 'cpn-5',
+    code: 'BFCM2025',
+    type: 'percentage',
+    value: 25,
     description: 'Black Friday / Cyber Monday 2025.',
-    usedCount: 4108, usageLimit: 20_000, isActive: false,
-    stackable: false, firstOrderOnly: false,
-    startsAt: isoDaysAgo(180), expiresAt: isoDaysAgo(150),
+    usedCount: 4108,
+    usageLimit: 20_000,
+    isActive: false,
+    stackable: false,
+    firstOrderOnly: false,
+    startsAt: isoDaysAgo(180),
+    expiresAt: isoDaysAgo(150),
   }),
   buildCoupon({
-    id: 'cpn-6', code: 'BOGO-HEADPHONES', type: 'bogo', value: 100,
+    id: 'cpn-6',
+    code: 'BOGO-HEADPHONES',
+    type: 'bogo',
+    value: 100,
     description: 'Buy one pair of headphones, get one free (lower price).',
     applicableBrandIds: ['brand-aurora'],
-    usedCount: 18, usageLimit: 100,
-    isActive: true, stackable: false, firstOrderOnly: false,
+    usedCount: 18,
+    usageLimit: 100,
+    isActive: true,
+    stackable: false,
+    firstOrderOnly: false,
     expiresAt: isoDaysAgo(-7),
   }),
 ];
@@ -379,7 +575,14 @@ export const ADMIN_REVIEWS: Review[] = (() => {
   const moderationSeeds: Array<
     Pick<
       Review,
-      'productId' | 'rating' | 'title' | 'body' | 'authorName' | 'verifiedPurchase' | 'helpfulCount' | 'notHelpfulCount'
+      | 'productId'
+      | 'rating'
+      | 'title'
+      | 'body'
+      | 'authorName'
+      | 'verifiedPurchase'
+      | 'helpfulCount'
+      | 'notHelpfulCount'
     > & { status: Review['status']; daysAgo: number; moderatorNote?: string }
   > = [
     {
@@ -495,14 +698,83 @@ export interface AuditEvent {
 }
 
 export const ADMIN_AUDIT_LOG: AuditEvent[] = [
-  { id: 'au-1', actorId: ADMIN_USER.id, actorName: ADMIN_USER.displayName ?? 'Admin', action: 'order.refund', entity: 'order', entityId: 'ord-H', metadata: { amount: 199.99 }, createdAt: isoDaysAgo(0, 4) },
-  { id: 'au-2', actorId: MANAGER_USER.id, actorName: MANAGER_USER.displayName ?? 'Manager', action: 'product.update', entity: 'product', entityId: products[0]?.id ?? 'p-0', metadata: { field: 'price', from: 349, to: 329 }, createdAt: isoDaysAgo(0, 8) },
-  { id: 'au-3', actorId: ADMIN_USER.id, actorName: ADMIN_USER.displayName ?? 'Admin', action: 'coupon.create', entity: 'coupon', entityId: 'cpn-3', createdAt: isoDaysAgo(1) },
-  { id: 'au-4', actorId: MANAGER_USER.id, actorName: MANAGER_USER.displayName ?? 'Manager', action: 'review.moderate', entity: 'review', entityId: 'mod-r-5', metadata: { decision: 'rejected' }, createdAt: isoDaysAgo(1, 3) },
-  { id: 'au-5', actorId: ADMIN_USER.id, actorName: ADMIN_USER.displayName ?? 'Admin', action: 'user.suspend', entity: 'user', entityId: 'cust-8', metadata: { reason: 'Chargeback abuse' }, createdAt: isoDaysAgo(2) },
-  { id: 'au-6', actorId: MANAGER_USER.id, actorName: MANAGER_USER.displayName ?? 'Manager', action: 'product.create', entity: 'product', entityId: 'p-new-1', createdAt: isoDaysAgo(3) },
-  { id: 'au-7', actorId: ADMIN_USER.id, actorName: ADMIN_USER.displayName ?? 'Admin', action: 'brand.update', entity: 'brand', entityId: brands[0]?.id ?? 'b-0', createdAt: isoDaysAgo(4) },
-  { id: 'au-8', actorId: MANAGER_USER.id, actorName: MANAGER_USER.displayName ?? 'Manager', action: 'order.update', entity: 'order', entityId: 'ord-B', metadata: { status: 'shipped' }, createdAt: isoDaysAgo(5) },
+  {
+    id: 'au-1',
+    actorId: ADMIN_USER.id,
+    actorName: ADMIN_USER.displayName ?? 'Admin',
+    action: 'order.refund',
+    entity: 'order',
+    entityId: 'ord-H',
+    metadata: { amount: 199.99 },
+    createdAt: isoDaysAgo(0, 4),
+  },
+  {
+    id: 'au-2',
+    actorId: MANAGER_USER.id,
+    actorName: MANAGER_USER.displayName ?? 'Manager',
+    action: 'product.update',
+    entity: 'product',
+    entityId: products[0]?.id ?? 'p-0',
+    metadata: { field: 'price', from: 349, to: 329 },
+    createdAt: isoDaysAgo(0, 8),
+  },
+  {
+    id: 'au-3',
+    actorId: ADMIN_USER.id,
+    actorName: ADMIN_USER.displayName ?? 'Admin',
+    action: 'coupon.create',
+    entity: 'coupon',
+    entityId: 'cpn-3',
+    createdAt: isoDaysAgo(1),
+  },
+  {
+    id: 'au-4',
+    actorId: MANAGER_USER.id,
+    actorName: MANAGER_USER.displayName ?? 'Manager',
+    action: 'review.moderate',
+    entity: 'review',
+    entityId: 'mod-r-5',
+    metadata: { decision: 'rejected' },
+    createdAt: isoDaysAgo(1, 3),
+  },
+  {
+    id: 'au-5',
+    actorId: ADMIN_USER.id,
+    actorName: ADMIN_USER.displayName ?? 'Admin',
+    action: 'user.suspend',
+    entity: 'user',
+    entityId: 'cust-8',
+    metadata: { reason: 'Chargeback abuse' },
+    createdAt: isoDaysAgo(2),
+  },
+  {
+    id: 'au-6',
+    actorId: MANAGER_USER.id,
+    actorName: MANAGER_USER.displayName ?? 'Manager',
+    action: 'product.create',
+    entity: 'product',
+    entityId: 'p-new-1',
+    createdAt: isoDaysAgo(3),
+  },
+  {
+    id: 'au-7',
+    actorId: ADMIN_USER.id,
+    actorName: ADMIN_USER.displayName ?? 'Admin',
+    action: 'brand.update',
+    entity: 'brand',
+    entityId: brands[0]?.id ?? 'b-0',
+    createdAt: isoDaysAgo(4),
+  },
+  {
+    id: 'au-8',
+    actorId: MANAGER_USER.id,
+    actorName: MANAGER_USER.displayName ?? 'Manager',
+    action: 'order.update',
+    entity: 'order',
+    entityId: 'ord-B',
+    metadata: { status: 'shipped' },
+    createdAt: isoDaysAgo(5),
+  },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -554,7 +826,7 @@ function buildSeries(seed: number, days = 30, base = 8000, jitter = 4500): Serie
   for (let i = days - 1; i >= 0; i -= 1) {
     const x = (days - 1 - i) / (days - 1);
     const wave = Math.sin((x + seed) * Math.PI * 1.5) * 0.7 + 0.3;
-    const value = Math.round(base + jitter * wave + (Math.sin(seed + i * 0.9) * 700));
+    const value = Math.round(base + jitter * wave + Math.sin(seed + i * 0.9) * 700);
     out.push({ date: isoDaysAgo(i), value: Math.max(0, value) });
   }
   return out;
@@ -566,7 +838,10 @@ export function buildAdminAnalytics(): AdminAnalyticsSummary {
   const revenueToday = ordersToday.reduce((sum, o) => sum + o.totals.total.amount, 0);
   const grossRevenue = ALL_ADMIN_ORDERS.reduce((sum, o) => sum + o.totals.total.amount, 0);
 
-  const productRevenue = new Map<string, { name: string; revenue: number; units: number; image?: { url: string; alt: string } }>();
+  const productRevenue = new Map<
+    string,
+    { name: string; revenue: number; units: number; image?: { url: string; alt: string } }
+  >();
   for (const order of ALL_ADMIN_ORDERS) {
     if (order.status === 'cancelled' || order.status === 'refunded') continue;
     for (const item of order.items) {
@@ -599,39 +874,52 @@ export function buildAdminAnalytics(): AdminAnalyticsSummary {
   for (const o of ALL_ADMIN_ORDERS) {
     ordersByStatusMap.set(o.status, (ordersByStatusMap.get(o.status) ?? 0) + 1);
   }
-  const ordersByStatus = Array.from(ordersByStatusMap.entries()).map(([status, count]) => ({ status, count }));
+  const ordersByStatus = Array.from(ordersByStatusMap.entries()).map(([status, count]) => ({
+    status,
+    count,
+  }));
 
-  const lowStock = products.filter((p) => p.stockStatus === 'low_stock' || p.stockStatus === 'out_of_stock').length;
+  const lowStock = products.filter(
+    (p) => p.stockStatus === 'low_stock' || p.stockStatus === 'out_of_stock',
+  ).length;
 
+  // Category revenues scaled to the GHS regime (USD ×12).
   const topCategories = [
-    { categoryId: 'cat-audio', name: 'Audio', revenue: money(48_120), share: 0.32 },
-    { categoryId: 'cat-laptops', name: 'Laptops', revenue: money(36_840), share: 0.24 },
-    { categoryId: 'cat-tvs', name: 'TVs & monitors', revenue: money(28_440), share: 0.19 },
-    { categoryId: 'cat-phones', name: 'Phones', revenue: money(21_180), share: 0.14 },
-    { categoryId: 'cat-accessories', name: 'Accessories', revenue: money(16_200), share: 0.11 },
+    { categoryId: 'cat-audio', name: 'Audio', revenue: money(577_440), share: 0.32 },
+    { categoryId: 'cat-laptops', name: 'Laptops', revenue: money(442_080), share: 0.24 },
+    { categoryId: 'cat-tvs', name: 'TVs & monitors', revenue: money(341_280), share: 0.19 },
+    { categoryId: 'cat-phones', name: 'Phones', revenue: money(254_160), share: 0.14 },
+    { categoryId: 'cat-accessories', name: 'Accessories', revenue: money(194_400), share: 0.11 },
   ];
 
   return {
     ordersToday: ordersToday.length || 4,
     ordersTodayDeltaPct: 12.4,
-    revenueToday: money(Number(revenueToday.toFixed(2))) ?? money(2480),
+    revenueToday: money(Number(revenueToday.toFixed(2))) ?? money(29_760),
     revenueTodayDeltaPct: 8.6,
-    averageOrderValue: money(Number((grossRevenue / Math.max(1, ALL_ADMIN_ORDERS.length)).toFixed(2))),
+    averageOrderValue: money(
+      Number((grossRevenue / Math.max(1, ALL_ADMIN_ORDERS.length)).toFixed(2)),
+    ),
     averageOrderValueDeltaPct: -2.1,
-    activeCustomers: ALL_MOCK_USERS.filter((u) => u.role === 'customer' && u.status === 'active').length + 142,
+    activeCustomers:
+      ALL_MOCK_USERS.filter((u) => u.role === 'customer' && u.status === 'active').length + 142,
     activeCustomersDeltaPct: 5.4,
     conversionRate: 3.42,
     conversionRateDeltaPct: 0.8,
     newSignupsWeek: 38,
     pendingReviews: ADMIN_REVIEWS.filter((r) => r.status === 'pending').length,
-    pendingOrders: ALL_ADMIN_ORDERS.filter((o) => o.status === 'pending' || o.status === 'paid' || o.status === 'processing').length,
+    pendingOrders: ALL_ADMIN_ORDERS.filter(
+      (o) => o.status === 'pending' || o.status === 'paid' || o.status === 'processing',
+    ).length,
     lowStockProducts: lowStock + 6,
     revenueSeries30d: buildSeries(0.3, 30, 9200, 4800),
     ordersSeries30d: buildSeries(0.7, 30, 38, 22),
     ordersByStatus,
     topProducts,
     topCategories,
-    recentOrders: [...ALL_ADMIN_ORDERS].sort((a, b) => b.placedAt.localeCompare(a.placedAt)).slice(0, 6),
+    recentOrders: [...ALL_ADMIN_ORDERS]
+      .sort((a, b) => b.placedAt.localeCompare(a.placedAt))
+      .slice(0, 6),
     recentAudit: ADMIN_AUDIT_LOG.slice(0, 5),
   };
 }

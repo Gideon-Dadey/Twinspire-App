@@ -22,23 +22,14 @@ export default function LoginPage() {
       footer={
         <p>
           Don&apos;t have an account?{' '}
-          <Link href="/register" className="font-medium text-primary hover:underline">
+          <Link href="/register" className="text-primary font-medium hover:underline">
             Create one
           </Link>
         </p>
       }
     >
-      <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-3 text-xs text-foreground">
-        <p className="font-semibold">Demo mode</p>
-        <p className="text-muted-foreground">
-          Use <code className="font-mono">demo@twinspire.dev</code> /{' '}
-          <code className="font-mono">TwinSpire!2026</code> to sign in instantly.
-        </p>
-      </div>
       <Suspense fallback={null}>
-        <div className="mt-4">
-          <LoginForm />
-        </div>
+        <LoginForm />
       </Suspense>
       <OrDivider />
       <SocialButtons />

@@ -7,7 +7,7 @@ import * as React from 'react';
 export type CheckoutStep = 'shipping' | 'payment' | 'review';
 
 const STEPS: { id: CheckoutStep; label: string }[] = [
-  { id: 'shipping', label: 'Shipping' },
+  { id: 'shipping', label: 'Delivery' },
   { id: 'payment', label: 'Payment' },
   { id: 'review', label: 'Review & place order' },
 ];
@@ -18,7 +18,11 @@ export interface CheckoutStepperProps {
   onStepClick?: (step: CheckoutStep) => void;
 }
 
-export function CheckoutStepper({ current, completed, onStepClick }: CheckoutStepperProps): React.JSX.Element {
+export function CheckoutStepper({
+  current,
+  completed,
+  onStepClick,
+}: CheckoutStepperProps): React.JSX.Element {
   return (
     <ol className="flex w-full items-center gap-3" aria-label="Checkout progress">
       {STEPS.map((step, idx) => {
@@ -35,7 +39,7 @@ export function CheckoutStepper({ current, completed, onStepClick }: CheckoutSte
               className={cn(
                 'flex flex-1 items-center gap-3 rounded-full transition-colors',
                 'text-left text-sm font-medium',
-                canSelect ? 'cursor-pointer hover:text-foreground' : 'cursor-default',
+                canSelect ? 'hover:text-foreground cursor-pointer' : 'cursor-default',
                 isCurrent ? 'text-foreground' : 'text-muted-foreground',
               )}
             >
@@ -55,10 +59,7 @@ export function CheckoutStepper({ current, completed, onStepClick }: CheckoutSte
             </button>
             {idx < STEPS.length - 1 && (
               <span
-                className={cn(
-                  'h-px flex-1',
-                  isCompleted ? 'bg-success/40' : 'bg-border',
-                )}
+                className={cn('h-px flex-1', isCompleted ? 'bg-success/40' : 'bg-border')}
                 aria-hidden
               />
             )}
