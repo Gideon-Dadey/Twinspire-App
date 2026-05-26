@@ -1,0 +1,33 @@
+import type { Metadata } from 'next';
+
+import { Breadcrumb } from '@twinspire/ui';
+
+import { CheckoutFlow } from '@/components/shop/checkout/checkout-flow';
+import { NextLinkBreadcrumb } from '@/components/shared/next-adapters';
+
+export const metadata: Metadata = {
+  title: 'Checkout',
+  description: 'Securely complete your TwinSpire order.',
+  robots: { index: false, follow: false },
+};
+
+export default function CheckoutPage() {
+  return (
+    <div className="container mx-auto px-4 pb-20 pt-8 md:pt-12">
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Cart', href: '/cart' },
+          { label: 'Checkout' },
+        ]}
+        linkComponent={NextLinkBreadcrumb}
+        className="mb-6"
+      />
+      <h1 className="mb-8 font-display text-3xl font-bold tracking-tight md:text-4xl">
+        Checkout
+      </h1>
+
+      <CheckoutFlow />
+    </div>
+  );
+}

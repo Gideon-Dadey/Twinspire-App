@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "TwinSpire Base",
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false
+  }
+}

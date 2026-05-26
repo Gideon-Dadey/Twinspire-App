@@ -1,0 +1,17 @@
+node_modules
+.pnpm-store
+dist
+build
+out
+.next
+.turbo
+coverage
+playwright-report
+test-results
+storybook-static
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+*.min.js
+*.min.css
+.git

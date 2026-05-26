@@ -1,0 +1,9 @@
+# Replace with real GitHub teams / users once they exist.
+*                          @twinspire/maintainers
+
+apps/frontend/             @twinspire/frontend
+apps/backend/              @twinspire/backend
+packages/ui/               @twinspire/design-system
+infrastructure/            @twinspire/platform
+docs/                      @twinspire/maintainers
+.github/                   @twinspire/platform

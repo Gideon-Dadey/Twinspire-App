@@ -1,0 +1,12 @@
+{
+  "extends": "@twinspire/config/tsconfig/react-library.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "rootDir": ".",
+    "types": ["jest", "node", "@testing-library/jest-dom"]
+  },
+  "include": ["src/**/*", "jest.setup.ts"],
+  "exclude": ["node_modules", "dist"]
+}

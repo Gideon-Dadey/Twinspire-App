@@ -1,0 +1,36 @@
+name: ✨ Feature request
+description: Suggest a new capability or improvement
+labels: ['feature', 'triage']
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What pain point or opportunity does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Suggested phase
+      options:
+        - Phase 1 — Foundation
+        - Phase 2 — Database
+        - Phase 3 — Backend core
+        - Phase 4 — Backend domain
+        - Phase 5 — Design system
+        - Phase 6 — Frontend public
+        - Phase 7 — Auth & user dashboard
+        - Phase 8 — Admin dashboard
+        - Phase 9 — SEO / Perf / Testing
+        - Phase 10 — DevOps & deployment

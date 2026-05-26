@@ -1,0 +1,126 @@
+name: twinspire-dev
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: twinspire-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-twinspire}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-twinspire}
+      MONGO_INITDB_DATABASE: twinspire
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks: [twinspire]
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: twinspire-redis
+    restart: unless-stopped
+    command:
+      - 'redis-server'
+      - '--appendonly'
+      - 'yes'
+      - '--maxmemory'
+      - '512mb'
+      - '--maxmemory-policy'
+      - 'allkeys-lru'
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [twinspire]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: twinspire-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx1g
+      - ingest.geoip.downloader.enabled=false
+    ports:
+      - '9200:9200'
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -sf http://localhost:9200/_cluster/health || exit 1']
+      interval: 15s
+      timeout: 10s
+      retries: 12
+      start_period: 60s
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    networks: [twinspire]
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: twinspire-kibana
+    restart: unless-stopped
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - xpack.security.enabled=false
+    ports:
+      - '5601:5601'
+    networks: [twinspire]
+    profiles: ['tools']
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: twinspire-mailhog
+    restart: unless-stopped
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    networks: [twinspire]
+
+  minio:
+    image: minio/minio:RELEASE.2024-10-13T13-34-11Z
+    container_name: twinspire-minio
+    restart: unless-stopped
+    command: server /data --console-address ':9001'
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-twinspire}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-twinspire-secret}
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks: [twinspire]
+
+volumes:
+  mongo-data:
+  mongo-config:
+  redis-data:
+  es-data:
+  minio-data:
+
+networks:
+  twinspire:
+    name: twinspire-dev
+    driver: bridge

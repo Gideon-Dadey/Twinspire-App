@@ -1,0 +1,28 @@
+{
+  "name": "@twinspire/types",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "files": ["src"],
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist .turbo"
+  },
+  "devDependencies": {
+    "@twinspire/config": "workspace:*",
+    "eslint": "^9.13.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  }
+}
