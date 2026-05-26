@@ -56,8 +56,8 @@ to:
 
 The token surface area covers:
 
-* `palette` — `primary` (TwinSpire Blue `#0055FF`), `secondary` (Onyx `#111827`), `accent`
-  (Voltage Orange `#F97316`), `neutral`, plus status (`success`, `warning`, `danger`, `info`).
+* `palette` — `primary` (Voltage Orange `#F97316`), `secondary` (Onyx `#111827`), `accent`
+  (Amber `#F59E0B`), `neutral`, plus status (`success`, `warning`, `danger`, `info`).
 * `typography` — Inter (sans), Geist (display), Geist Mono (mono), 2xs → 9xl scale.
 * `spacing` — 0–96 (rem-based), aligned with Tailwind defaults.
 * `radii` — `xs`–`4xl`, `full`.

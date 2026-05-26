@@ -52,7 +52,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1400&q=80&auto=format&fit=crop',
     alt: 'Modern smartphone on a soft pastel background',
     background:
-      'bg-gradient-to-br from-blue-50 via-white to-orange-50',
+      'bg-gradient-to-br from-orange-50 via-white to-amber-50',
     accent: 'text-primary',
   },
   {
@@ -67,8 +67,8 @@ export const HERO_SLIDES: HeroSlide[] = [
       'https://images.unsplash.com/photo-1592286927505-1def25115558?w=1400&q=80&auto=format&fit=crop',
     alt: 'iPhone 15 Pro held in natural light',
     background:
-      'bg-gradient-to-br from-slate-50 via-blue-50 to-blue-100',
-    accent: 'text-blue-600',
+      'bg-gradient-to-br from-stone-50 via-white to-orange-100',
+    accent: 'text-orange-600',
   },
   {
     id: 'macbook',
@@ -97,8 +97,8 @@ export const HERO_SLIDES: HeroSlide[] = [
       'https://images.unsplash.com/photo-1486572788966-cfd3df1f5b42?w=1400&q=80&auto=format&fit=crop',
     alt: 'Gaming controller in a softly lit setup',
     background:
-      'bg-gradient-to-br from-indigo-50 via-white to-blue-50',
-    accent: 'text-indigo-600',
+      'bg-gradient-to-br from-zinc-50 via-white to-orange-100',
+    accent: 'text-orange-600',
   },
   {
     id: 'oled',

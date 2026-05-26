@@ -18,7 +18,7 @@ export function verifyEmailTemplate(vars: VerifyEmailVars): Pick<EmailMessage, '
     <h1 style="margin:0 0 16px;font-size:22px;">Welcome, ${escapeHtml(vars.firstName)}!</h1>
     <p style="margin:0 0 16px;line-height:1.6;">Confirm your email so we know it's really you. This link expires in 24 hours.</p>
     <p style="margin:0 0 24px;">${renderButton('Verify email', vars.verifyUrl)}</p>
-    <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;">Or paste this URL into your browser:<br/><span style="word-break:break-all;color:#0055ff;">${escapeHtml(vars.verifyUrl)}</span></p>
+    <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;">Or paste this URL into your browser:<br/><span style="word-break:break-all;color:#f97316;">${escapeHtml(vars.verifyUrl)}</span></p>
   `;
   const html = renderLayout({
     title: subject,

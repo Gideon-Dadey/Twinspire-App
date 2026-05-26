@@ -389,7 +389,7 @@ async function seedCampaignsAndBanners(): Promise<{ campaigns: number; banners: 
       width: 1080,
       height: 1620,
     },
-    backgroundColor: '#0055FF',
+    backgroundColor: '#F97316',
     textColor: '#FFFFFF',
     campaignId: campaign._id,
     priority: 10,

@@ -8,6 +8,7 @@ const baseProduct: ProductCardProduct = {
   id: 'prod-1',
   name: 'TwinSpire Wireless Headphones',
   slug: 'twinspire-headphones',
+  sku: 'TS-WH-001',
   brandName: 'TwinSpire',
   images: [{ url: '/img.jpg', alt: 'Headphones', position: 0 }],
   price: { amount: 199, compareAtAmount: 249, currency: 'USD' },
@@ -19,10 +20,10 @@ const baseProduct: ProductCardProduct = {
 };
 
 describe('<ProductCard />', () => {
-  it('renders the name and brand and a price tag', () => {
+  it('renders the name, SKU, and a price tag', () => {
     render(<ProductCard product={baseProduct} />);
     expect(screen.getByText(baseProduct.name)).toBeInTheDocument();
-    expect(screen.getByText('TwinSpire')).toBeInTheDocument();
+    expect(screen.getByText(baseProduct.sku)).toBeInTheDocument();
     expect(screen.getByText(/\$199\.00/)).toBeInTheDocument();
     expect(screen.getByText(/\$249\.00/)).toBeInTheDocument();
   });

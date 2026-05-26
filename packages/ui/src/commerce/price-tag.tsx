@@ -12,6 +12,14 @@ export interface PriceTagProps {
   className?: string;
   showCompare?: boolean;
   showDiscount?: boolean;
+  /**
+   * Color tone for the main price amount.
+   * - `default` (foreground) is used in product detail pages and cart.
+   * - `primary` paints the price in brand orange (product cards / hero pricing).
+   * - `destructive` (legacy) — only emitted automatically when a compare price exists
+   *   AND `tone` is left at `default`. Pass `primary` to opt out.
+   */
+  tone?: 'default' | 'primary';
 }
 
 const sizeStyles = {
@@ -28,6 +36,7 @@ export function PriceTag({
   className,
   showCompare = true,
   showDiscount = true,
+  tone = 'default',
 }: PriceTagProps): React.JSX.Element {
   const hasCompare = showCompare && price.compareAtAmount != null && price.compareAtAmount > price.amount;
   const discountPercent =
@@ -37,6 +46,8 @@ export function PriceTag({
         ? Math.round(((price.compareAtAmount - price.amount) / price.compareAtAmount) * 100)
         : 0;
   const styles = sizeStyles[size];
+  const mainTone =
+    tone === 'primary' ? 'text-primary' : hasCompare ? 'text-destructive' : 'text-foreground';
 
   return (
     <div
@@ -50,7 +61,7 @@ export function PriceTag({
       <Money
         amount={price.amount}
         currency={price.currency}
-        className={cn(styles.current, hasCompare && 'text-destructive')}
+        className={cn(styles.current, mainTone)}
       />
       {hasCompare && price.compareAtAmount != null && (
         <Money

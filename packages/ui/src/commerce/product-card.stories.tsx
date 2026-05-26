@@ -7,6 +7,7 @@ const sample: ProductCardProduct = {
   id: 'sb-1',
   name: 'Aurora X Pro Wireless Headphones',
   slug: 'aurora-x-pro',
+  sku: 'AU-XP-001',
   brandName: 'Aurora Audio',
   images: [
     {
