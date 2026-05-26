@@ -5,24 +5,24 @@
  * `styles/globals.css`, and exposed to Tailwind via `tailwind.preset.cjs`.
  *
  * Brand palette:
- *   primary  → #0055FF (TwinSpire Blue)
+ *   primary  → #F97316 (Voltage Orange)
  *   secondary→ #111827 (Onyx)
- *   accent   → #F97316 (Voltage Orange)
+ *   accent   → #F59E0B (Amber)
  */
 
 export const palette = {
   primary: {
-    50: '#EAF0FF',
-    100: '#D5E2FF',
-    200: '#ABC5FF',
-    300: '#82A7FF',
-    400: '#588AFF',
-    500: '#0055FF',
-    600: '#0044CC',
-    700: '#003399',
-    800: '#002266',
-    900: '#001133',
-    950: '#000A1F',
+    50: '#FFF7ED',
+    100: '#FFEDD5',
+    200: '#FED7AA',
+    300: '#FDBA74',
+    400: '#FB923C',
+    500: '#F97316',
+    600: '#EA580C',
+    700: '#C2410C',
+    800: '#9A3412',
+    900: '#7C2D12',
+    950: '#431407',
   },
   secondary: {
     50: '#F8FAFC',
@@ -38,17 +38,16 @@ export const palette = {
     950: '#020617',
   },
   accent: {
-    50: '#FFF7ED',
-    100: '#FFEDD5',
-    200: '#FED7AA',
-    300: '#FDBA74',
-    400: '#FB923C',
-    500: '#F97316',
-    600: '#EA580C',
-    700: '#C2410C',
-    800: '#9A3412',
-    900: '#7C2D12',
-    950: '#431407',
+    50: '#FFFBEB',
+    100: '#FEF3C7',
+    200: '#FDE68A',
+    300: '#FCD34D',
+    400: '#FBBF24',
+    500: '#F59E0B',
+    600: '#D97706',
+    700: '#B45309',
+    800: '#92400E',
+    900: '#78350F',
   },
   neutral: {
     0: '#FFFFFF',
@@ -127,7 +126,7 @@ export const shadows = {
   xl: '0 20px 40px -8px rgba(17, 24, 39, 0.14), 0 8px 16px -8px rgba(17, 24, 39, 0.08)',
   '2xl': '0 32px 64px -16px rgba(17, 24, 39, 0.20)',
   inner: 'inset 0 2px 4px 0 rgba(17, 24, 39, 0.06)',
-  glow: '0 0 0 4px rgba(0, 85, 255, 0.20)',
+  glow: '0 0 0 4px rgba(249, 115, 22, 0.20)',
 } as const;
 
 export const spacing = {
