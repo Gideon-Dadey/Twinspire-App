@@ -69,18 +69,8 @@ export function LoginForm({ redirectTo = '/account' }: LoginFormProps) {
 
   return (
     <form className="grid gap-4" onSubmit={onSubmit} noValidate>
-      <FormField
-        id="login-email"
-        label="Email"
-        required
-        error={errors.email?.message}
-      >
-        <Input
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          {...register('email')}
-        />
+      <FormField id="login-email" label="Email" required error={errors.email?.message}>
+        <Input type="email" autoComplete="email" {...register('email')} />
       </FormField>
       <FormField
         id="login-password"
@@ -89,7 +79,7 @@ export function LoginForm({ redirectTo = '/account' }: LoginFormProps) {
             <span>Password</span>
             <Link
               href="/forgot-password"
-              className="text-xs font-medium text-primary hover:underline"
+              className="text-primary text-xs font-medium hover:underline"
             >
               Forgot password?
             </Link>
@@ -98,12 +88,7 @@ export function LoginForm({ redirectTo = '/account' }: LoginFormProps) {
         required
         error={errors.password?.message}
       >
-        <Input
-          type="password"
-          autoComplete="current-password"
-          placeholder="••••••••••••"
-          {...register('password')}
-        />
+        <Input type="password" autoComplete="current-password" {...register('password')} />
       </FormField>
       {needsTotp ? (
         <FormField

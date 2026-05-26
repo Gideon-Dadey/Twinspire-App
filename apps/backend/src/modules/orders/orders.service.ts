@@ -2,7 +2,13 @@ import { Types } from 'mongoose';
 
 import { Cart, type CartDoc, type CartDocument } from '../../models/cart.model';
 import { Coupon } from '../../models/coupon.model';
-import { Order, type OrderAddressShape, type OrderDoc, type OrderDocument, type OrderStatus } from '../../models/order.model';
+import {
+  Order,
+  type OrderAddressShape,
+  type OrderDoc,
+  type OrderDocument,
+  type OrderStatus,
+} from '../../models/order.model';
 import { Product, type ProductDoc } from '../../models/product.model';
 import { cacheService } from '../../services/cache';
 import { pricingService, type PricingCartItem } from '../../services/pricing';
@@ -33,7 +39,10 @@ const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
 export class OrdersService {
   /* ---------- Quote ---------- */
 
-  async quote(identity: CartIdentity, opts: { couponCodes?: string[]; country?: string } = {}): Promise<unknown> {
+  async quote(
+    identity: CartIdentity,
+    opts: { couponCodes?: string[]; country?: string } = {},
+  ): Promise<unknown> {
     const cart = await this.loadCart(identity);
     if (!cart || cart.items.length === 0) throw HttpError.badRequest('Cart is empty');
     const pricingItems = await this.buildPricingItems(cart);
@@ -55,7 +64,8 @@ export class OrdersService {
       shippingAddress: OrderAddressShape;
       billingAddress?: OrderAddressShape;
       shippingMethodId?: string;
-      paymentProvider: 'stripe' | 'paypal';
+      paymentProvider: 'stripe' | 'paypal' | 'paystack';
+      paystackChannel?: 'momo' | 'card' | 'bank';
       guestEmail?: string;
       notes?: string;
       idempotencyKey?: string;
@@ -65,7 +75,9 @@ export class OrdersService {
     if (!cart || cart.items.length === 0) throw HttpError.badRequest('Cart is empty');
 
     if (!identity.userId && !input.guestEmail) {
-      throw HttpError.badRequest('Guest email is required for guest orders', { code: 'GUEST_EMAIL_REQUIRED' });
+      throw HttpError.badRequest('Guest email is required for guest orders', {
+        code: 'GUEST_EMAIL_REQUIRED',
+      });
     }
 
     /* Idempotency: cache previous result for a short window */
@@ -122,13 +134,15 @@ export class OrdersService {
       });
 
       const currency = cart.currency;
-      const zero = { amount: 0, currency };
       const totals = {
         subtotal: { amount: quote.subtotal, currency },
         discount: { amount: quote.discount, currency },
-        shipping: { amount: quote.shipping, currency },
+        // Shipping is always 0 in the Ghana operating model. The pricing
+        // service is also patched to never return a positive shipping value,
+        // but we defensively clamp here as the canonical truth.
+        shipping: { amount: 0, currency },
         tax: { amount: quote.tax, currency },
-        total: { amount: quote.total, currency },
+        total: { amount: quote.total - quote.shipping, currency },
       };
 
       const order = await Order.create({
@@ -141,7 +155,12 @@ export class OrdersService {
         billingAddress: input.billingAddress ?? input.shippingAddress,
         couponCodes: quote.appliedCoupons.map((c) => c.code),
         notes: input.notes,
-        paymentMethod: { provider: input.paymentProvider },
+        paymentMethod: {
+          provider: input.paymentProvider,
+          ...(input.paymentProvider === 'paystack' && input.paystackChannel
+            ? { paystackChannel: input.paystackChannel }
+            : {}),
+        },
         status: 'pending',
         paymentStatus: 'pending',
         fulfillmentStatus: 'unfulfilled',
@@ -156,6 +175,7 @@ export class OrdersService {
       ]);
 
       // Clear the cart
+      const zero = { amount: 0, currency };
       cart.items = [];
       cart.couponCodes = [];
       cart.totals = {
@@ -168,7 +188,8 @@ export class OrdersService {
       };
       await cart.save();
 
-      if (idemKey) await cacheService.set(idemKey, { orderId: String(order._id) }, { ttlSeconds: 60 * 60 });
+      if (idemKey)
+        await cacheService.set(idemKey, { orderId: String(order._id) }, { ttlSeconds: 60 * 60 });
 
       return order;
     } finally {
@@ -178,7 +199,10 @@ export class OrdersService {
 
   /* ---------- User-facing ---------- */
 
-  async listForUser(userId: string, query: OrderListQuery): Promise<{ items: OrderDoc[]; meta: unknown }> {
+  async listForUser(
+    userId: string,
+    query: OrderListQuery,
+  ): Promise<{ items: OrderDoc[]; meta: unknown }> {
     const filter: FilterQuery<OrderDoc> = { userId };
     if (query.status) filter.status = query.status;
     const paged = await Order.paginate(filter, {
@@ -296,7 +320,12 @@ export class OrdersService {
       last4,
     };
     if (order.status === 'pending' || order.status === 'awaiting_payment') {
-      await this.transitionStatus(order, 'paid', undefined, `Payment ${providerPaymentId} captured`);
+      await this.transitionStatus(
+        order,
+        'paid',
+        undefined,
+        `Payment ${providerPaymentId} captured`,
+      );
     } else {
       await order.save();
     }
@@ -317,7 +346,8 @@ export class OrdersService {
   async markRefunded(orderId: string, refundedAmount: number, reason?: string): Promise<void> {
     const order = await Order.findById(orderId);
     if (!order) return;
-    order.paymentStatus = refundedAmount >= order.totals.total.amount ? 'refunded' : 'partially_refunded';
+    order.paymentStatus =
+      refundedAmount >= order.totals.total.amount ? 'refunded' : 'partially_refunded';
     if (order.paymentStatus === 'refunded' && order.status !== 'refunded') {
       await this.transitionStatus(order, 'refunded', undefined, reason ?? 'Refunded');
     } else {
@@ -367,7 +397,9 @@ export class OrdersService {
     return product.stockStatus !== 'out_of_stock';
   }
 
-  private async reserveStockForOrder(items: { productId: Types.ObjectId; variantId?: Types.ObjectId; quantity: number }[]): Promise<void> {
+  private async reserveStockForOrder(
+    items: { productId: Types.ObjectId; variantId?: Types.ObjectId; quantity: number }[],
+  ): Promise<void> {
     await Promise.all(
       items.map((item) => {
         if (item.variantId) {

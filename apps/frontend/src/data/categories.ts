@@ -3,7 +3,10 @@ import type { Category } from '@twinspire/types';
 const now = '2026-01-01T00:00:00.000Z';
 
 function makeCategory(
-  input: Omit<Category, 'createdAt' | 'updatedAt' | 'isActive' | 'ancestors' | 'level' | 'path' | 'isFeatured'> & {
+  input: Omit<
+    Category,
+    'createdAt' | 'updatedAt' | 'isActive' | 'ancestors' | 'level' | 'path' | 'isFeatured'
+  > & {
     ancestors?: string[];
     level?: number;
     isFeatured?: boolean;
@@ -44,7 +47,8 @@ export const categories: Category[] = [
     id: 'c-laptops',
     name: 'Laptops',
     slug: 'laptops',
-    description: 'Ultrabooks, creator laptops, workstations, gaming.',
+    description:
+      'MacBook, ThinkPad, XPS, Spectre, Galaxy Book, Legion, OMEN — ultrabooks, creator laptops, workstations, and gaming.',
     image: {
       url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
       alt: 'Open laptop',
@@ -52,7 +56,7 @@ export const categories: Category[] = [
     icon: 'Laptop',
     position: 2,
     isFeatured: true,
-    productCount: 28,
+    productCount: 38,
   }),
   makeCategory({
     id: 'c-tvs',

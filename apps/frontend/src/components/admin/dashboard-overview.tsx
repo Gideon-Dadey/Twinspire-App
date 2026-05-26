@@ -35,7 +35,7 @@ import { StatCard } from './stat-card';
 
 const STATUS_COLORS: Record<string, string> = {
   pending: '#f59e0b',
-  awaiting_payment: '#f97316',
+  awaiting_payment: '#e91b25',
   paid: '#0ea5e9',
   processing: '#6366f1',
   shipped: '#8b5cf6',
@@ -69,8 +69,8 @@ export function DashboardOverview() {
 
   if (isError || !data) {
     return (
-      <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-6 text-sm">
-        <p className="font-medium text-destructive">Couldn’t load admin analytics.</p>
+      <div className="border-destructive/20 bg-destructive/5 rounded-lg border p-6 text-sm">
+        <p className="text-destructive font-medium">Couldn’t load admin analytics.</p>
         <Button variant="outline" size="sm" className="mt-3" onClick={() => void refetch()}>
           Retry
         </Button>
@@ -125,11 +125,11 @@ export function DashboardOverview() {
         />
       </div>
 
-      <section className="rounded-lg border border-border bg-card p-5">
+      <section className="border-border bg-card rounded-lg border p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-base font-semibold">Revenue & orders</h2>
-            <p className="text-xs text-muted-foreground">Last 30 days, all channels.</p>
+            <p className="text-muted-foreground text-xs">Last 30 days, all channels.</p>
           </div>
           <Tabs defaultValue="revenue" className="w-full sm:w-auto">
             <TabsList>
@@ -156,7 +156,7 @@ export function DashboardOverview() {
       </section>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="rounded-lg border border-border bg-card p-5 lg:col-span-2">
+        <div className="border-border bg-card rounded-lg border p-5 lg:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">Recent orders</h2>
             <Button asChild variant="ghost" size="sm">
@@ -170,22 +170,27 @@ export function DashboardOverview() {
             {summary.recentOrders.map((order) => (
               <li
                 key={order.id}
-                className="grid items-center gap-3 rounded-lg border border-border/60 bg-background px-3 py-3 text-sm sm:grid-cols-[1fr_auto_auto_auto]"
+                className="border-border/60 bg-background grid items-center gap-3 rounded-lg border px-3 py-3 text-sm sm:grid-cols-[1fr_auto_auto_auto]"
               >
                 <div className="min-w-0">
                   <Link
                     href={`/admin/orders/${order.id}`}
-                    className="block truncate font-medium text-foreground hover:underline"
+                    className="text-foreground block truncate font-medium hover:underline"
                   >
                     {order.orderNumber}
                   </Link>
-                  <p className="truncate text-xs text-muted-foreground">
+                  <p className="text-muted-foreground truncate text-xs">
                     {order.items.length} items · {formatRelativeTime(order.placedAt)}
                   </p>
                 </div>
                 <OrderStatusPill status={order.status} />
-                <Money value={order.totals.total} className="text-sm font-medium text-foreground" />
-                <Button asChild variant="ghost" size="sm" aria-label={`Open order ${order.orderNumber}`}>
+                <Money value={order.totals.total} className="text-foreground text-sm font-medium" />
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  aria-label={`Open order ${order.orderNumber}`}
+                >
                   <Link href={`/admin/orders/${order.id}`}>
                     <Eye className="size-4" aria-hidden />
                   </Link>
@@ -196,7 +201,7 @@ export function DashboardOverview() {
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-lg border border-border bg-card p-5">
+          <div className="border-border bg-card rounded-lg border p-5">
             <h2 className="text-base font-semibold">Orders by status</h2>
             <div className="mt-4 flex items-center gap-5">
               <Donut
@@ -222,14 +227,14 @@ export function DashboardOverview() {
                       />
                       <span className="capitalize">{s.status.replace(/_/g, ' ')}</span>
                     </span>
-                    <span className="font-medium text-foreground">{s.count}</span>
+                    <span className="text-foreground font-medium">{s.count}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="rounded-lg border border-border bg-card p-5">
+          <div className="border-border bg-card rounded-lg border p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-semibold">Needs attention</h2>
             </div>
@@ -255,7 +260,7 @@ export function DashboardOverview() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-lg border border-border bg-card p-5">
+        <div className="border-border bg-card rounded-lg border p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">Top products</h2>
             <Button asChild variant="ghost" size="sm">
@@ -267,22 +272,31 @@ export function DashboardOverview() {
           </div>
           <ul className="mt-3 grid gap-2">
             {summary.topProducts.map((p, i) => (
-              <li key={p.productId} className="flex items-center gap-3 rounded-lg border border-border/60 bg-background p-2 text-sm">
-                <span className="grid size-7 place-items-center rounded-md bg-primary/10 text-xs font-semibold text-primary">
+              <li
+                key={p.productId}
+                className="border-border/60 bg-background flex items-center gap-3 rounded-lg border p-2 text-sm"
+              >
+                <span className="bg-primary/10 text-primary grid size-7 place-items-center rounded-md text-xs font-semibold">
                   {i + 1}
                 </span>
                 {p.image ? (
-                  <span className="relative h-12 w-12 overflow-hidden rounded-md bg-muted">
-                    <Image src={p.image.url} alt={p.image.alt ?? p.name} fill sizes="48px" className="object-cover" />
+                  <span className="bg-muted relative h-12 w-12 overflow-hidden rounded-md">
+                    <Image
+                      src={p.image.url}
+                      alt={p.image.alt ?? p.name}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
                   </span>
                 ) : (
-                  <span className="grid size-12 place-items-center rounded-md bg-muted text-muted-foreground">
+                  <span className="bg-muted text-muted-foreground grid size-12 place-items-center rounded-md">
                     <PackageSearch className="size-4" aria-hidden />
                   </span>
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-foreground">{p.name}</p>
-                  <p className="text-xs text-muted-foreground">{p.units} sold</p>
+                  <p className="text-foreground truncate font-medium">{p.name}</p>
+                  <p className="text-muted-foreground text-xs">{p.units} sold</p>
                 </div>
                 <Money value={p.revenue} className="text-sm font-medium" />
               </li>
@@ -290,21 +304,21 @@ export function DashboardOverview() {
           </ul>
         </div>
 
-        <div className="rounded-lg border border-border bg-card p-5">
+        <div className="border-border bg-card rounded-lg border p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">Top categories</h2>
-            <Crown className="size-4 text-muted-foreground" aria-hidden />
+            <Crown className="text-muted-foreground size-4" aria-hidden />
           </div>
           <ul className="mt-3 grid gap-3">
             {summary.topCategories.map((c) => (
               <li key={c.categoryId} className="space-y-1">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium text-foreground">{c.name}</span>
+                  <span className="text-foreground font-medium">{c.name}</span>
                   <Money value={c.revenue} className="text-muted-foreground" />
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
                   <div
-                    className={cn('h-full rounded-full bg-primary')}
+                    className={cn('bg-primary h-full rounded-full')}
                     style={{ width: `${Math.round(c.share * 100)}%` }}
                   />
                 </div>
@@ -314,7 +328,7 @@ export function DashboardOverview() {
         </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-card p-5">
+      <div className="border-border bg-card rounded-lg border p-5">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold">Recent admin activity</h2>
           <Button asChild variant="ghost" size="sm">
@@ -326,18 +340,25 @@ export function DashboardOverview() {
         </div>
         <ul className="mt-3 grid gap-2 text-sm">
           {summary.recentAudit.map((event) => (
-            <li key={event.id} className="flex items-center justify-between gap-3 rounded-lg border border-border/60 bg-background px-3 py-2">
+            <li
+              key={event.id}
+              className="border-border/60 bg-background flex items-center justify-between gap-3 rounded-lg border px-3 py-2"
+            >
               <div className="min-w-0">
-                <p className="truncate text-foreground">
+                <p className="text-foreground truncate">
                   <span className="font-medium">{event.actorName}</span>{' '}
                   <span className="text-muted-foreground">{prettifyAction(event.action)}</span>{' '}
                   {event.entityId ? (
-                    <code className="text-xs text-muted-foreground">{event.entityId}</code>
+                    <code className="text-muted-foreground text-xs">{event.entityId}</code>
                   ) : null}
                 </p>
-                <p className="text-xs text-muted-foreground">{formatRelativeTime(event.createdAt)}</p>
+                <p className="text-muted-foreground text-xs">
+                  {formatRelativeTime(event.createdAt)}
+                </p>
               </div>
-              <Badge variant="outline" className="capitalize">{event.entity}</Badge>
+              <Badge variant="outline" className="capitalize">
+                {event.entity}
+              </Badge>
             </li>
           ))}
         </ul>
@@ -346,18 +367,26 @@ export function DashboardOverview() {
   );
 }
 
-function AlertRow({ icon: Icon, label, href }: { icon: typeof ShoppingBag; label: string; href: string }) {
+function AlertRow({
+  icon: Icon,
+  label,
+  href,
+}: {
+  icon: typeof ShoppingBag;
+  label: string;
+  href: string;
+}) {
   return (
     <li>
       <Link
         href={href}
-        className="flex items-center justify-between gap-3 rounded-lg border border-border/60 bg-background px-3 py-2 hover:bg-muted"
+        className="border-border/60 bg-background hover:bg-muted flex items-center justify-between gap-3 rounded-lg border px-3 py-2"
       >
         <span className="inline-flex items-center gap-2">
-          <Icon className="size-4 text-muted-foreground" aria-hidden />
+          <Icon className="text-muted-foreground size-4" aria-hidden />
           <span className="text-foreground">{label}</span>
         </span>
-        <ArrowRight className="size-3.5 text-muted-foreground" aria-hidden />
+        <ArrowRight className="text-muted-foreground size-3.5" aria-hidden />
       </Link>
     </li>
   );

@@ -168,7 +168,9 @@ async function verifyAppleIdToken(idToken: string): Promise<SocialProfile> {
   if (parts.length !== 3) throw HttpError.unauthorized('Malformed Apple ID token');
   let payload: AppleIdTokenPayload;
   try {
-    payload = JSON.parse(Buffer.from(parts[1] ?? '', 'base64url').toString('utf8')) as AppleIdTokenPayload;
+    payload = JSON.parse(
+      Buffer.from(parts[1] ?? '', 'base64url').toString('utf8'),
+    ) as AppleIdTokenPayload;
   } catch {
     throw HttpError.unauthorized('Apple token payload unreadable');
   }
@@ -191,7 +193,9 @@ async function verifyAppleIdToken(idToken: string): Promise<SocialProfile> {
 
 /** Find or create a user for a verified social profile. */
 export async function linkOrCreateSocialUser(profile: SocialProfile): Promise<UserDocument> {
-  const byExternal = await User.findOne({ [`externalIds.${profile.provider}`]: profile.externalId });
+  const byExternal = await User.findOne({
+    [`externalIds.${profile.provider}`]: profile.externalId,
+  });
   if (byExternal) return byExternal;
 
   const byEmail = await User.findOne({ email: profile.email });
@@ -217,7 +221,7 @@ export async function linkOrCreateSocialUser(profile: SocialProfile): Promise<Us
     externalIds: { [profile.provider]: profile.externalId },
     preferences: {
       locale: 'en-US',
-      currency: 'USD',
+      currency: 'GHS',
       theme: 'system',
       marketingOptIn: false,
       newsletter: false,
@@ -225,4 +229,3 @@ export async function linkOrCreateSocialUser(profile: SocialProfile): Promise<Us
   });
   return user;
 }
-

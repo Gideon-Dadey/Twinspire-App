@@ -24,7 +24,9 @@ export function CartSummary({
   children,
 }: CartSummaryProps): React.JSX.Element {
   return (
-    <aside className={cn('flex flex-col gap-4 rounded-lg border border-border bg-card p-6', className)}>
+    <aside
+      className={cn('border-border bg-card flex flex-col gap-4 rounded-lg border p-6', className)}
+    >
       <h2 className="font-display text-lg font-semibold tracking-tight">Order summary</h2>
 
       <dl className="space-y-2 text-sm">
@@ -35,7 +37,7 @@ export function CartSummary({
           </dd>
         </div>
         {totals.discount.amount > 0 && (
-          <div className="flex items-center justify-between text-success">
+          <div className="text-success flex items-center justify-between">
             <dt>Discount</dt>
             <dd>
               −<Money value={totals.discount} />
@@ -43,13 +45,11 @@ export function CartSummary({
           </div>
         )}
         <div className="flex items-center justify-between">
-          <dt className="text-muted-foreground">Shipping</dt>
-          <dd className="font-medium">
-            {totals.shipping.amount === 0 ? 'Free' : <Money value={totals.shipping} />}
-          </dd>
+          <dt className="text-muted-foreground">Delivery</dt>
+          <dd className="text-success font-medium">Free · arranged by phone</dd>
         </div>
         <div className="flex items-center justify-between">
-          <dt className="text-muted-foreground">Estimated tax</dt>
+          <dt className="text-muted-foreground">VAT (12.5%)</dt>
           <dd className="font-medium">
             <Money value={totals.tax} />
           </dd>
@@ -59,7 +59,7 @@ export function CartSummary({
       <Separator />
 
       <div className="flex items-baseline justify-between">
-        <span className="text-sm text-muted-foreground">Estimated total</span>
+        <span className="text-muted-foreground text-sm">Total</span>
         <Money value={totals.total} className="text-2xl font-bold tracking-tight" />
       </div>
 
@@ -71,8 +71,8 @@ export function CartSummary({
         </Button>
       )}
 
-      <p className="text-center text-[11px] text-muted-foreground">
-        Taxes calculated at checkout based on shipping address.
+      <p className="text-muted-foreground text-center text-[11px]">
+        Ghana VAT included · our team will call to confirm and arrange delivery.
       </p>
     </aside>
   );

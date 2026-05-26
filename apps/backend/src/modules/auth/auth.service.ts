@@ -80,7 +80,7 @@ export class AuthService {
       status: 'pending',
       preferences: {
         locale: 'en-US',
-        currency: 'USD',
+        currency: 'GHS',
         theme: 'system',
         marketingOptIn: input.marketingOptIn ?? false,
         newsletter: input.newsletter ?? false,
@@ -234,7 +234,10 @@ export class AuthService {
      REFRESH (with rotation + reuse detection)
      ========================================================================= */
 
-  async refresh(rawRefreshToken: string, req: Request): Promise<IssuedTokens & { user: SanitizedUser }> {
+  async refresh(
+    rawRefreshToken: string,
+    req: Request,
+  ): Promise<IssuedTokens & { user: SanitizedUser }> {
     let claims;
     try {
       claims = verifyRefreshToken(rawRefreshToken);
@@ -299,7 +302,11 @@ export class AuthService {
      LOGOUT
      ========================================================================= */
 
-  async logout(input: { sessionId?: string; userId?: string; everywhere?: boolean }): Promise<void> {
+  async logout(input: {
+    sessionId?: string;
+    userId?: string;
+    everywhere?: boolean;
+  }): Promise<void> {
     if (input.everywhere && input.userId) {
       await Session.updateMany(
         { userId: input.userId, revokedAt: null },
@@ -411,7 +418,9 @@ export class AuthService {
      TWO-FACTOR AUTHENTICATION
      ========================================================================= */
 
-  async beginTwoFactorSetup(userId: string): Promise<{ secret: string; uri: string; qrDataUrl: string }> {
+  async beginTwoFactorSetup(
+    userId: string,
+  ): Promise<{ secret: string; uri: string; qrDataUrl: string }> {
     const user = await User.findById(userId).exec();
     if (!user) throw HttpError.notFound('User not found');
     if (user.twoFactorEnabled) {
@@ -511,9 +520,7 @@ export class AuthService {
       expiresAt: Date;
     }[]
   > {
-    const sessions = await Session.find({ userId, revokedAt: null })
-      .sort({ createdAt: -1 })
-      .lean();
+    const sessions = await Session.find({ userId, revokedAt: null }).sort({ createdAt: -1 }).lean();
     return sessions.map((s) => ({
       id: String(s._id),
       deviceLabel: s.deviceLabel,

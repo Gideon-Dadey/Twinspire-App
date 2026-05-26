@@ -1,4 +1,3 @@
-
 import { Cart } from '../../models/cart.model';
 import { Coupon, type CouponDoc } from '../../models/coupon.model';
 import { Product } from '../../models/product.model';
@@ -11,7 +10,10 @@ import type { FilterQuery, Types } from 'mongoose';
 export class CouponsService {
   /* ---------- Public ---------- */
 
-  async validateForUser(code: string, opts: { userId?: string; sessionId?: string }): Promise<unknown> {
+  async validateForUser(
+    code: string,
+    opts: { userId?: string; sessionId?: string },
+  ): Promise<unknown> {
     const identity = opts.userId ? { userId: opts.userId } : { sessionId: opts.sessionId };
     const cart = await Cart.findOne(identity);
     const pricingItems: PricingCartItem[] = [];
@@ -38,7 +40,7 @@ export class CouponsService {
     }
 
     return pricingService.validateCoupon(code, {
-      currency: cart?.currency ?? 'USD',
+      currency: cart?.currency ?? 'GHS',
       items: pricingItems,
       couponCodes: [],
       userId: opts.userId,

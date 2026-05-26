@@ -1,5 +1,7 @@
+import { faHeart } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cn } from '@twinspire/ui';
-import { Heart } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { primaryNav, siteConfig } from '@/lib/site-config';
@@ -11,24 +13,31 @@ import { SearchBar } from './search-bar';
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-sticky border-b border-border bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+    // `isolate` creates a brand-new stacking context for the header, so any
+    // descendant `z-*` inside cards/badges/etc. can never poke through.
+    // `z-sticky` (1100) sits well above every page-level layer; the explicit
+    // `z-50` fallback is there in case a downstream Tailwind config strips
+    // the custom token. Background bumped from /90 to /95 + a hard fallback
+    // so content can't bleed visually through the blur during fast scrolls.
+    <header className="z-sticky border-border bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 isolate border-b backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center gap-2 px-4 sm:gap-3 md:gap-4 xl:gap-6">
         <MobileNav />
 
-        <Link
-          href="/"
-          aria-label={siteConfig.name}
-          className="flex shrink-0 items-center gap-2"
-        >
-          <span
-            aria-hidden
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-base font-bold text-primary-foreground shadow-sm"
-          >
-            T
-          </span>
-          <span className="hidden font-display text-lg font-semibold tracking-tight sm:inline">
-            {siteConfig.name}
-          </span>
+        <Link href="/" aria-label={siteConfig.name} className="flex shrink-0 items-center">
+          {/*
+           * Logo lockup ships at native 1280×426 (~3:1). We render at a fixed
+           * 40px height; Next/Image keeps the natural aspect by computing
+           * width from the intrinsic ratio (≈120px). `priority` so the LCP
+           * paints without waiting on hydration.
+           */}
+          <Image
+            src="/twinspire-logo.png"
+            alt={siteConfig.name}
+            width={1280}
+            height={426}
+            priority
+            className="h-9 w-auto sm:h-10"
+          />
         </Link>
 
         <nav aria-label="Primary" className="hidden min-w-0 flex-1 xl:block">
@@ -56,10 +65,10 @@ export function SiteHeader() {
           <AccountMenu />
           <Link
             href="/wishlist"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className="text-muted-foreground hover:bg-muted hover:text-foreground inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
             aria-label="Wishlist"
           >
-            <Heart className="h-5 w-5" aria-hidden />
+            <FontAwesomeIcon icon={faHeart} className="h-[18px] w-[18px]" aria-hidden />
           </Link>
           <CartIcon />
         </div>

@@ -20,12 +20,6 @@ import { OrderReview } from './order-review';
 import { PaymentForm } from './payment-form';
 import { ShippingForm } from './shipping-form';
 
-const SHIPPING_PRICE: Record<ShippingFormValues['shippingMethod'], number> = {
-  standard: 0,
-  express: 14.95,
-  overnight: 24.95,
-};
-
 export function CheckoutFlow(): React.JSX.Element {
   const router = useRouter();
   const items = useCartStore((s) => s.items);
@@ -35,7 +29,8 @@ export function CheckoutFlow(): React.JSX.Element {
 
   const { user, isAuthenticated } = useSession();
   const addresses = useAddressesQuery();
-  const defaultAddress = addresses.data?.addresses.find((a) => a.isDefault) ?? addresses.data?.addresses[0];
+  const defaultAddress =
+    addresses.data?.addresses.find((a) => a.isDefault) ?? addresses.data?.addresses[0];
 
   const sessionDefaults = React.useMemo<Partial<ShippingFormValues> | undefined>(() => {
     if (!user) return undefined;
@@ -47,9 +42,9 @@ export function CheckoutFlow(): React.JSX.Element {
       line1: defaultAddress?.line1 ?? '',
       line2: defaultAddress?.line2 ?? '',
       city: defaultAddress?.city ?? '',
-      state: defaultAddress?.state ?? '',
+      state: defaultAddress?.state ?? 'Greater Accra',
       postalCode: defaultAddress?.postalCode ?? '',
-      country: defaultAddress?.country ?? 'United States',
+      country: defaultAddress?.country ?? 'Ghana',
     };
   }, [user, defaultAddress]);
 
@@ -58,15 +53,10 @@ export function CheckoutFlow(): React.JSX.Element {
   const [shipping, setShipping] = React.useState<ShippingFormValues | undefined>();
   const [payment, setPayment] = React.useState<PaymentFormValues | undefined>();
 
-  const shippingOverride =
-    shipping && shipping.shippingMethod !== 'standard'
-      ? SHIPPING_PRICE[shipping.shippingMethod]
-      : undefined;
-
-  const totals = React.useMemo(
-    () => computeTotals(items, { couponCode, shippingOverride }),
-    [items, couponCode, shippingOverride],
-  );
+  // Shipping is permanently free in the Ghana operating model — delivery is
+  // arranged manually by phone, never at carrier rates. No `shippingOverride`
+  // is passed to `computeTotals`, so it defaults to 0.
+  const totals = React.useMemo(() => computeTotals(items, { couponCode }), [items, couponCode]);
 
   function markCompleted(target: CheckoutStep) {
     setCompleted((prev) => {
@@ -127,11 +117,14 @@ export function CheckoutFlow(): React.JSX.Element {
         {step === 'shipping' && (
           <>
             {isAuthenticated && sessionDefaults?.line1 ? (
-              <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-xs text-foreground">
+              <div className="border-primary/30 bg-primary/5 text-foreground rounded-lg border p-4 text-xs">
                 <p className="font-semibold">We&apos;ve filled in your saved details.</p>
                 <p className="text-muted-foreground">
                   Edit anything below or pick a different address from{' '}
-                  <Link href="/account/addresses" className="font-medium text-primary hover:underline">
+                  <Link
+                    href="/account/addresses"
+                    className="text-primary font-medium hover:underline"
+                  >
                     your address book
                   </Link>
                   .
@@ -162,12 +155,8 @@ export function CheckoutFlow(): React.JSX.Element {
         )}
       </section>
 
-      <CartSummary
-        totals={totals}
-        showCheckoutButton={false}
-        className="h-fit lg:sticky lg:top-24"
-      >
-        <p className="text-xs text-muted-foreground">
+      <CartSummary totals={totals} showCheckoutButton={false} className="h-fit lg:sticky lg:top-24">
+        <p className="text-muted-foreground text-xs">
           {items.length} {items.length === 1 ? 'item' : 'items'} in this order
         </p>
       </CartSummary>

@@ -1,4 +1,3 @@
-
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
 import { Product, type ProductDoc } from '../../models/product.model';
@@ -130,7 +129,8 @@ export class SearchService {
       });
     }
     if (query.rating !== undefined) filter.push({ range: { rating: { gte: query.rating } } });
-    if (query.inStock) filter.push({ terms: { stockStatus: ['in_stock', 'low_stock', 'preorder'] } });
+    if (query.inStock)
+      filter.push({ terms: { stockStatus: ['in_stock', 'low_stock', 'preorder'] } });
 
     const sort = this.buildEsSort(query.sort) as unknown as string[];
 
@@ -158,7 +158,7 @@ export class SearchService {
     const total = typeof totalRaw === 'number' ? totalRaw : (totalRaw?.value ?? 0);
 
     const items: SearchResultItem[] = result.hits.hits.map((hit) => {
-      const src = (hit._source ?? {});
+      const src = hit._source ?? {};
       return {
         id: String(hit._id),
         sku: String(src.sku ?? ''),
@@ -166,7 +166,7 @@ export class SearchService {
         slug: String(src.slug ?? ''),
         brandName: src.brandName ? String(src.brandName) : undefined,
         price: Number(src.price ?? 0),
-        currency: String(src.currency ?? 'USD'),
+        currency: String(src.currency ?? 'GHS'),
         rating: Number(src.rating ?? 0),
         ratingCount: Number(src.ratingCount ?? 0),
         highlight: {
@@ -194,7 +194,10 @@ export class SearchService {
       pages: Math.max(1, Math.ceil(total / query.limit)),
       facets: {
         brands: (aggs?.brands?.buckets ?? []).map((b) => ({ name: b.key, count: b.doc_count })),
-        categories: (aggs?.categories?.buckets ?? []).map((b) => ({ name: b.key, count: b.doc_count })),
+        categories: (aggs?.categories?.buckets ?? []).map((b) => ({
+          name: b.key,
+          count: b.doc_count,
+        })),
         priceRange: { min: aggs?.price_min?.value ?? 0, max: aggs?.price_max?.value ?? 0 },
         ratings: (aggs?.ratings?.buckets ?? []).map((b) => ({ rating: b.key, count: b.doc_count })),
       },
@@ -247,7 +250,7 @@ export class SearchService {
       sort: sort,
     });
 
-    const items: SearchResultItem[] = (paged.items).map((p) => ({
+    const items: SearchResultItem[] = paged.items.map((p) => ({
       id: String(p._id),
       sku: p.sku,
       name: p.name,

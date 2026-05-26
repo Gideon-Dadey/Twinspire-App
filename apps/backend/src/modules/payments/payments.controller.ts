@@ -1,4 +1,3 @@
-
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
 import { Payment } from '../../models/payment.model';
@@ -15,6 +14,9 @@ export const paymentsController = {
       stripe: env.STRIPE_SECRET_KEY ? { configured: true } : { configured: false },
       paypal: env.PAYPAL_CLIENT_ID
         ? { configured: true, env: env.PAYPAL_ENV, clientId: env.PAYPAL_CLIENT_ID }
+        : { configured: false },
+      paystack: env.PAYSTACK_PUBLIC_KEY
+        ? { configured: true, publicKey: env.PAYSTACK_PUBLIC_KEY }
         : { configured: false },
     });
   },
@@ -46,5 +48,20 @@ export const paymentsController = {
     const headers = req.headers as Record<string, string>;
     await paymentsService.handlePaypalWebhook(req.body, headers);
     res.status(200).json({ received: true });
+  },
+
+  async paystackWebhook(req: Request, res: Response): Promise<void> {
+    const signature = req.headers['x-paystack-signature'];
+    if (!signature || typeof signature !== 'string') {
+      throw HttpError.badRequest('Missing Paystack signature');
+    }
+    const raw = req.body as Buffer;
+    try {
+      await paymentsService.handlePaystackWebhook(raw, signature);
+      res.status(200).json({ received: true });
+    } catch (err) {
+      logger.warn({ err }, 'Paystack webhook handling failed');
+      throw err;
+    }
   },
 };

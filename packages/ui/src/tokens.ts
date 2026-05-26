@@ -5,24 +5,24 @@
  * `styles/globals.css`, and exposed to Tailwind via `tailwind.preset.cjs`.
  *
  * Brand palette:
- *   primary  → #F97316 (Voltage Orange)
+ *   primary  → #E91B25 (Twinspire Brand Red, sampled from official logo)
  *   secondary→ #111827 (Onyx)
  *   accent   → #F59E0B (Amber)
  */
 
 export const palette = {
   primary: {
-    50: '#FFF7ED',
-    100: '#FFEDD5',
-    200: '#FED7AA',
-    300: '#FDBA74',
-    400: '#FB923C',
-    500: '#F97316',
-    600: '#EA580C',
-    700: '#C2410C',
-    800: '#9A3412',
-    900: '#7C2D12',
-    950: '#431407',
+    50: '#FEF1F2',
+    100: '#FEE0E2',
+    200: '#FDC1C5',
+    300: '#FB97A0',
+    400: '#F65F6C',
+    500: '#E91B25',
+    600: '#C81118',
+    700: '#A60C14',
+    800: '#861014',
+    900: '#6F1014',
+    950: '#3A0608',
   },
   secondary: {
     50: '#F8FAFC',
@@ -126,7 +126,7 @@ export const shadows = {
   xl: '0 20px 40px -8px rgba(17, 24, 39, 0.14), 0 8px 16px -8px rgba(17, 24, 39, 0.08)',
   '2xl': '0 32px 64px -16px rgba(17, 24, 39, 0.20)',
   inner: 'inset 0 2px 4px 0 rgba(17, 24, 39, 0.06)',
-  glow: '0 0 0 4px rgba(249, 115, 22, 0.20)',
+  glow: '0 0 0 4px rgba(233, 27, 37, 0.20)',
 } as const;
 
 export const spacing = {

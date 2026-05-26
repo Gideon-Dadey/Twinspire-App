@@ -25,8 +25,12 @@ export const checkoutQuoteBodySchema = z.object({
 export const placeOrderBodySchema = z.object({
   shippingAddress: addressSchema,
   billingAddress: addressSchema.optional(),
+  // `shippingMethodId` is preserved for backward compatibility but the Ghana
+  // operating model has no rate cards — orders are always free local delivery.
   shippingMethodId: objectId.optional(),
-  paymentProvider: z.enum(['stripe', 'paypal']),
+  paymentProvider: z.enum(['stripe', 'paypal', 'paystack']),
+  /** For Paystack: which rail to channel the customer through. */
+  paystackChannel: z.enum(['momo', 'card', 'bank']).optional(),
   guestEmail: z.string().email().optional(),
   notes: z.string().max(1000).optional(),
   idempotencyKey: z.string().trim().min(8).max(128).optional(),
@@ -59,7 +63,9 @@ export type OrderListQuery = z.infer<typeof orderListQuerySchema>;
 
 export const adminUpdateOrderBodySchema = z.object({
   status: orderListQuerySchema.shape.status.unwrap().optional(),
-  fulfillmentStatus: z.enum(['unfulfilled', 'partial', 'fulfilled', 'returned', 'restocked']).optional(),
+  fulfillmentStatus: z
+    .enum(['unfulfilled', 'partial', 'fulfilled', 'returned', 'restocked'])
+    .optional(),
   note: z.string().max(600).optional(),
   trackingNumber: z.string().max(120).optional(),
   carrier: z.string().max(120).optional(),

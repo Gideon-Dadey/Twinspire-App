@@ -1,4 +1,3 @@
-
 import { auditService } from '../../services/audit.service';
 import { HttpError } from '../../utils/http-error';
 import { sendCreated, sendSuccess } from '../../utils/response';
@@ -33,8 +32,13 @@ export const ordersController = {
     const body = req.body as Parameters<typeof ordersService.placeOrder>[1];
     const orderDoc = await ordersService.placeOrder(identity, body);
 
-    // Initiate payment session (Stripe or PayPal)
-    const paymentSession = await paymentsService.createPaymentSession(orderDoc, body.paymentProvider, req);
+    // Initiate payment session (Stripe, PayPal, or Paystack)
+    const paymentSession = await paymentsService.createPaymentSession(
+      orderDoc,
+      body.paymentProvider,
+      req,
+      body.paymentProvider === 'paystack' ? { paystackChannel: body.paystackChannel } : undefined,
+    );
 
     sendCreated(res, { order: orderDoc.toJSON(), paymentSession });
   },
@@ -78,7 +82,11 @@ export const ordersController = {
       userId,
       req.body as Parameters<typeof ordersService.adminUpdate>[2],
     );
-    await auditService.fromRequest(req, { action: 'update', targetType: 'Order', targetId: orderId });
+    await auditService.fromRequest(req, {
+      action: 'update',
+      targetType: 'Order',
+      targetId: orderId,
+    });
     sendSuccess(res, { order });
   },
 

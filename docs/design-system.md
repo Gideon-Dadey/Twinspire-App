@@ -36,12 +36,12 @@ import {
 
 The package exports:
 
-| Entry point                          | What it ships                                              |
-| ------------------------------------ | ---------------------------------------------------------- |
-| `@twinspire/ui`                      | Components, composables, hooks, tokens, motion             |
-| `@twinspire/ui/tokens`               | TypeScript-only design tokens                              |
-| `@twinspire/ui/tailwind-preset`      | Tailwind preset (colors, fonts, animations, keyframes)     |
-| `@twinspire/ui/styles/globals.css`   | CSS variables (light + dark) + base layer normalizations   |
+| Entry point                        | What it ships                                            |
+| ---------------------------------- | -------------------------------------------------------- |
+| `@twinspire/ui`                    | Components, composables, hooks, tokens, motion           |
+| `@twinspire/ui/tokens`             | TypeScript-only design tokens                            |
+| `@twinspire/ui/tailwind-preset`    | Tailwind preset (colors, fonts, animations, keyframes)   |
+| `@twinspire/ui/styles/globals.css` | CSS variables (light + dark) + base layer normalizations |
 
 ## Foundations
 
@@ -56,22 +56,22 @@ to:
 
 The token surface area covers:
 
-* `palette` — `primary` (Voltage Orange `#F97316`), `secondary` (Onyx `#111827`), `accent`
+- `palette` — `primary` (Twinspire Brand Red `#E91B25`), `secondary` (Onyx `#111827`), `accent`
   (Amber `#F59E0B`), `neutral`, plus status (`success`, `warning`, `danger`, `info`).
-* `typography` — Inter (sans), Geist (display), Geist Mono (mono), 2xs → 9xl scale.
-* `spacing` — 0–96 (rem-based), aligned with Tailwind defaults.
-* `radii` — `xs`–`4xl`, `full`.
-* `shadows` — `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `inner`, `glow` (brand glow ring).
-* `screens` — `xs` (320px) through `3xl` (1920px).
-* `zIndex` — semantic stops (`dropdown`, `modal`, `popover`, `toast`, …).
-* `motion` — Tailwind-aligned `duration` and `easing` tokens.
+- `typography` — Inter (sans), Geist (display), Geist Mono (mono), 2xs → 9xl scale.
+- `spacing` — 0–96 (rem-based), aligned with Tailwind defaults.
+- `radii` — `xs`–`4xl`, `full`.
+- `shadows` — `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `inner`, `glow` (brand glow ring).
+- `screens` — `xs` (320px) through `3xl` (1920px).
+- `zIndex` — semantic stops (`dropdown`, `modal`, `popover`, `toast`, …).
+- `motion` — Tailwind-aligned `duration` and `easing` tokens.
 
 The Tailwind preset additionally exposes:
 
-* `bg-gradient-hero`, `bg-gradient-card`, `bg-shimmer-bg`
-* `animate-fade-in / fade-out / slide-up / slide-down / scale-in / shimmer / pulse-soft / marquee`
-* `transition-duration-fast/moderate/slow/…` and `ease-spring`, `ease-out-expo`
-* `aspect-product` (4 / 5) and `aspect-banner` (21 / 9)
+- `bg-gradient-hero`, `bg-gradient-card`, `bg-shimmer-bg`
+- `animate-fade-in / fade-out / slide-up / slide-down / scale-in / shimmer / pulse-soft / marquee`
+- `transition-duration-fast/moderate/slow/…` and `ease-spring`, `ease-out-expo`
+- `aspect-product` (4 / 5) and `aspect-banner` (21 / 9)
 
 ### Dark mode
 
@@ -84,16 +84,16 @@ CSS variables flip in `:root` vs `.dark`. The frontend layout already loads
 
 ## Utilities
 
-| Export              | Location                                  | What it does                                 |
-| ------------------- | ----------------------------------------- | -------------------------------------------- |
-| `cn(...classes)`    | `lib/cn.ts`                               | `clsx + tailwind-merge` class merger         |
-| `useMediaQuery`     | `lib/hooks/use-media-query.ts`            | SSR-safe match-media subscription            |
-| `useIsMobile/Tablet/Desktop` | same                              | Breakpoint helpers                            |
-| `usePrefersReducedMotion`    | same                              | Respect OS motion preferences                 |
-| `useControllableState`       | `lib/hooks/use-controllable-state.ts`     | Controlled/uncontrolled state hybrid          |
-| `useDebouncedValue`          | `lib/hooks/use-debounced-value.ts`        | Debounced reactive value                      |
-| `useCopyToClipboard`         | `lib/hooks/use-copy-to-clipboard.ts`      | Clipboard copy with success flag              |
-| `useMounted`                 | `lib/hooks/use-mounted.ts`                | Hydration-safe boolean                        |
+| Export                       | Location                              | What it does                         |
+| ---------------------------- | ------------------------------------- | ------------------------------------ |
+| `cn(...classes)`             | `lib/cn.ts`                           | `clsx + tailwind-merge` class merger |
+| `useMediaQuery`              | `lib/hooks/use-media-query.ts`        | SSR-safe match-media subscription    |
+| `useIsMobile/Tablet/Desktop` | same                                  | Breakpoint helpers                   |
+| `usePrefersReducedMotion`    | same                                  | Respect OS motion preferences        |
+| `useControllableState`       | `lib/hooks/use-controllable-state.ts` | Controlled/uncontrolled state hybrid |
+| `useDebouncedValue`          | `lib/hooks/use-debounced-value.ts`    | Debounced reactive value             |
+| `useCopyToClipboard`         | `lib/hooks/use-copy-to-clipboard.ts`  | Clipboard copy with success flag     |
+| `useMounted`                 | `lib/hooks/use-mounted.ts`            | Hydration-safe boolean               |
 
 Money / number / date formatting still live in [`@twinspire/utils`](../packages/utils/src/format.ts)
 and are re-used by the commerce composables.
@@ -102,10 +102,10 @@ and are re-used by the commerce composables.
 
 Shadcn-style recipes wrapping Radix Primitives. All ship with:
 
-* `cn`-based composition (override-friendly Tailwind class merging).
-* Keyboard accessible defaults (Radix takes care of ARIA roles + focus management).
-* `data-state` attribute hooks for motion / animation classes.
-* `focus-visible:ring-ring ring-offset-background` for consistent focus rings.
+- `cn`-based composition (override-friendly Tailwind class merging).
+- Keyboard accessible defaults (Radix takes care of ARIA roles + focus management).
+- `data-state` attribute hooks for motion / animation classes.
+- `focus-visible:ring-ring ring-offset-background` for consistent focus rings.
 
 Shipped primitives:
 
@@ -127,12 +127,12 @@ Tooltip
 
 `Button` is a `class-variance-authority` recipe. It accepts:
 
-* `variant`: `default | destructive | outline | secondary | ghost | link | accent | success`
-* `size`: `xs | sm | md | lg | xl | icon | icon-sm | icon-lg`
-* `rounded`: `default | full | none`
-* `loading`: shows a spinner and sets `aria-busy`
-* `leftIcon` / `rightIcon`: render alongside children
-* `asChild`: forward props to a custom child (Next/Link, Tooltip trigger, …)
+- `variant`: `default | destructive | outline | secondary | ghost | link | accent | success`
+- `size`: `xs | sm | md | lg | xl | icon | icon-sm | icon-lg`
+- `rounded`: `default | full | none`
+- `loading`: shows a spinner and sets `aria-busy`
+- `leftIcon` / `rightIcon`: render alongside children
+- `asChild`: forward props to a custom child (Next/Link, Tooltip trigger, …)
 
 ```tsx
 <Button asChild size="xl" rounded="full" rightIcon={<ArrowRight />}>
@@ -158,31 +158,31 @@ The error message is rendered with `role="alert"` for screen-reader announcement
 Motion utilities live in `@twinspire/ui` (re-exported from `motion/`). They wrap Framer Motion
 with project-default easings/durations and respect `prefers-reduced-motion`.
 
-| Export        | What it is                                                       |
-| ------------- | ---------------------------------------------------------------- |
-| `presets`     | `fadeIn`, `slideUp`, `slideInLeft/Right`, `scaleIn`, `pop`, …    |
-| `springs`     | `soft`, `snappy`, `bouncy`                                       |
-| `<FadeIn>`    | Fades in on mount                                                |
-| `<Reveal>`    | Slides up on scroll-into-view (first time)                       |
-| `<Stagger>` + `<StaggerItem>` | Stagger children when the container enters view  |
-| `<PageTransition pageKey>`    | Wrap route children for cross-fade transitions   |
+| Export                        | What it is                                                    |
+| ----------------------------- | ------------------------------------------------------------- |
+| `presets`                     | `fadeIn`, `slideUp`, `slideInLeft/Right`, `scaleIn`, `pop`, … |
+| `springs`                     | `soft`, `snappy`, `bouncy`                                    |
+| `<FadeIn>`                    | Fades in on mount                                             |
+| `<Reveal>`                    | Slides up on scroll-into-view (first time)                    |
+| `<Stagger>` + `<StaggerItem>` | Stagger children when the container enters view               |
+| `<PageTransition pageKey>`    | Wrap route children for cross-fade transitions                |
 
 Each motion component checks `useReducedMotion` (Framer) or `usePrefersReducedMotion` and falls
 back to a static `<div>` for users who opt out.
 
 ## Commerce composables
 
-| Component            | Notes                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------- |
-| `<Money>`            | Renders `Money` or `(amount, currency)` via `formatMoney` from `@twinspire/utils`.       |
-| `<PriceTag>`         | Current price + optional compare-at + computed discount; sized `sm/md/lg/xl`.            |
-| `<RatingStars>`      | Decimal-precise fill, accessible label (`role="img"`), optional value/count.             |
-| `<StockBadge>`       | Maps `StockStatus` (`in_stock`, `low_stock`, …) to the appropriate Badge variant.        |
-| `<ProductCard>`      | Composes image, badges, price tag, rating, stock, CTA, and wishlist toggle.              |
-| `<ProductCardSkeleton>` | Shimmering loading state with the same layout.                                        |
-| `<CategoryCard>`     | Square or full-bleed tile, hover lift, optional image + product count.                   |
-| `<QuantityStepper>`  | Controlled/uncontrolled, clamped to `min`/`max`, keyboard accessible.                    |
-| `<Breadcrumb>`       | Accessible breadcrumb with custom link component + chevron/slash separators.             |
+| Component               | Notes                                                                              |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| `<Money>`               | Renders `Money` or `(amount, currency)` via `formatMoney` from `@twinspire/utils`. |
+| `<PriceTag>`            | Current price + optional compare-at + computed discount; sized `sm/md/lg/xl`.      |
+| `<RatingStars>`         | Decimal-precise fill, accessible label (`role="img"`), optional value/count.       |
+| `<StockBadge>`          | Maps `StockStatus` (`in_stock`, `low_stock`, …) to the appropriate Badge variant.  |
+| `<ProductCard>`         | Composes image, badges, price tag, rating, stock, CTA, and wishlist toggle.        |
+| `<ProductCardSkeleton>` | Shimmering loading state with the same layout.                                     |
+| `<CategoryCard>`        | Square or full-bleed tile, hover lift, optional image + product count.             |
+| `<QuantityStepper>`     | Controlled/uncontrolled, clamped to `min`/`max`, keyboard accessible.              |
+| `<Breadcrumb>`          | Accessible breadcrumb with custom link component + chevron/slash separators.       |
 
 `<ProductCard>` accepts a `linkComponent` and `imageComponent` prop so the Next.js storefront
 can pass `next/link` and `next/image` while Storybook / tests use plain `<a>` / `<img>`.
@@ -191,10 +191,10 @@ can pass `next/link` and `next/image` while Storybook / tests use plain `<a>` / 
 
 Storybook 8 is configured in [`packages/ui/.storybook`](../packages/ui/.storybook) with:
 
-* **Addons**: `essentials`, `interactions`, `a11y`, `themes`, `links`
-* **Builder**: `@storybook/react-vite`
-* **Theme switcher**: `withThemeByClassName` (light ↔ dark via `.dark`)
-* **A11y**: axe-core through `@storybook/addon-a11y`
+- **Addons**: `essentials`, `interactions`, `a11y`, `themes`, `links`
+- **Builder**: `@storybook/react-vite`
+- **Theme switcher**: `withThemeByClassName` (light ↔ dark via `.dark`)
+- **A11y**: axe-core through `@storybook/addon-a11y`
 
 ```bash
 pnpm --filter @twinspire/ui storybook        # http://localhost:6006
@@ -217,15 +217,15 @@ pnpm --filter @twinspire/ui test:watch    # watch mode
 Tests focus on behaviour and accessibility (`role`, `aria-*`, keyboard) rather than markup
 snapshots. Covered today:
 
-* `cn()` Tailwind merger
-* `<Button>` (loading, disabled, refs, variants)
-* `<Badge>` (variants)
-* `<FormField>` (a11y wiring: label, description, error, `aria-invalid`)
-* `<Money>` (formatting + strikethrough)
-* `<PriceTag>` (current + compare-at + discount)
-* `<RatingStars>` (clamping + a11y label)
-* `<QuantityStepper>` (clamping + callbacks)
-* `<ProductCard>` (link, CTA, wishlist toggle, OOS state)
+- `cn()` Tailwind merger
+- `<Button>` (loading, disabled, refs, variants)
+- `<Badge>` (variants)
+- `<FormField>` (a11y wiring: label, description, error, `aria-invalid`)
+- `<Money>` (formatting + strikethrough)
+- `<PriceTag>` (current + compare-at + discount)
+- `<RatingStars>` (clamping + a11y label)
+- `<QuantityStepper>` (clamping + callbacks)
+- `<ProductCard>` (link, CTA, wishlist toggle, OOS state)
 
 ## Frontend integration
 

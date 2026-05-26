@@ -10,11 +10,10 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
-    theme_color: '#F97316',
+    theme_color: '#E91B25',
     icons: [
-      { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-      { src: '/icon-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      { src: '/twinspire-logo.png', sizes: 'any', type: 'image/png', purpose: 'any' },
+      { src: '/twinspire-logo.png', sizes: 'any', type: 'image/png', purpose: 'maskable' },
     ],
   };
 }

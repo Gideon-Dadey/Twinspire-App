@@ -56,7 +56,11 @@ const productSchema = z.object({
   stockStatus: z.enum(['in_stock', 'low_stock', 'out_of_stock', 'backorder', 'preorder']),
   condition: z.enum(['new', 'refurbished', 'used', 'open_box']),
   priceAmount: z.coerce.number().min(0),
-  priceCompareAt: z.coerce.number().min(0).optional().or(z.literal('').transform(() => undefined)),
+  priceCompareAt: z.coerce
+    .number()
+    .min(0)
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
   priceCurrency: z.string().length(3),
   imageUrl: z.string().url('Provide a valid image URL').optional().or(z.literal('')),
   imageAlt: z.string().max(200).optional().or(z.literal('')),
@@ -122,7 +126,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
       condition: product?.condition ?? 'new',
       priceAmount: product?.price.amount ?? 0,
       priceCompareAt: product?.price.compareAtAmount ?? undefined,
-      priceCurrency: product?.price.currency ?? 'USD',
+      priceCurrency: product?.price.currency ?? 'GHS',
       imageUrl: product?.images[0]?.url ?? '',
       imageAlt: product?.images[0]?.alt ?? '',
       isFeatured: product?.isFeatured ?? false,
@@ -151,7 +155,8 @@ export function ProductForm({ mode, product }: ProductFormProps) {
       price: {
         amount: values.priceAmount,
         currency: values.priceCurrency.toUpperCase() as Product['price']['currency'],
-        compareAtAmount: typeof values.priceCompareAt === 'number' ? values.priceCompareAt : undefined,
+        compareAtAmount:
+          typeof values.priceCompareAt === 'number' ? values.priceCompareAt : undefined,
       },
       imageUrl: values.imageUrl || undefined,
       imageAlt: values.imageAlt || undefined,
@@ -159,7 +164,10 @@ export function ProductForm({ mode, product }: ProductFormProps) {
       isBestSeller: values.isBestSeller,
       isNewArrival: values.isNewArrival,
       tags: values.tags
-        ? values.tags.split(',').map((t) => t.trim()).filter(Boolean)
+        ? values.tags
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean)
         : [],
     };
 
@@ -193,10 +201,10 @@ export function ProductForm({ mode, product }: ProductFormProps) {
       className="grid gap-6 lg:grid-cols-[1fr_320px]"
     >
       <div className="space-y-6">
-        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
+        <section className="border-border bg-card space-y-4 rounded-lg border p-5">
           <div>
             <h2 className="text-sm font-semibold">Basic info</h2>
-            <p className="text-xs text-muted-foreground">Required for storefront listing.</p>
+            <p className="text-muted-foreground text-xs">Required for storefront listing.</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <FormField id="name" label="Name" required error={form.formState.errors.name?.message}>
@@ -205,32 +213,71 @@ export function ProductForm({ mode, product }: ProductFormProps) {
             <FormField id="sku" label="SKU" required error={form.formState.errors.sku?.message}>
               <Input placeholder="AUR-XPRO-BLK" {...form.register('sku')} />
             </FormField>
-            <FormField id="slug" label="Slug" error={form.formState.errors.slug?.message} description="Auto-generated from name when empty.">
+            <FormField
+              id="slug"
+              label="Slug"
+              error={form.formState.errors.slug?.message}
+              description="Auto-generated from name when empty."
+            >
               <Input placeholder="aurora-x-pro-headphones" {...form.register('slug')} />
             </FormField>
             <FormField id="tags" label="Tags" description="Comma separated">
               <Input placeholder="audio, new arrival" {...form.register('tags')} />
             </FormField>
           </div>
-          <FormField id="shortDescription" label="Short description" description="Shown in listings + cart.">
-            <Textarea rows={2} placeholder="Studio-grade ANC headphones with 40-hour battery." {...form.register('shortDescription')} />
+          <FormField
+            id="shortDescription"
+            label="Short description"
+            description="Shown in listings + cart."
+          >
+            <Textarea
+              rows={2}
+              placeholder="Studio-grade ANC headphones with 40-hour battery."
+              {...form.register('shortDescription')}
+            />
           </FormField>
-          <FormField id="description" label="Description" required error={form.formState.errors.description?.message}>
+          <FormField
+            id="description"
+            label="Description"
+            required
+            error={form.formState.errors.description?.message}
+          >
             <Textarea rows={8} {...form.register('description')} />
           </FormField>
         </section>
 
-        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
+        <section className="border-border bg-card space-y-4 rounded-lg border p-5">
           <div>
             <h2 className="text-sm font-semibold">Pricing</h2>
-            <p className="text-xs text-muted-foreground">Storefront price + optional compare-at.</p>
+            <p className="text-muted-foreground text-xs">Storefront price + optional compare-at.</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
-            <FormField id="priceAmount" label="Price" required error={form.formState.errors.priceAmount?.message}>
-              <Input type="number" inputMode="decimal" step="0.01" min={0} {...form.register('priceAmount')} />
+            <FormField
+              id="priceAmount"
+              label="Price"
+              required
+              error={form.formState.errors.priceAmount?.message}
+            >
+              <Input
+                type="number"
+                inputMode="decimal"
+                step="0.01"
+                min={0}
+                {...form.register('priceAmount')}
+              />
             </FormField>
-            <FormField id="priceCompareAt" label="Compare at" description="Strikethrough price (optional).">
-              <Input type="number" inputMode="decimal" step="0.01" min={0} {...form.register('priceCompareAt')} />
+            <FormField
+              id="priceCompareAt"
+              label="Compare at"
+              description="Strikethrough price (optional)."
+            >
+              <Input
+                type="number"
+                inputMode="decimal"
+                step="0.01"
+                min={0}
+                {...form.register('priceCompareAt')}
+              />
             </FormField>
             <FormField id="priceCurrency" label="Currency" required>
               <Input maxLength={3} {...form.register('priceCurrency')} />
@@ -238,27 +285,42 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           </div>
         </section>
 
-        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
+        <section className="border-border bg-card space-y-4 rounded-lg border p-5">
           <div>
             <h2 className="text-sm font-semibold">Media</h2>
-            <p className="text-xs text-muted-foreground">Primary image used in listings and cards.</p>
+            <p className="text-muted-foreground text-xs">
+              Primary image used in listings and cards.
+            </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-[1fr_180px]">
             <div className="space-y-3">
-              <FormField id="imageUrl" label="Primary image URL" error={form.formState.errors.imageUrl?.message}>
+              <FormField
+                id="imageUrl"
+                label="Primary image URL"
+                error={form.formState.errors.imageUrl?.message}
+              >
                 <Input placeholder="https://images.unsplash.com/…" {...form.register('imageUrl')} />
               </FormField>
               <FormField id="imageAlt" label="Alt text">
-                <Input placeholder="Aurora X Pro headphones in matte black" {...form.register('imageAlt')} />
+                <Input
+                  placeholder="Aurora X Pro headphones in matte black"
+                  {...form.register('imageAlt')}
+                />
               </FormField>
             </div>
-            <div className="flex h-44 items-center justify-center overflow-hidden rounded-lg border border-dashed border-border bg-background">
+            <div className="border-border bg-background flex h-44 items-center justify-center overflow-hidden rounded-lg border border-dashed">
               {imageUrl ? (
                 <span className="relative block h-full w-full">
-                  <Image src={imageUrl} alt={form.watch('imageAlt') || 'Preview'} fill sizes="180px" className="object-contain" />
+                  <Image
+                    src={imageUrl}
+                    alt={form.watch('imageAlt') || 'Preview'}
+                    fill
+                    sizes="180px"
+                    className="object-contain"
+                  />
                 </span>
               ) : (
-                <p className="px-3 text-center text-xs text-muted-foreground">Image preview</p>
+                <p className="text-muted-foreground px-3 text-center text-xs">Image preview</p>
               )}
             </div>
           </div>
@@ -266,7 +328,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
       </div>
 
       <div className="space-y-6">
-        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
+        <section className="border-border bg-card space-y-4 rounded-lg border p-5">
           <div>
             <h2 className="text-sm font-semibold">Organisation</h2>
           </div>
@@ -276,10 +338,14 @@ export function ProductForm({ mode, product }: ProductFormProps) {
             render={({ field, fieldState }) => (
               <FormField id="brandId" label="Brand" required error={fieldState.error?.message}>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger><SelectValue placeholder="Choose a brand" /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a brand" />
+                  </SelectTrigger>
                   <SelectContent>
                     {(brands.data?.items ?? []).map((b) => (
-                      <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+                      <SelectItem key={b.id} value={b.id}>
+                        {b.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -290,12 +356,21 @@ export function ProductForm({ mode, product }: ProductFormProps) {
             control={form.control}
             name="primaryCategoryId"
             render={({ field, fieldState }) => (
-              <FormField id="primaryCategoryId" label="Primary category" required error={fieldState.error?.message}>
+              <FormField
+                id="primaryCategoryId"
+                label="Primary category"
+                required
+                error={fieldState.error?.message}
+              >
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger><SelectValue placeholder="Choose a category" /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a category" />
+                  </SelectTrigger>
                   <SelectContent>
                     {(categories.data?.items ?? []).map((c) => (
-                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -304,7 +379,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           />
         </section>
 
-        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
+        <section className="border-border bg-card space-y-4 rounded-lg border p-5">
           <div>
             <h2 className="text-sm font-semibold">Status & inventory</h2>
           </div>
@@ -314,10 +389,14 @@ export function ProductForm({ mode, product }: ProductFormProps) {
             render={({ field }) => (
               <FormField id="status" label="Publication status">
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     {STATUS_OPTIONS.map((o) => (
-                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                      <SelectItem key={o.value} value={o.value}>
+                        {o.label}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -330,10 +409,14 @@ export function ProductForm({ mode, product }: ProductFormProps) {
             render={({ field }) => (
               <FormField id="stockStatus" label="Stock status">
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     {STOCK_OPTIONS.map((o) => (
-                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                      <SelectItem key={o.value} value={o.value}>
+                        {o.label}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -346,10 +429,14 @@ export function ProductForm({ mode, product }: ProductFormProps) {
             render={({ field }) => (
               <FormField id="condition" label="Condition">
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     {CONDITION_OPTIONS.map((o) => (
-                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                      <SelectItem key={o.value} value={o.value}>
+                        {o.label}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -358,7 +445,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           />
         </section>
 
-        <section className="space-y-3 rounded-lg border border-border bg-card p-5">
+        <section className="border-border bg-card space-y-3 rounded-lg border p-5">
           <h2 className="text-sm font-semibold">Storefront badges</h2>
           {(['isFeatured', 'isBestSeller', 'isNewArrival'] as const).map((key) => (
             <Controller
@@ -381,12 +468,17 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           ))}
         </section>
 
-        <div className="flex flex-col gap-2 rounded-lg border border-border bg-card p-5">
+        <div className="border-border bg-card flex flex-col gap-2 rounded-lg border p-5">
           <Button type="submit" disabled={isSubmitting} fullWidth>
             {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
             {mode === 'create' ? 'Create product' : 'Save changes'}
           </Button>
-          <Button type="button" variant="outline" fullWidth onClick={() => router.push('/admin/products')}>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth
+            onClick={() => router.push('/admin/products')}
+          >
             Cancel
           </Button>
           {mode === 'edit' && product ? (
@@ -396,7 +488,10 @@ export function ProductForm({ mode, product }: ProductFormProps) {
                   type="button"
                   variant="ghost"
                   fullWidth
-                  className={cn('text-destructive hover:bg-destructive/10', !canDelete && 'opacity-60')}
+                  className={cn(
+                    'text-destructive hover:bg-destructive/10',
+                    !canDelete && 'opacity-60',
+                  )}
                   disabled={!canDelete || deleteMutation.isPending}
                 >
                   <Trash2 className="size-4" aria-hidden />
@@ -407,8 +502,8 @@ export function ProductForm({ mode, product }: ProductFormProps) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete “{product.name}”?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This cannot be undone. Existing orders that reference this product will keep their
-                    snapshot.
+                    This cannot be undone. Existing orders that reference this product will keep
+                    their snapshot.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -419,7 +514,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
             </AlertDialog>
           ) : null}
           {!canDelete && mode === 'edit' ? (
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-muted-foreground text-[11px]">
               Only admins can delete products. Ask an admin to remove this one.
             </p>
           ) : null}

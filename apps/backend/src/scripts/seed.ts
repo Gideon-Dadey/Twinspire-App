@@ -72,9 +72,7 @@ async function seedPermissionsAndRoles(): Promise<void> {
   await Permission.insertMany(permissions, { ordered: false }).catch(() => undefined);
   const permDocs = await Permission.find({ key: { $in: permissions.map((p) => p.key) } }).lean();
 
-  const permByKey = new Map(
-    permDocs.map((p) => [p.key, p._id as Types.ObjectId]),
-  );
+  const permByKey = new Map(permDocs.map((p) => [p.key, p._id as Types.ObjectId]));
 
   const allPerms = Array.from(permByKey.values());
 
@@ -120,11 +118,41 @@ async function seedPermissionsAndRoles(): Promise<void> {
 }
 
 async function seedUsers(): Promise<number> {
-  const seed: { email: string; firstName: string; lastName: string; role: string; password: string }[] = [
-    { email: 'admin@twinspire.dev', firstName: 'Ada', lastName: 'Lovelace', role: 'admin', password: 'AdminPass!234' },
-    { email: 'manager@twinspire.dev', firstName: 'Grace', lastName: 'Hopper', role: 'manager', password: 'ManagerPass!234' },
-    { email: 'support@twinspire.dev', firstName: 'Alan', lastName: 'Turing', role: 'support', password: 'SupportPass!234' },
-    { email: 'staff@twinspire.dev', firstName: 'Linus', lastName: 'Torvalds', role: 'staff', password: 'StaffPass!234' },
+  const seed: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+    password: string;
+  }[] = [
+    {
+      email: 'admin@twinspire.dev',
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      role: 'admin',
+      password: 'AdminPass!234',
+    },
+    {
+      email: 'manager@twinspire.dev',
+      firstName: 'Grace',
+      lastName: 'Hopper',
+      role: 'manager',
+      password: 'ManagerPass!234',
+    },
+    {
+      email: 'support@twinspire.dev',
+      firstName: 'Alan',
+      lastName: 'Turing',
+      role: 'support',
+      password: 'SupportPass!234',
+    },
+    {
+      email: 'staff@twinspire.dev',
+      firstName: 'Linus',
+      lastName: 'Torvalds',
+      role: 'staff',
+      password: 'StaffPass!234',
+    },
   ];
 
   for (let i = 0; i < 46; i++) {
@@ -145,7 +173,13 @@ async function seedUsers(): Promise<number> {
       role: s.role,
       status: 'active',
       emailVerifiedAt: new Date(),
-      preferences: { locale: 'en-US', currency: 'USD', theme: 'system', marketingOptIn: false, newsletter: true },
+      preferences: {
+        locale: 'en-GH',
+        currency: 'GHS',
+        theme: 'system',
+        marketingOptIn: false,
+        newsletter: true,
+      },
     });
     await user.setPassword(s.password);
     await user.save();
@@ -247,11 +281,11 @@ async function seedProducts(
         const slug = slugify(name);
         skuCounter += 1;
         const sku = `TS-${brand.slug.toUpperCase()}-${skuCounter.toString().padStart(5, '0')}`;
-        const basePrice = Math.round(
-          template.min + Math.random() * (template.max - template.min),
-        );
+        const basePrice = Math.round(template.min + Math.random() * (template.max - template.min));
         const hasDiscount = Math.random() > 0.55;
-        const compareAt = hasDiscount ? Math.round(basePrice * (1 + Math.random() * 0.25 + 0.1)) : undefined;
+        const compareAt = hasDiscount
+          ? Math.round(basePrice * (1 + Math.random() * 0.25 + 0.1))
+          : undefined;
 
         const stock = Math.floor(Math.random() * 80) + 5;
         const stockStatus: ProductDoc['stockStatus'] =
@@ -278,7 +312,7 @@ async function seedProducts(
           price: {
             amount: basePrice,
             compareAtAmount: compareAt,
-            currency: 'USD',
+            currency: 'GHS',
             discountPercent: compareAt
               ? Math.round(((compareAt - basePrice) / compareAt) * 100)
               : undefined,
@@ -315,7 +349,7 @@ async function seedProducts(
           weight: { value: 1.5, unit: 'kg' },
           dimensions: { length: 25, width: 18, height: 2, unit: 'cm' },
           warranty: { months: 12, description: 'Manufacturer warranty included.' },
-          shipping: { freeShipping: basePrice > 500, handlingDays: 1 },
+          shipping: { freeShipping: true, handlingDays: 1 },
           rating: {
             average: Math.round((4 + Math.random()) * 10) / 10,
             count: Math.floor(Math.random() * 500),
@@ -345,7 +379,7 @@ async function seedCoupons(): Promise<number> {
       description: c.description,
       type: c.type,
       value: c.value,
-      currency: c.type === 'fixed' ? 'USD' : undefined,
+      currency: c.type === 'fixed' ? 'GHS' : undefined,
       startsAt: now,
       expiresAt: new Date(now.getTime() + 90 * 24 * 60 * 60_000),
       isActive: true,
@@ -389,7 +423,7 @@ async function seedCampaignsAndBanners(): Promise<{ campaigns: number; banners: 
       width: 1080,
       height: 1620,
     },
-    backgroundColor: '#F97316',
+    backgroundColor: '#E91B25',
     textColor: '#FFFFFF',
     campaignId: campaign._id,
     priority: 10,

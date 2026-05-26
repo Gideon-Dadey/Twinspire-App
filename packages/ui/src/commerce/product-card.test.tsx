@@ -20,9 +20,10 @@ const baseProduct: ProductCardProduct = {
 };
 
 describe('<ProductCard />', () => {
-  it('renders the name, SKU, and a price tag', () => {
+  it('renders the brand, name, SKU, and a price tag', () => {
     render(<ProductCard product={baseProduct} />);
     expect(screen.getByText(baseProduct.name)).toBeInTheDocument();
+    expect(screen.getByText('TwinSpire')).toBeInTheDocument();
     expect(screen.getByText(baseProduct.sku)).toBeInTheDocument();
     expect(screen.getByText(/\$199\.00/)).toBeInTheDocument();
     expect(screen.getByText(/\$249\.00/)).toBeInTheDocument();
@@ -49,9 +50,7 @@ describe('<ProductCard />', () => {
 
   it('shows the wishlist toggle and announces its pressed state', async () => {
     const onAddToWishlist = jest.fn();
-    render(
-      <ProductCard product={baseProduct} onAddToWishlist={onAddToWishlist} inWishlist />,
-    );
+    render(<ProductCard product={baseProduct} onAddToWishlist={onAddToWishlist} inWishlist />);
     const wishlistBtn = screen.getByRole('button', { name: /remove from wishlist/i });
     expect(wishlistBtn).toHaveAttribute('aria-pressed', 'true');
     await userEvent.click(wishlistBtn);

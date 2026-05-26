@@ -86,10 +86,13 @@ const cartSchema = new Schema<CartDoc, CartModelType>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', default: null, index: true },
     sessionId: { type: String, default: null, index: true, maxlength: 64 },
-    currency: { type: String, required: true, uppercase: true, default: 'USD' },
+    currency: { type: String, required: true, uppercase: true, default: 'GHS' },
     items: { type: [cartItemSchema], default: [] },
     totals: { type: cartTotalsSchema, required: true },
-    couponCodes: { type: [{ type: String, uppercase: true, trim: true, maxlength: 48 }], default: [] },
+    couponCodes: {
+      type: [{ type: String, uppercase: true, trim: true, maxlength: 48 }],
+      default: [],
+    },
     notes: { type: String, maxlength: 600 },
     expiresAt: { type: Date, default: null, index: { expires: 0 } },
   },

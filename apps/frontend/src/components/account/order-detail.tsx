@@ -42,9 +42,9 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
   }
   if (error || !data) {
     return (
-      <div className="rounded-lg border border-border bg-card p-10 text-center">
-        <p className="text-sm font-semibold text-foreground">Order not found</p>
-        <p className="mt-1 text-xs text-muted-foreground">
+      <div className="border-border bg-card rounded-lg border p-10 text-center">
+        <p className="text-foreground text-sm font-semibold">Order not found</p>
+        <p className="text-muted-foreground mt-1 text-xs">
           {(error as { message?: string } | null)?.message ??
             'We could not find that order on your account.'}
         </p>
@@ -56,28 +56,30 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
   }
 
   const order = data.order;
-  const canCancel = !['shipped', 'delivered', 'cancelled', 'refunded', 'completed'].includes(order.status);
+  const canCancel = !['shipped', 'delivered', 'cancelled', 'refunded', 'completed'].includes(
+    order.status,
+  );
 
   return (
     <div className="space-y-8">
       <Link
         href="/account/orders"
-        className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+        className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs font-medium"
       >
         <ChevronLeft className="size-3.5" aria-hidden />
         Back to orders
       </Link>
 
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-6">
+      <header className="border-border flex flex-wrap items-center justify-between gap-3 border-b pb-6">
         <div className="space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+          <p className="text-primary text-xs font-semibold uppercase tracking-wide">
             Order {order.orderNumber}
           </p>
-          <h1 className="flex flex-wrap items-center gap-2 text-2xl font-display font-semibold tracking-tight">
+          <h1 className="font-display flex flex-wrap items-center gap-2 text-2xl font-semibold tracking-tight">
             {order.items[0]?.name ?? 'Order details'}
             <OrderStatusBadge status={order.status} />
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Placed {formatDate(order.placedAt, { dateStyle: 'long' })}
           </p>
         </div>
@@ -122,14 +124,14 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <section className="rounded-lg border border-border bg-card p-6">
+          <section className="border-border bg-card rounded-lg border p-6">
             <h2 className="text-base font-semibold">
               {order.items.length} item{order.items.length === 1 ? '' : 's'}
             </h2>
-            <ul className="mt-4 divide-y divide-border">
+            <ul className="divide-border mt-4 divide-y">
               {order.items.map((item) => (
                 <li key={item.id} className="flex items-start gap-4 py-4">
-                  <div className="flex size-20 items-center justify-center rounded-lg border border-border bg-muted text-muted-foreground">
+                  <div className="border-border bg-muted text-muted-foreground flex size-20 items-center justify-center rounded-lg border">
                     {item.image?.url ? (
                       <Image
                         src={item.image.url}
@@ -145,12 +147,12 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/products/${item.productId}`}
-                      className="text-sm font-semibold text-foreground hover:underline"
+                      className="text-foreground text-sm font-semibold hover:underline"
                     >
                       {item.name}
                     </Link>
-                    <p className="mt-0.5 text-xs text-muted-foreground">SKU {item.sku}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Qty {item.quantity}</p>
+                    <p className="text-muted-foreground mt-0.5 text-xs">SKU {item.sku}</p>
+                    <p className="text-muted-foreground mt-1 text-xs">Qty {item.quantity}</p>
                   </div>
                   <div className="text-right text-sm font-medium">
                     <Money value={item.lineTotal} />
@@ -161,25 +163,27 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
           </section>
 
           {order.shippingMethod?.trackingNumber ? (
-            <section className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-6">
+            <section className="border-border bg-card flex flex-wrap items-center justify-between gap-3 rounded-lg border p-6">
               <div className="flex items-start gap-3">
-                <span aria-hidden className="rounded-lg bg-primary/10 p-2 text-primary">
+                <span aria-hidden className="bg-primary/10 text-primary rounded-lg p-2">
                   <Truck className="size-5" />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold">Shipped with {order.shippingMethod.carrier ?? order.shippingMethod.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Tracking number {order.shippingMethod.trackingNumber}
+                  <p className="text-sm font-semibold">
+                    Out for delivery via {order.shippingMethod.carrier ?? order.shippingMethod.name}
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    Reference {order.shippingMethod.trackingNumber}
                   </p>
                 </div>
               </div>
               <Button variant="outline" size="sm" disabled>
-                Track package
+                Call dispatcher
               </Button>
             </section>
           ) : null}
 
-          <section className="rounded-lg border border-border bg-card p-6">
+          <section className="border-border bg-card rounded-lg border p-6">
             <h2 className="text-base font-semibold">Timeline</h2>
             <div className="mt-4">
               <OrderTimeline order={order} />
@@ -188,7 +192,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
         </div>
 
         <aside className="space-y-6">
-          <section className="rounded-lg border border-border bg-card p-6">
+          <section className="border-border bg-card rounded-lg border p-6">
             <h2 className="text-base font-semibold">Order summary</h2>
             <dl className="mt-4 space-y-2 text-sm">
               <div className="flex items-center justify-between">
@@ -198,7 +202,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
                 </dd>
               </div>
               {order.totals.discount.amount > 0 ? (
-                <div className="flex items-center justify-between text-success">
+                <div className="text-success flex items-center justify-between">
                   <dt>Discount</dt>
                   <dd>
                     − <Money value={order.totals.discount} />
@@ -206,18 +210,16 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
                 </div>
               ) : null}
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Shipping</dt>
-                <dd>
-                  <Money value={order.totals.shipping} />
-                </dd>
+                <dt className="text-muted-foreground">Delivery</dt>
+                <dd className="text-success">Free</dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Tax</dt>
+                <dt className="text-muted-foreground">VAT</dt>
                 <dd>
                   <Money value={order.totals.tax} />
                 </dd>
               </div>
-              <div className="flex items-center justify-between border-t border-border pt-3 text-base font-semibold">
+              <div className="border-border flex items-center justify-between border-t pt-3 text-base font-semibold">
                 <dt>Total</dt>
                 <dd>
                   <Money value={order.totals.total} />
@@ -226,9 +228,9 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
             </dl>
           </section>
 
-          <section className="rounded-lg border border-border bg-card p-6">
-            <h2 className="text-base font-semibold">Shipping address</h2>
-            <address className="mt-3 not-italic text-sm leading-relaxed text-muted-foreground">
+          <section className="border-border bg-card rounded-lg border p-6">
+            <h2 className="text-base font-semibold">Delivery address</h2>
+            <address className="text-muted-foreground mt-3 text-sm not-italic leading-relaxed">
               <p className="text-foreground">
                 {order.shippingAddress.firstName} {order.shippingAddress.lastName}
               </p>
@@ -236,17 +238,17 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
               {order.shippingAddress.line2 ? <p>{order.shippingAddress.line2}</p> : null}
               <p>
                 {order.shippingAddress.city}
-                {order.shippingAddress.state ? `, ${order.shippingAddress.state}` : ''}{' '}
-                {order.shippingAddress.postalCode}
+                {order.shippingAddress.state ? `, ${order.shippingAddress.state}` : ''}
+                {order.shippingAddress.postalCode ? ` · ${order.shippingAddress.postalCode}` : ''}
               </p>
               <p>{order.shippingAddress.country}</p>
             </address>
           </section>
 
           {order.paymentMethod ? (
-            <section className="rounded-lg border border-border bg-card p-6">
+            <section className="border-border bg-card rounded-lg border p-6">
               <h2 className="text-base font-semibold">Payment</h2>
-              <p className="mt-3 text-sm capitalize text-muted-foreground">
+              <p className="text-muted-foreground mt-3 text-sm capitalize">
                 {order.paymentMethod.provider}
                 {order.paymentMethod.last4 ? ` • ending in ${order.paymentMethod.last4}` : ''}
               </p>

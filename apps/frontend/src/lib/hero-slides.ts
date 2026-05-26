@@ -19,7 +19,7 @@ export interface HeroSlide {
   title: string;
   /** Subtitle / tagline below the headline. */
   subtitle: string;
-  /** Optional support copy (price hint, shipping note, etc.). */
+  /** Optional support copy (price hint, in-stock note, etc.). */
   note?: string;
   /** Primary call-to-action. */
   cta: { label: string; href: string };
@@ -45,14 +45,13 @@ export const HERO_SLIDES: HeroSlide[] = [
     title: 'The electronics store that keeps up.',
     subtitle:
       'Phones, laptops, gaming, TVs and audio — from the brands you trust, delivered fast and backed by real humans.',
-    note: 'Free 2-day shipping on orders over $99.',
+    note: 'In stock now at our Accra store · Pay with MoMo, card, or PayPal.',
     cta: { label: "Shop today's deals", href: '/deals' },
     ctaSecondary: { label: 'Browse new arrivals', href: '/phones' },
     image:
       'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1400&q=80&auto=format&fit=crop',
     alt: 'Modern smartphone on a soft pastel background',
-    background:
-      'bg-gradient-to-br from-orange-50 via-white to-amber-50',
+    background: 'bg-gradient-to-br from-orange-50 via-white to-amber-50',
     accent: 'text-primary',
   },
   {
@@ -60,29 +59,27 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: 'Just launched',
     title: 'iPhone 15 Pro · Titanium',
     subtitle: 'So strong. So light. So Pro.',
-    note: 'From $999 with eligible trade-in.',
+    note: 'From ₵12,000 with eligible trade-in.',
     cta: { label: 'Shop iPhone', href: '/phones' },
     ctaSecondary: { label: 'See the lineup', href: '/phones?brand=apple' },
     image:
       'https://images.unsplash.com/photo-1592286927505-1def25115558?w=1400&q=80&auto=format&fit=crop',
     alt: 'iPhone 15 Pro held in natural light',
-    background:
-      'bg-gradient-to-br from-stone-50 via-white to-orange-100',
-    accent: 'text-orange-600',
+    background: 'bg-gradient-to-br from-stone-50 via-white to-orange-100',
+    accent: 'text-primary',
   },
   {
     id: 'macbook',
     eyebrow: 'Built to last',
     title: 'MacBook Pro M3',
     subtitle: 'Crush deadlines, render scenes, ship code.',
-    note: 'Up to 22 hours of battery — from $1,599.',
+    note: 'Up to 22 hours of battery — from ₵19,200.',
     cta: { label: 'Shop MacBook', href: '/laptops' },
     ctaSecondary: { label: 'Compare models', href: '/laptops?brand=apple' },
     image:
       'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=1400&q=80&auto=format&fit=crop',
     alt: 'MacBook Pro 14-inch on a clean desk',
-    background:
-      'bg-gradient-to-br from-stone-50 via-white to-amber-50',
+    background: 'bg-gradient-to-br from-stone-50 via-white to-amber-50',
     accent: 'text-amber-600',
   },
   {
@@ -90,15 +87,14 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: 'In stock now',
     title: 'PlayStation 5 Slim · Bundle & save',
     subtitle: 'Play has no limits.',
-    note: 'Bundle two games and save $80 at checkout.',
+    note: 'Bundle two games and save ₵960 at checkout.',
     cta: { label: 'Shop PlayStation', href: '/gaming' },
     ctaSecondary: { label: 'See bundles', href: '/deals?category=gaming' },
     image:
       'https://images.unsplash.com/photo-1486572788966-cfd3df1f5b42?w=1400&q=80&auto=format&fit=crop',
     alt: 'Gaming controller in a softly lit setup',
-    background:
-      'bg-gradient-to-br from-zinc-50 via-white to-orange-100',
-    accent: 'text-orange-600',
+    background: 'bg-gradient-to-br from-zinc-50 via-white to-orange-100',
+    accent: 'text-primary',
   },
   {
     id: 'oled',
@@ -111,8 +107,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     image:
       'https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=1400&q=80&auto=format&fit=crop',
     alt: 'Modern OLED television in a stylish living room',
-    background:
-      'bg-gradient-to-br from-rose-50 via-white to-orange-50',
+    background: 'bg-gradient-to-br from-rose-50 via-white to-orange-50',
     accent: 'text-rose-600',
   },
 ];

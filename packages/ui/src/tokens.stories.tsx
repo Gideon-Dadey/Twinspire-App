@@ -18,10 +18,10 @@ function ColorRamp({ name, ramp }: { name: string; ramp: Record<string, string> 
         {Object.entries(ramp).map(([shade, value]) => (
           <div
             key={shade}
-            className="flex w-24 flex-col gap-1 rounded-lg border border-border p-2 text-[10px]"
+            className="border-border flex w-24 flex-col gap-1 rounded-lg border p-2 text-[10px]"
           >
             <span className="block h-10 rounded" style={{ background: value }} />
-            <span className="font-medium text-foreground">{shade}</span>
+            <span className="text-foreground font-medium">{shade}</span>
             <span className="text-muted-foreground">{value}</span>
           </div>
         ))}
@@ -33,9 +33,9 @@ function ColorRamp({ name, ramp }: { name: string; ramp: Record<string, string> 
 export const Palette: Story = {
   render: () => (
     <div className="space-y-6">
-      <ColorRamp name="Primary (TwinSpire Blue)" ramp={palette.primary} />
+      <ColorRamp name="Primary (Twinspire Brand Red)" ramp={palette.primary} />
       <ColorRamp name="Secondary (Onyx)" ramp={palette.secondary} />
-      <ColorRamp name="Accent (Voltage Orange)" ramp={palette.accent} />
+      <ColorRamp name="Accent (Amber)" ramp={palette.accent} />
       <ColorRamp name="Neutral" ramp={palette.neutral} />
     </div>
   ),
@@ -46,7 +46,7 @@ export const Typography: Story = {
     <div className="space-y-4">
       <h3 className="font-display text-sm font-semibold tracking-tight">Type scale</h3>
       <table className="w-full text-left text-sm">
-        <thead className="text-xs uppercase tracking-wide text-muted-foreground">
+        <thead className="text-muted-foreground text-xs uppercase tracking-wide">
           <tr>
             <th className="py-2">Token</th>
             <th className="py-2">Preview</th>
@@ -54,8 +54,8 @@ export const Typography: Story = {
         </thead>
         <tbody>
           {Object.keys(typography.fontSize).map((key) => (
-            <tr key={key} className="border-t border-border">
-              <td className="py-2 font-mono text-xs text-muted-foreground">{key}</td>
+            <tr key={key} className="border-border border-t">
+              <td className="text-muted-foreground py-2 font-mono text-xs">{key}</td>
               <td className={`py-2 text-${key}`}>The quick brown fox jumps over the lazy dog</td>
             </tr>
           ))}
@@ -72,9 +72,9 @@ export const Spacing: Story = {
       <div className="space-y-1">
         {Object.entries(spacing).map(([key, value]) => (
           <div key={key} className="flex items-center gap-3 text-sm">
-            <span className="w-12 font-mono text-xs text-muted-foreground">{key}</span>
-            <span className="font-mono text-xs text-muted-foreground">{value}</span>
-            <span className="h-2 rounded bg-primary" style={{ width: value }} />
+            <span className="text-muted-foreground w-12 font-mono text-xs">{key}</span>
+            <span className="text-muted-foreground font-mono text-xs">{value}</span>
+            <span className="bg-primary h-2 rounded" style={{ width: value }} />
           </div>
         ))}
       </div>
@@ -90,10 +90,10 @@ export const Radii: Story = {
         {Object.entries(radii).map(([key, value]) => (
           <div
             key={key}
-            className="flex h-20 w-28 flex-col items-center justify-center gap-1 border border-border bg-card text-xs"
+            className="border-border bg-card flex h-20 w-28 flex-col items-center justify-center gap-1 border text-xs"
             style={{ borderRadius: value }}
           >
-            <span className="font-mono text-muted-foreground">{key}</span>
+            <span className="text-muted-foreground font-mono">{key}</span>
             <span className="font-medium">{value}</span>
           </div>
         ))}
@@ -106,14 +106,14 @@ export const Shadows: Story = {
   render: () => (
     <div className="space-y-3">
       <h3 className="font-display text-sm font-semibold tracking-tight">Elevation</h3>
-      <div className="flex flex-wrap gap-6 bg-muted/40 p-6">
+      <div className="bg-muted/40 flex flex-wrap gap-6 p-6">
         {Object.entries(shadows).map(([key, value]) => (
           <div
             key={key}
-            className="flex h-24 w-32 flex-col items-center justify-center gap-1 rounded-lg bg-background text-xs"
+            className="bg-background flex h-24 w-32 flex-col items-center justify-center gap-1 rounded-lg text-xs"
             style={{ boxShadow: value }}
           >
-            <span className="font-mono text-muted-foreground">{key}</span>
+            <span className="text-muted-foreground font-mono">{key}</span>
           </div>
         ))}
       </div>

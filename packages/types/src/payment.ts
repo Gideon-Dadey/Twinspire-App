@@ -1,6 +1,6 @@
 import type { BaseEntity, ID, Money } from './common';
 
-export type PaymentProvider = 'stripe' | 'paypal' | 'cash' | 'transfer' | 'local';
+export type PaymentProvider = 'stripe' | 'paypal' | 'paystack' | 'cash' | 'transfer' | 'local';
 
 export type PaymentIntentStatus =
   | 'requires_action'

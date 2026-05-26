@@ -1,6 +1,11 @@
 'use client';
 
-import type { Image as ImageData, Product, ProductPrice, ProductRatingSummary } from '@twinspire/types';
+import type {
+  Image as ImageData,
+  Product,
+  ProductPrice,
+  ProductRatingSummary,
+} from '@twinspire/types';
 import { Heart, ShoppingCart } from 'lucide-react';
 import * as React from 'react';
 
@@ -16,7 +21,18 @@ import { StockBadge } from './stock-badge';
 /** Minimal product shape the card needs — keeps Storybook/test data tiny. */
 export type ProductCardProduct = Pick<
   Product,
-  'id' | 'name' | 'slug' | 'sku' | 'brandName' | 'images' | 'price' | 'rating' | 'stockStatus' | 'isNewArrival' | 'isBestSeller' | 'tags'
+  | 'id'
+  | 'name'
+  | 'slug'
+  | 'sku'
+  | 'brandName'
+  | 'images'
+  | 'price'
+  | 'rating'
+  | 'stockStatus'
+  | 'isNewArrival'
+  | 'isBestSeller'
+  | 'tags'
 >;
 
 export type ProductCardLinkComponent = React.ComponentType<{
@@ -70,7 +86,9 @@ function pickPrimaryImage(images: ImageData[] | undefined): ImageData | undefine
   return [...images].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))[0];
 }
 
-function pickRating(rating: ProductRatingSummary | undefined): { value: number; count: number } | undefined {
+function pickRating(
+  rating: ProductRatingSummary | undefined,
+): { value: number; count: number } | undefined {
   if (!rating) return undefined;
   return { value: rating.average, count: rating.count };
 }
@@ -125,17 +143,18 @@ export function ProductCard({
     lg: 'p-5',
   } as const;
 
-  // Cards use a wider-than-tall image area (4:3) to keep the overall height
-  // compact like the Vatan reference. Add-to-cart slides up as an absolute
-  // overlay on hover so it never adds to the resting card height.
-  const aspect = 4 / 3;
+  // Cards use a square image area — the industry-standard ratio for retail
+  // product grids (Amazon, Best Buy, Apple, Newegg). Combined with the
+  // absolute hover add-to-cart and the brand → name → price body rhythm,
+  // this gives the card real visual weight without bloating the height.
+  const aspect = 1;
 
   return (
     <Card
       data-product-id={product.id}
       className={cn(
-        'group/card relative flex h-full flex-col overflow-hidden rounded-lg border border-border/70 bg-card transition-all duration-moderate',
-        'hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_12px_28px_-12px_rgba(15,23,42,0.18)]',
+        'group/card border-border/70 bg-card duration-moderate relative flex h-full flex-col overflow-hidden rounded-lg border transition-all',
+        'hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_12px_28px_-12px_rgba(15,23,42,0.18)]',
         className,
       )}
     >
@@ -143,12 +162,14 @@ export function ProductCard({
         <div
           aria-hidden
           className={cn(
-            'pointer-events-none absolute left-3 top-3 z-10 flex size-12 flex-col items-center justify-center rounded-full text-center text-[10px] font-semibold uppercase leading-tight tracking-tight text-primary-foreground shadow-sm',
+            'text-primary-foreground pointer-events-none absolute left-3 top-3 z-10 flex size-12 flex-col items-center justify-center rounded-full text-center text-[10px] font-semibold uppercase leading-tight tracking-tight shadow-sm',
             'bg-primary',
           )}
         >
           <span className="text-[12px] font-bold leading-none">{promo.label}</span>
-          {promo.sublabel && <span className="mt-0.5 text-[8.5px] font-medium opacity-90">{promo.sublabel}</span>}
+          {promo.sublabel && (
+            <span className="mt-0.5 text-[8.5px] font-medium opacity-90">{promo.sublabel}</span>
+          )}
         </div>
       )}
 
@@ -159,12 +180,15 @@ export function ProductCard({
           aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
           onClick={() => onAddToWishlist?.(product)}
           className={cn(
-            'absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-full bg-background/70 text-muted-foreground backdrop-blur transition-colors',
-            'hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+            'bg-background/70 text-muted-foreground absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-full backdrop-blur transition-colors',
+            'hover:bg-background hover:text-foreground focus-visible:ring-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
             inWishlist && 'text-destructive',
           )}
         >
-          <Heart className={cn('size-4 transition-colors', inWishlist && 'fill-destructive')} aria-hidden />
+          <Heart
+            className={cn('size-4 transition-colors', inWishlist && 'fill-destructive')}
+            aria-hidden
+          />
         </button>
       )}
 
@@ -177,26 +201,40 @@ export function ProductCard({
               width={image.width ?? 600}
               height={image.height ?? 450}
               sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              className="h-full w-full object-contain transition-transform duration-moderate ease-out group-hover/card:scale-[1.04]"
+              className="duration-moderate h-full w-full object-contain transition-transform ease-out group-hover/card:scale-[1.04]"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-muted-foreground/40">
+            <div className="text-muted-foreground/40 flex h-full w-full items-center justify-center">
               <span className="text-xs">No image</span>
             </div>
           )}
         </AspectRatio>
       </LinkComp>
 
-      <div className={cn('relative flex flex-1 flex-col border-t border-border/60 bg-card', bodyPad[size])}>
-        {product.sku && (
-          <p className="truncate text-[10.5px] font-medium uppercase tracking-wide text-muted-foreground/80">
-            {product.sku}
-          </p>
+      <div
+        className={cn(
+          'border-border/60 bg-card relative flex flex-1 flex-col border-t',
+          bodyPad[size],
         )}
+      >
+        <div className="flex items-baseline justify-between gap-2">
+          {product.brandName ? (
+            <p className="text-foreground truncate text-[11px] font-semibold uppercase tracking-wide">
+              {product.brandName}
+            </p>
+          ) : (
+            <span aria-hidden />
+          )}
+          {product.sku && (
+            <p className="text-muted-foreground/80 shrink-0 truncate text-[10px] font-medium uppercase tracking-wide">
+              {product.sku}
+            </p>
+          )}
+        </div>
 
         <LinkComp
           href={linkHref}
-          className="line-clamp-2 text-[13px] font-medium leading-snug text-foreground transition-colors hover:text-primary"
+          className="text-foreground hover:text-primary line-clamp-2 min-h-[2.5rem] text-[13px] font-medium leading-snug transition-colors"
         >
           {product.name}
         </LinkComp>
@@ -215,7 +253,7 @@ export function ProductCard({
         {showAddToCart && (
           <div
             className={cn(
-              'absolute inset-x-2 bottom-2 translate-y-2 opacity-0 transition-all duration-fast',
+              'duration-fast absolute inset-x-2 bottom-2 translate-y-2 opacity-0 transition-all',
               'group-hover/card:translate-y-0 group-hover/card:opacity-100',
               'group-focus-within/card:translate-y-0 group-focus-within/card:opacity-100',
               outOfStock && 'translate-y-0 opacity-100',

@@ -24,12 +24,7 @@ export type OrderStatus =
   | 'on_hold'
   | 'failed';
 
-export type FulfillmentStatus =
-  | 'unfulfilled'
-  | 'partial'
-  | 'fulfilled'
-  | 'returned'
-  | 'restocked';
+export type FulfillmentStatus = 'unfulfilled' | 'partial' | 'fulfilled' | 'returned' | 'restocked';
 
 export type PaymentStatus =
   | 'pending'
@@ -160,8 +155,10 @@ export interface OrderAttrs {
   shippingMethod?: { id?: Types.ObjectId; name: string; carrier?: string; trackingNumber?: string };
   paymentMethod?: {
     id?: Types.ObjectId;
-    provider: 'stripe' | 'paypal' | 'cash' | 'transfer' | 'local';
+    provider: 'stripe' | 'paypal' | 'paystack' | 'cash' | 'transfer' | 'local';
     last4?: string;
+    /** For Paystack: `momo`, `card`, or `bank` — the rail used. */
+    paystackChannel?: 'momo' | 'card' | 'bank';
   };
   couponCodes: string[];
   notes?: string;
@@ -193,7 +190,14 @@ const orderSchema = new Schema<OrderDoc, OrderModelType>(
       default: generateOrderNumber,
     },
     userId: { type: Schema.Types.ObjectId, ref: 'User', default: null, index: true },
-    guestEmail: { type: String, trim: true, lowercase: true, maxlength: 240, index: true, sparse: true },
+    guestEmail: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      maxlength: 240,
+      index: true,
+      sparse: true,
+    },
     status: {
       type: String,
       enum: [
@@ -220,7 +224,15 @@ const orderSchema = new Schema<OrderDoc, OrderModelType>(
     },
     paymentStatus: {
       type: String,
-      enum: ['pending', 'authorized', 'captured', 'partially_refunded', 'refunded', 'voided', 'failed'],
+      enum: [
+        'pending',
+        'authorized',
+        'captured',
+        'partially_refunded',
+        'refunded',
+        'voided',
+        'failed',
+      ],
       default: 'pending',
       index: true,
     },
@@ -237,10 +249,17 @@ const orderSchema = new Schema<OrderDoc, OrderModelType>(
     },
     paymentMethod: {
       id: { type: Schema.Types.ObjectId },
-      provider: { type: String, enum: ['stripe', 'paypal', 'cash', 'transfer', 'local'] },
+      provider: {
+        type: String,
+        enum: ['stripe', 'paypal', 'paystack', 'cash', 'transfer', 'local'],
+      },
       last4: { type: String, trim: true, maxlength: 8 },
+      paystackChannel: { type: String, enum: ['momo', 'card', 'bank'] },
     },
-    couponCodes: { type: [{ type: String, uppercase: true, trim: true, maxlength: 48 }], default: [] },
+    couponCodes: {
+      type: [{ type: String, uppercase: true, trim: true, maxlength: 48 }],
+      default: [],
+    },
     notes: { type: String, maxlength: 1000 },
     invoiceUrl: { type: String, trim: true, maxlength: 2048 },
     timeline: { type: [orderTimelineEventSchema], default: [] },

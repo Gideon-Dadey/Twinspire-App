@@ -20,7 +20,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 21 95% 53%;
+    --primary: 357 82% 51%; /* #E91B25 — Twinspire Brand Red */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 222 47% 11%;
@@ -37,7 +37,7 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 21 95% 53%;
+    --ring: 357 82% 51%;
 
     --radius: 0.2rem;
   }
@@ -56,13 +56,22 @@
   }
 
   body {
-    @apply min-h-screen bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground min-h-screen font-sans antialiased;
     font-size: 15px;
     line-height: 1.55;
-    font-feature-settings: 'rlig' 1, 'calt' 1, 'ss01' 1, 'cv11' 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1,
+      'ss01' 1,
+      'cv11' 1;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display text-foreground;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -79,7 +88,7 @@
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+    @apply ring-ring ring-offset-background outline-none ring-2 ring-offset-2;
   }
 
   ::-webkit-scrollbar {
@@ -89,7 +98,7 @@
     @apply bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-border;
+    @apply bg-border rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/40;
