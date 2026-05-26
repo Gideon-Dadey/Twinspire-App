@@ -16,7 +16,7 @@ export default function PaymentMethodsPage() {
         title="Payment methods"
         description="Save cards for faster checkout. Wallet integration lands in Phase 8."
       />
-      <section className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+      <section className="rounded-lg border border-dashed border-border bg-card p-10 text-center">
         <p className="text-sm font-semibold text-foreground">
           Stored payment methods arrive with the Stripe integration in Phase 8.
         </p>

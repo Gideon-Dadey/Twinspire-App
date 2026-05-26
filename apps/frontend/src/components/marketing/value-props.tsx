@@ -29,7 +29,7 @@ export function ValueProps() {
       <div className="container mx-auto grid grid-cols-1 gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         {items.map(({ icon: Icon, title, body }) => (
           <div key={title} className="flex items-start gap-4">
-            <span className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-background shadow-sm">
+            <span className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-background shadow-sm">
               <Icon className="h-5 w-5 text-primary" aria-hidden />
             </span>
             <div>

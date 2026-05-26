@@ -42,7 +42,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
   }
   if (error || !data) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-10 text-center">
+      <div className="rounded-lg border border-border bg-card p-10 text-center">
         <p className="text-sm font-semibold text-foreground">Order not found</p>
         <p className="mt-1 text-xs text-muted-foreground">
           {(error as { message?: string } | null)?.message ??
@@ -122,7 +122,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <section className="rounded-2xl border border-border bg-card p-6">
+          <section className="rounded-lg border border-border bg-card p-6">
             <h2 className="text-base font-semibold">
               {order.items.length} item{order.items.length === 1 ? '' : 's'}
             </h2>
@@ -161,7 +161,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
           </section>
 
           {order.shippingMethod?.trackingNumber ? (
-            <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-6">
+            <section className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-6">
               <div className="flex items-start gap-3">
                 <span aria-hidden className="rounded-lg bg-primary/10 p-2 text-primary">
                   <Truck className="size-5" />
@@ -179,7 +179,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
             </section>
           ) : null}
 
-          <section className="rounded-2xl border border-border bg-card p-6">
+          <section className="rounded-lg border border-border bg-card p-6">
             <h2 className="text-base font-semibold">Timeline</h2>
             <div className="mt-4">
               <OrderTimeline order={order} />
@@ -188,7 +188,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
         </div>
 
         <aside className="space-y-6">
-          <section className="rounded-2xl border border-border bg-card p-6">
+          <section className="rounded-lg border border-border bg-card p-6">
             <h2 className="text-base font-semibold">Order summary</h2>
             <dl className="mt-4 space-y-2 text-sm">
               <div className="flex items-center justify-between">
@@ -226,7 +226,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
             </dl>
           </section>
 
-          <section className="rounded-2xl border border-border bg-card p-6">
+          <section className="rounded-lg border border-border bg-card p-6">
             <h2 className="text-base font-semibold">Shipping address</h2>
             <address className="mt-3 not-italic text-sm leading-relaxed text-muted-foreground">
               <p className="text-foreground">
@@ -244,7 +244,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
           </section>
 
           {order.paymentMethod ? (
-            <section className="rounded-2xl border border-border bg-card p-6">
+            <section className="rounded-lg border border-border bg-card p-6">
               <h2 className="text-base font-semibold">Payment</h2>
               <p className="mt-3 text-sm capitalize text-muted-foreground">
                 {order.paymentMethod.provider}

@@ -29,12 +29,12 @@ export function StatCard({
   className,
 }: StatCardProps) {
   if (loading) {
-    return <Skeleton className={cn('h-32 w-full rounded-2xl', className)} />;
+    return <Skeleton className={cn('h-32 w-full rounded-lg', className)} />;
   }
   const positive = typeof deltaPct === 'number' && deltaPct >= 0;
   const negative = typeof deltaPct === 'number' && deltaPct < 0;
   return (
-    <div className={cn('flex flex-col gap-3 rounded-2xl border border-border bg-card p-5', className)}>
+    <div className={cn('flex flex-col gap-3 rounded-lg border border-border bg-card p-5', className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -42,7 +42,7 @@ export function StatCard({
           </p>
           <p className="truncate text-2xl font-semibold text-foreground sm:text-3xl">{value}</p>
         </div>
-        <span aria-hidden className="rounded-xl bg-primary/10 p-2 text-primary">
+        <span aria-hidden className="rounded-lg bg-primary/10 p-2 text-primary">
           <Icon className="size-5" />
         </span>
       </div>

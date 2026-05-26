@@ -60,7 +60,7 @@ export function CategoryCard({
       <LinkComp
         href={resolvedHref}
         className={cn(
-          'group relative flex items-end overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all',
+          'group relative flex items-end overflow-hidden rounded-lg border border-border bg-card p-5 shadow-sm transition-all',
           'hover:-translate-y-0.5 hover:shadow-lg',
           className,
         )}
@@ -92,7 +92,7 @@ export function CategoryCard({
     <LinkComp
       href={resolvedHref}
       className={cn(
-        'group block overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all',
+        'group block overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all',
         'hover:-translate-y-0.5 hover:shadow-lg',
         className,
       )}

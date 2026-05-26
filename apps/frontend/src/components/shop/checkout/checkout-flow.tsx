@@ -127,7 +127,7 @@ export function CheckoutFlow(): React.JSX.Element {
         {step === 'shipping' && (
           <>
             {isAuthenticated && sessionDefaults?.line1 ? (
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 text-xs text-foreground">
+              <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-xs text-foreground">
                 <p className="font-semibold">We&apos;ve filled in your saved details.</p>
                 <p className="text-muted-foreground">
                   Edit anything below or pick a different address from{' '}

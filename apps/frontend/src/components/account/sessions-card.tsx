@@ -11,7 +11,7 @@ export function SessionsCard() {
   const revoke = useRevokeSession();
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+    <section className="rounded-lg border border-border bg-card p-6 sm:p-8">
       <header className="flex items-start justify-between gap-3">
         <div className="space-y-1">
           <h2 className="text-lg font-display font-semibold tracking-tight">Active sessions</h2>

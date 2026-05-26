@@ -54,7 +54,7 @@ export function CategoryGrid() {
               <Link
                 href={`/${slug}`}
                 className={cn(
-                  'group flex h-full flex-col items-start gap-3 rounded-2xl border border-border bg-card p-5',
+                  'group flex h-full flex-col items-start gap-3 rounded-lg border border-border bg-card p-5',
                   'shadow-xs transition-all duration-moderate ease-spring',
                   'hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
@@ -62,7 +62,7 @@ export function CategoryGrid() {
               >
                 <span
                   className={cn(
-                    'inline-flex h-10 w-10 items-center justify-center rounded-xl',
+                    'inline-flex h-10 w-10 items-center justify-center rounded-lg',
                     'bg-primary/10 text-primary transition-colors',
                     'group-hover:bg-primary group-hover:text-primary-foreground',
                   )}

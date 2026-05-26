@@ -18,7 +18,7 @@ interface StatCardProps {
 
 function StatCard({ label, value, icon: Icon, description }: StatCardProps) {
   return (
-    <div className="flex items-start justify-between rounded-2xl border border-border bg-card p-5">
+    <div className="flex items-start justify-between rounded-lg border border-border bg-card p-5">
       <div className="space-y-1">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
         <p className="text-2xl font-display font-semibold text-foreground">{value}</p>
@@ -41,7 +41,7 @@ export function DashboardStats() {
     return (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-24 w-full rounded-2xl" />
+          <Skeleton key={i} className="h-24 w-full rounded-lg" />
         ))}
       </div>
     );

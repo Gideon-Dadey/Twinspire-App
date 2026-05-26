@@ -116,7 +116,7 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps): React.JSX.Elemen
         </Button>
       </div>
 
-      <div className="grid gap-3 rounded-2xl border border-border bg-muted/40 p-4 text-sm">
+      <div className="grid gap-3 rounded-lg border border-border bg-muted/40 p-4 text-sm">
         <div className="flex items-start gap-3">
           <Truck className="mt-0.5 size-4 text-primary" aria-hidden />
           <div>

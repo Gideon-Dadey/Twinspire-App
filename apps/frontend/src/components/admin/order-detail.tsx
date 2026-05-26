@@ -79,15 +79,15 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
   if (isLoading) {
     return (
       <div className="grid gap-6 lg:grid-cols-3">
-        <Skeleton className="h-96 w-full rounded-2xl lg:col-span-2" />
-        <Skeleton className="h-96 w-full rounded-2xl" />
+        <Skeleton className="h-96 w-full rounded-lg lg:col-span-2" />
+        <Skeleton className="h-96 w-full rounded-lg" />
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+      <div className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
         Order not found.{' '}
         <Link href="/admin/orders" className="text-primary hover:underline">
           Back to orders
@@ -140,7 +140,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-5">
         <div className="space-y-1">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Placed {formatDate(order.placedAt, { dateStyle: 'long', timeStyle: 'short' })}
@@ -164,7 +164,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <div className="space-y-6">
-          <section className="rounded-2xl border border-border bg-card p-5">
+          <section className="rounded-lg border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">
               {order.items.length} item{order.items.length === 1 ? '' : 's'}
             </h3>
@@ -191,7 +191,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
             </ul>
           </section>
 
-          <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+          <section className="space-y-4 rounded-lg border border-border bg-card p-5">
             <div>
               <h3 className="text-sm font-semibold">Fulfilment & status</h3>
               <p className="text-xs text-muted-foreground">
@@ -248,7 +248,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
             </div>
           </section>
 
-          <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+          <section className="space-y-4 rounded-lg border border-border bg-card p-5">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-semibold">Refund</h3>
@@ -319,7 +319,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
             ) : null}
           </section>
 
-          <section className="rounded-2xl border border-border bg-card p-5">
+          <section className="rounded-lg border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">Timeline</h3>
             <div className="mt-3">
               <OrderTimeline order={order} />
@@ -328,7 +328,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
         </div>
 
         <aside className="space-y-4">
-          <section className="rounded-2xl border border-border bg-card p-5">
+          <section className="rounded-lg border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">Customer</h3>
             {customer ? (
               <div className="mt-3 space-y-1">
@@ -350,7 +350,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
             )}
           </section>
 
-          <section className="rounded-2xl border border-border bg-card p-5">
+          <section className="rounded-lg border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">Shipping</h3>
             <address className="mt-3 not-italic text-sm leading-relaxed text-muted-foreground">
               <p className="text-foreground">
@@ -374,7 +374,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
             ) : null}
           </section>
 
-          <section className="rounded-2xl border border-border bg-card p-5">
+          <section className="rounded-lg border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">Totals</h3>
             <dl className="mt-3 space-y-2 text-sm">
               <Row label="Subtotal" value={<Money value={order.totals.subtotal} />} />
@@ -398,7 +398,7 @@ export function AdminOrderDetail({ orderId }: { orderId: string }) {
           </section>
 
           {order.notes ? (
-            <section className="rounded-2xl border border-border bg-card p-5">
+            <section className="rounded-lg border border-border bg-card p-5">
               <h3 className="text-sm font-semibold">Internal notes</h3>
               <p className="mt-2 whitespace-pre-wrap text-xs text-muted-foreground">{order.notes}</p>
             </section>

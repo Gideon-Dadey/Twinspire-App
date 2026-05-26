@@ -108,7 +108,7 @@ export function AdminSidebar({ className }: { className?: string }) {
       )}
     >
       <Link href="/admin" className="flex items-center gap-2 px-1 py-1 transition-opacity hover:opacity-90">
-        <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+        <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
           <Sparkles className="size-4" aria-hidden />
         </span>
         <div className="leading-tight">
@@ -152,7 +152,7 @@ export function AdminSidebar({ className }: { className?: string }) {
         ))}
       </nav>
 
-      <div className="rounded-2xl border border-border bg-background p-3">
+      <div className="rounded-lg border border-border bg-background p-3">
         <div className="flex items-center gap-3">
           <Avatar className="size-9">
             {user?.avatarUrl ? <AvatarImage src={user.avatarUrl} alt={displayName} /> : null}

@@ -104,7 +104,7 @@ export function ShippingForm({ defaultValues, onSubmit }: ShippingFormProps) {
             <Label
               key={option.id}
               htmlFor={`shipping-${option.id}`}
-              className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 has-[input:checked]:border-primary"
+              className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 has-[input:checked]:border-primary"
             >
               <div className="flex items-center gap-3">
                 <RadioGroupItem id={`shipping-${option.id}`} value={option.id} />

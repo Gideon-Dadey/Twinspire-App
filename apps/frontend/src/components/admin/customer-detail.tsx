@@ -54,14 +54,14 @@ export function CustomerDetail({ customerId }: { customerId: string }) {
   if (isLoading) {
     return (
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <Skeleton className="h-96 w-full rounded-2xl" />
-        <Skeleton className="h-96 w-full rounded-2xl" />
+        <Skeleton className="h-96 w-full rounded-lg" />
+        <Skeleton className="h-96 w-full rounded-lg" />
       </div>
     );
   }
   if (error || !data) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+      <div className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
         Customer not found.{' '}
         <Link href="/admin/customers" className="text-primary hover:underline">
           Back to customers
@@ -75,7 +75,7 @@ export function CustomerDetail({ customerId }: { customerId: string }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
       <div className="space-y-6">
-        <section className="rounded-2xl border border-border bg-card p-5">
+        <section className="rounded-lg border border-border bg-card p-5">
           <div className="flex flex-wrap items-center gap-4">
             <Avatar className="size-16">
               {c.avatarUrl ? <AvatarImage src={c.avatarUrl} alt={`${c.firstName} ${c.lastName}`} /> : null}
@@ -121,14 +121,14 @@ export function CustomerDetail({ customerId }: { customerId: string }) {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-border bg-card p-5">
+        <section className="rounded-lg border border-border bg-card p-5">
           <h3 className="text-sm font-semibold">Recent orders</h3>
           {c.recentOrders.length === 0 ? (
             <p className="mt-3 text-sm text-muted-foreground">No orders yet.</p>
           ) : (
             <ul className="mt-3 grid gap-2">
               {c.recentOrders.map((o) => (
-                <li key={o.id} className="grid items-center gap-3 rounded-xl border border-border/60 bg-background px-3 py-3 text-sm sm:grid-cols-[1fr_auto_auto_auto]">
+                <li key={o.id} className="grid items-center gap-3 rounded-lg border border-border/60 bg-background px-3 py-3 text-sm sm:grid-cols-[1fr_auto_auto_auto]">
                   <div className="min-w-0">
                     <Link href={`/admin/orders/${o.id}`} className="block truncate font-medium hover:underline">
                       {o.orderNumber}
@@ -148,7 +148,7 @@ export function CustomerDetail({ customerId }: { customerId: string }) {
       </div>
 
       <aside className="space-y-4">
-        <section className="rounded-2xl border border-border bg-card p-5">
+        <section className="rounded-lg border border-border bg-card p-5">
           <h3 className="text-sm font-semibold">Contact</h3>
           <dl className="mt-3 grid gap-2 text-sm">
             <div className="flex items-center justify-between">
@@ -176,7 +176,7 @@ export function CustomerDetail({ customerId }: { customerId: string }) {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-border bg-card p-5">
+        <section className="rounded-lg border border-border bg-card p-5">
           <h3 className="text-sm font-semibold">Account controls</h3>
           {!isAdmin ? (
             <p className="mt-2 text-xs text-muted-foreground">
@@ -221,7 +221,7 @@ export function CustomerDetail({ customerId }: { customerId: string }) {
         </section>
 
         {c.preferences ? (
-          <section className="rounded-2xl border border-border bg-card p-5">
+          <section className="rounded-lg border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">Preferences</h3>
             <dl className="mt-3 grid gap-2 text-sm">
               <Row label="Locale" value={c.preferences.locale} />

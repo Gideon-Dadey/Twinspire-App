@@ -183,7 +183,7 @@ export function CouponFormSheet({ open, onOpenChange, coupon, submitting, onSubm
             </FormField>
           </div>
 
-          <div className="grid gap-3 rounded-xl border border-border bg-card/60 p-3">
+          <div className="grid gap-3 rounded-lg border border-border bg-card/60 p-3">
             {[
               { key: 'isActive', label: 'Active' },
               { key: 'stackable', label: 'Stackable with other coupons' },

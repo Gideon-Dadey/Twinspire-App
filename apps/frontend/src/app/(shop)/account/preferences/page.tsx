@@ -17,7 +17,7 @@ export default function PreferencesPage() {
         title="Preferences"
         description="Tune TwinSpire to your locale, currency, and how often we contact you."
       />
-      <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <section className="rounded-lg border border-border bg-card p-6 sm:p-8">
         <PreferencesForm />
       </section>
     </div>

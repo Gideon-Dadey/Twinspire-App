@@ -17,7 +17,7 @@ export default function ProfilePage() {
         title="Profile"
         description="Update the basics other shoppers and our shipping partners see."
       />
-      <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <section className="rounded-lg border border-border bg-card p-6 sm:p-8">
         <ProfileForm />
       </section>
     </div>

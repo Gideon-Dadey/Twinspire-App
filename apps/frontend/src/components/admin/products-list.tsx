@@ -90,7 +90,7 @@ export function ProductsList() {
         <SummaryTile label="Out of stock" value={totals?.outOfStock ?? 0} tone="danger" />
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 sm:flex-row sm:items-end sm:gap-3">
+      <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4 sm:flex-row sm:items-end sm:gap-3">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
           <Input
@@ -294,7 +294,7 @@ function SummaryTile({ label, value, tone }: { label: string; value: number; ton
   return (
     <div
       className={cn(
-        'rounded-xl border border-border bg-card p-3',
+        'rounded-lg border border-border bg-card p-3',
         tone === 'warning' && 'border-amber-500/20 bg-amber-500/5',
         tone === 'danger' && 'border-rose-500/20 bg-rose-500/5',
       )}

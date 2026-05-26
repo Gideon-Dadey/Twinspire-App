@@ -38,7 +38,7 @@ export function OrderReview({ items, shipping, payment, onBack, onPlaceOrder }: 
   return (
     <div className="space-y-8">
       <section className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-border bg-card p-5">
+        <div className="rounded-lg border border-border bg-card p-5">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Shipping
@@ -63,7 +63,7 @@ export function OrderReview({ items, shipping, payment, onBack, onPlaceOrder }: 
           </p>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-5">
+        <div className="rounded-lg border border-border bg-card p-5">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Payment
@@ -87,7 +87,7 @@ export function OrderReview({ items, shipping, payment, onBack, onPlaceOrder }: 
         <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           {items.length} {items.length === 1 ? 'item' : 'items'}
         </h3>
-        <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <ul className="divide-y divide-border rounded-lg border border-border bg-card">
           {items.map((item) => (
             <li key={item.id} className="flex items-center gap-3 p-4">
               <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-muted">

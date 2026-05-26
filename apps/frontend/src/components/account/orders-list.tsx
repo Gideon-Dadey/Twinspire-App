@@ -74,7 +74,7 @@ export function OrdersList() {
       {isLoading ? (
         <div className="grid gap-3">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-24 rounded-2xl" />
+            <Skeleton key={i} className="h-24 rounded-lg" />
           ))}
         </div>
       ) : data?.items.length ? (
@@ -83,7 +83,7 @@ export function OrdersList() {
             <li key={order.id}>
               <Link
                 href={`/account/orders/${order.id}`}
-                className="group flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/40"
+                className="group flex flex-wrap items-center gap-4 rounded-lg border border-border bg-card p-5 transition-all hover:border-primary/40"
               >
                 <div className="flex -space-x-2">
                   {order.previewImages.length === 0 ? (

@@ -35,7 +35,7 @@ export default function BrandsPage() {
             <Link
               href={`/brands/${brand.slug}`}
               className={cn(
-                'group flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition-all',
+                'group flex h-full flex-col rounded-lg border border-border bg-card p-5 transition-all',
                 'hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg',
               )}
             >

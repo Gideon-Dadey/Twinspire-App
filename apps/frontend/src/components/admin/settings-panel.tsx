@@ -41,7 +41,7 @@ export function SettingsPanel() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+      <section className="space-y-4 rounded-lg border border-border bg-card p-5">
         <div className="space-y-1">
           <h2 className="text-sm font-semibold">Storefront preferences</h2>
           <p className="text-xs text-muted-foreground">Controls for global commerce behavior.</p>
@@ -61,12 +61,12 @@ export function SettingsPanel() {
         </p>
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+      <section className="space-y-4 rounded-lg border border-border bg-card p-5">
         <div className="space-y-1">
           <h2 className="text-sm font-semibold">Environment</h2>
           <p className="text-xs text-muted-foreground">Where the console is reading data from.</p>
         </div>
-        <div className="flex items-center justify-between rounded-xl border border-border bg-background p-3 text-sm">
+        <div className="flex items-center justify-between rounded-lg border border-border bg-background p-3 text-sm">
           <div>
             <p className="font-medium">API mode</p>
             <p className="text-xs text-muted-foreground">
@@ -83,7 +83,7 @@ export function SettingsPanel() {
             </Badge>
           )}
         </div>
-        <div className="rounded-xl border border-border bg-background p-3 text-sm">
+        <div className="rounded-lg border border-border bg-background p-3 text-sm">
           <p className="font-medium">Reset mock data</p>
           <p className="text-xs text-muted-foreground">
             Clears localStorage seeds. Useful when demoing or debugging.
@@ -126,7 +126,7 @@ function SettingRow({
   control: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-background p-3">
+    <div className="flex items-center justify-between gap-3 rounded-lg border border-border/60 bg-background p-3">
       <div>
         <p className="text-sm font-medium text-foreground">{label}</p>
         <p className="text-xs text-muted-foreground">{description}</p>

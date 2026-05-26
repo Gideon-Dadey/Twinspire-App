@@ -110,7 +110,7 @@ export const Shadows: Story = {
         {Object.entries(shadows).map(([key, value]) => (
           <div
             key={key}
-            className="flex h-24 w-32 flex-col items-center justify-center gap-1 rounded-xl bg-background text-xs"
+            className="flex h-24 w-32 flex-col items-center justify-center gap-1 rounded-lg bg-background text-xs"
             style={{ boxShadow: value }}
           >
             <span className="font-mono text-muted-foreground">{key}</span>

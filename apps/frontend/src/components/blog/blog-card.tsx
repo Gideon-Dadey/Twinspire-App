@@ -17,7 +17,7 @@ export function BlogCard({ post, size = 'md', className }: BlogCardProps) {
   return (
     <article
       className={cn(
-        'group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-lg',
+        'group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-lg',
         className,
       )}
     >

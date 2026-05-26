@@ -19,7 +19,7 @@ export default function SecurityPage() {
         title="Security"
         description="Strengthen your account with a unique password and two-factor authentication."
       />
-      <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <section className="rounded-lg border border-border bg-card p-6 sm:p-8">
         <h2 className="text-lg font-display font-semibold tracking-tight">Change password</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           You will be signed out of every device after updating your password.

@@ -125,7 +125,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         </header>
 
         {post.coverImage && (
-          <div className="relative mx-auto mt-10 aspect-banner max-w-5xl overflow-hidden rounded-3xl border border-border bg-muted">
+          <div className="relative mx-auto mt-10 aspect-banner max-w-5xl overflow-hidden rounded-lg border border-border bg-muted">
             <Image
               src={post.coverImage.url}
               alt={post.coverImage.alt}

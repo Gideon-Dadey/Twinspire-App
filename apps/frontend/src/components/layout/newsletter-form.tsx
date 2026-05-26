@@ -23,7 +23,7 @@ export function NewsletterForm(): React.JSX.Element {
 
   if (status === 'subscribed') {
     return (
-      <div className="flex items-center gap-3 rounded-2xl border border-success/30 bg-success/10 px-5 py-4 text-success">
+      <div className="flex items-center gap-3 rounded-lg border border-success/30 bg-success/10 px-5 py-4 text-success">
         <CheckCircle2 className="size-5" aria-hidden />
         <p className="text-sm">
           Thanks — we sent a confirmation to <span className="font-semibold">{email}</span>.

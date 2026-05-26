@@ -63,7 +63,7 @@ export function AccountSidebar() {
 
   return (
     <aside className="lg:sticky lg:top-32 lg:h-fit">
-      <div className="rounded-2xl border border-border bg-card p-5">
+      <div className="rounded-lg border border-border bg-card p-5">
         <div className="flex items-center gap-3">
           <Avatar className="size-12">
             {user?.avatarUrl ? <AvatarImage src={user.avatarUrl} alt={displayName} /> : null}
@@ -82,7 +82,7 @@ export function AccountSidebar() {
         ) : null}
       </div>
 
-      <nav className="mt-4 rounded-2xl border border-border bg-card p-2" aria-label="Account">
+      <nav className="mt-4 rounded-lg border border-border bg-card p-2" aria-label="Account">
         <ul className="grid gap-0.5">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;

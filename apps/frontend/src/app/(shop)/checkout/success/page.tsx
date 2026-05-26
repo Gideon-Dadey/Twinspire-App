@@ -27,7 +27,7 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
         className="mb-6"
       />
 
-      <div className="rounded-3xl border border-border bg-card p-8 text-center md:p-12">
+      <div className="rounded-lg border border-border bg-card p-8 text-center md:p-12">
         <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-success/15 text-success">
           <CheckCircle2 className="size-8" aria-hidden />
         </div>
@@ -39,7 +39,7 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
           ships.
         </p>
 
-        <div className="mx-auto mt-8 inline-flex items-center gap-3 rounded-2xl border border-border bg-background px-5 py-4">
+        <div className="mx-auto mt-8 inline-flex items-center gap-3 rounded-lg border border-border bg-background px-5 py-4">
           <Package className="size-5 text-primary" aria-hidden />
           <div className="text-left">
             <p className="text-xs uppercase tracking-wider text-muted-foreground">

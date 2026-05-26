@@ -111,7 +111,7 @@ export function TaxonomyFormSheet({
             <Input placeholder="https://…" {...form.register('imageUrl')} />
           </FormField>
 
-          <div className="grid gap-3 rounded-xl border border-border bg-card/60 p-3">
+          <div className="grid gap-3 rounded-lg border border-border bg-card/60 p-3">
             <Controller
               control={form.control}
               name="isFeatured"

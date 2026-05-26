@@ -26,7 +26,7 @@ export function RecentOrdersCard() {
   const { data, isLoading } = useOrdersQuery({ perPage: 4 });
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-6">
+    <section className="rounded-lg border border-border bg-card p-6">
       <header className="flex items-center justify-between gap-2">
         <div>
           <h2 className="text-lg font-display font-semibold tracking-tight">Recent orders</h2>

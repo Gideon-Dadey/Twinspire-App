@@ -17,7 +17,7 @@ export function CartLineItem({ item }: { item: CartItem }): React.JSX.Element {
     <li className="flex gap-4 py-6">
       <Link
         href={`/products/${item.slug}`}
-        className="relative size-28 shrink-0 overflow-hidden rounded-xl bg-muted sm:size-32"
+        className="relative size-28 shrink-0 overflow-hidden rounded-lg bg-muted sm:size-32"
       >
         {item.image && (
           <Image

@@ -55,13 +55,13 @@ export function DashboardOverview() {
       <div className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-36 w-full rounded-2xl" />
+            <Skeleton key={i} className="h-36 w-full rounded-lg" />
           ))}
         </div>
-        <Skeleton className="h-72 w-full rounded-2xl" />
+        <Skeleton className="h-72 w-full rounded-lg" />
         <div className="grid gap-4 lg:grid-cols-3">
-          <Skeleton className="h-64 w-full rounded-2xl lg:col-span-2" />
-          <Skeleton className="h-64 w-full rounded-2xl" />
+          <Skeleton className="h-64 w-full rounded-lg lg:col-span-2" />
+          <Skeleton className="h-64 w-full rounded-lg" />
         </div>
       </div>
     );
@@ -69,7 +69,7 @@ export function DashboardOverview() {
 
   if (isError || !data) {
     return (
-      <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-6 text-sm">
+      <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-6 text-sm">
         <p className="font-medium text-destructive">Couldn’t load admin analytics.</p>
         <Button variant="outline" size="sm" className="mt-3" onClick={() => void refetch()}>
           Retry
@@ -125,7 +125,7 @@ export function DashboardOverview() {
         />
       </div>
 
-      <section className="rounded-2xl border border-border bg-card p-5">
+      <section className="rounded-lg border border-border bg-card p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-base font-semibold">Revenue & orders</h2>
@@ -156,7 +156,7 @@ export function DashboardOverview() {
       </section>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="rounded-2xl border border-border bg-card p-5 lg:col-span-2">
+        <div className="rounded-lg border border-border bg-card p-5 lg:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">Recent orders</h2>
             <Button asChild variant="ghost" size="sm">
@@ -170,7 +170,7 @@ export function DashboardOverview() {
             {summary.recentOrders.map((order) => (
               <li
                 key={order.id}
-                className="grid items-center gap-3 rounded-xl border border-border/60 bg-background px-3 py-3 text-sm sm:grid-cols-[1fr_auto_auto_auto]"
+                className="grid items-center gap-3 rounded-lg border border-border/60 bg-background px-3 py-3 text-sm sm:grid-cols-[1fr_auto_auto_auto]"
               >
                 <div className="min-w-0">
                   <Link
@@ -196,7 +196,7 @@ export function DashboardOverview() {
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="rounded-lg border border-border bg-card p-5">
             <h2 className="text-base font-semibold">Orders by status</h2>
             <div className="mt-4 flex items-center gap-5">
               <Donut
@@ -229,7 +229,7 @@ export function DashboardOverview() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="rounded-lg border border-border bg-card p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-semibold">Needs attention</h2>
             </div>
@@ -255,7 +255,7 @@ export function DashboardOverview() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl border border-border bg-card p-5">
+        <div className="rounded-lg border border-border bg-card p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">Top products</h2>
             <Button asChild variant="ghost" size="sm">
@@ -267,7 +267,7 @@ export function DashboardOverview() {
           </div>
           <ul className="mt-3 grid gap-2">
             {summary.topProducts.map((p, i) => (
-              <li key={p.productId} className="flex items-center gap-3 rounded-xl border border-border/60 bg-background p-2 text-sm">
+              <li key={p.productId} className="flex items-center gap-3 rounded-lg border border-border/60 bg-background p-2 text-sm">
                 <span className="grid size-7 place-items-center rounded-md bg-primary/10 text-xs font-semibold text-primary">
                   {i + 1}
                 </span>
@@ -290,7 +290,7 @@ export function DashboardOverview() {
           </ul>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-5">
+        <div className="rounded-lg border border-border bg-card p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">Top categories</h2>
             <Crown className="size-4 text-muted-foreground" aria-hidden />
@@ -314,7 +314,7 @@ export function DashboardOverview() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-5">
+      <div className="rounded-lg border border-border bg-card p-5">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold">Recent admin activity</h2>
           <Button asChild variant="ghost" size="sm">

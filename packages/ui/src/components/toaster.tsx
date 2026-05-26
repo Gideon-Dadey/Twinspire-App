@@ -22,7 +22,7 @@ export function Toaster({ className, ...props }: ToasterProps): React.JSX.Elemen
       toastOptions={{
         classNames: {
           toast:
-            'group rounded-xl border border-border bg-background text-foreground shadow-lg backdrop-blur-sm',
+            'group rounded-lg border border-border bg-background text-foreground shadow-lg backdrop-blur-sm',
           title: 'text-sm font-semibold tracking-tight',
           description: 'text-xs text-muted-foreground',
           actionButton:

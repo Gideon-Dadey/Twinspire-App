@@ -7,7 +7,7 @@ export function DealsBanner() {
   return (
     <section className="container mx-auto px-4 py-16 md:py-24">
       <Reveal>
-        <div className="relative overflow-hidden rounded-3xl bg-secondary text-secondary-foreground">
+        <div className="relative overflow-hidden rounded-lg bg-secondary text-secondary-foreground">
           <div className="grid items-center gap-6 px-6 py-10 md:grid-cols-2 md:px-12 md:py-16 lg:py-20">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent">
@@ -35,7 +35,7 @@ export function DealsBanner() {
                 </Button>
               </div>
             </div>
-            <div className="relative aspect-banner overflow-hidden rounded-2xl">
+            <div className="relative aspect-banner overflow-hidden rounded-lg">
               <Image
                 src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=1800&q=70"
                 alt="Holiday deals collage"

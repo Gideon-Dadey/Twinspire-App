@@ -17,7 +17,7 @@ export function AuditLog() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-border bg-card p-4">
+      <div className="rounded-lg border border-border bg-card p-4">
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
           <Input

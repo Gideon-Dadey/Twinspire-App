@@ -38,7 +38,7 @@ export function EditorialStrip() {
           const author = getAuthorById(post.authorId);
           return (
             <Reveal key={post.id} delay={idx * 0.05}>
-              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-lg">
+              <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-lg">
                 {post.coverImage && (
                   <Link href={`/blog/${post.slug}`} className="relative block aspect-banner overflow-hidden bg-muted">
                     <Image

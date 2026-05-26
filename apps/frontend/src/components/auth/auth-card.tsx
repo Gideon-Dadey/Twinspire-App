@@ -26,7 +26,7 @@ export function AuthCard({ eyebrow, title, description, footer, children }: Auth
         </span>
         {siteConfig.name}
       </Link>
-      <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+      <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
         {eyebrow ? (
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">{eyebrow}</p>
         ) : null}

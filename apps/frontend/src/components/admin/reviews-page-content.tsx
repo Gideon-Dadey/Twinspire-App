@@ -98,17 +98,17 @@ export function ReviewsPageContent() {
       {isLoading ? (
         <div className="grid gap-3">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-32 animate-pulse rounded-2xl bg-muted" />
+            <div key={i} className="h-32 animate-pulse rounded-lg bg-muted" />
           ))}
         </div>
       ) : data?.items.length === 0 ? (
-        <div className="grid place-items-center rounded-2xl border border-dashed border-border bg-card/40 p-12 text-center">
+        <div className="grid place-items-center rounded-lg border border-dashed border-border bg-card/40 p-12 text-center">
           <p className="text-sm text-muted-foreground">Nothing in this queue. 🎉</p>
         </div>
       ) : (
         <ul className="grid gap-3">
           {data?.items.map((review) => (
-            <li key={review.id} className="rounded-2xl border border-border bg-card p-4">
+            <li key={review.id} className="rounded-lg border border-border bg-card p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                 <Link
                   href={review.product.slug ? `/products/${review.product.slug}` : '#'}

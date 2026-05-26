@@ -68,7 +68,7 @@ export function CategoriesPageContent() {
 
   return (
     <>
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
           {data?.items.length ?? 0} categories total
         </p>

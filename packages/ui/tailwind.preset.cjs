@@ -117,13 +117,18 @@ module.exports = {
         mono: ['var(--font-mono)', 'Geist Mono', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
-        xs: '2px',
-        sm: 'calc(var(--radius) - 4px)',
-        md: 'calc(var(--radius) - 2px)',
+        // Consistency rule: every "card-sized" radius is locked to the brand
+        // `--radius` token (currently 0.2rem). `sm`/`md` floor at 0 so tight
+        // controls render with near-square corners; everything `lg` and above
+        // resolves to exactly `var(--radius)` so cards, dialogs, popovers,
+        // sheets, hero panels, and product cards all match.
+        xs: '1px',
+        sm: 'max(0px, calc(var(--radius) - 2px))',
+        md: 'max(0px, calc(var(--radius) - 1px))',
         lg: 'var(--radius)',
-        xl: 'calc(var(--radius) + 4px)',
-        '2xl': 'calc(var(--radius) + 8px)',
-        '3xl': 'calc(var(--radius) + 16px)',
+        xl: 'var(--radius)',
+        '2xl': 'var(--radius)',
+        '3xl': 'var(--radius)',
       },
       boxShadow: {
         xs: '0 1px 2px 0 rgba(17, 24, 39, 0.05)',

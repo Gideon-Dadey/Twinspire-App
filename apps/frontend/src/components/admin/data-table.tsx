@@ -36,7 +36,7 @@ export function DataTable<T>({
   onRowClick,
 }: DataTableProps<T>) {
   return (
-    <div className={cn('overflow-hidden rounded-2xl border border-border bg-card', className)}>
+    <div className={cn('overflow-hidden rounded-lg border border-border bg-card', className)}>
       <div className="max-h-[640px] overflow-auto">
         <table className="w-full border-collapse text-sm">
           {caption ? <caption className="sr-only">{caption}</caption> : null}

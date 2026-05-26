@@ -39,7 +39,7 @@ export function PublicWishlistGate() {
         linkComponent={NextLinkBreadcrumb}
         className="mb-8"
       />
-      <div className="mx-auto max-w-xl rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
+      <div className="mx-auto max-w-xl rounded-lg border border-border bg-card p-10 text-center shadow-sm">
         <span
           aria-hidden
           className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary"

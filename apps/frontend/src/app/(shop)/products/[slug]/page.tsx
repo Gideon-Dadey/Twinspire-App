@@ -73,7 +73,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <div className="container mx-auto px-4 pb-16 pt-8 md:pt-12">
         <Breadcrumb items={breadcrumbItems} linkComponent={NextLinkBreadcrumb} className="mb-6" />
 
-        <div className="grid gap-10 lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_460px]">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)] lg:gap-12 xl:gap-16">
           <ProductGallery images={product.images} productName={product.name} />
           <ProductBuyBox product={product} />
         </div>

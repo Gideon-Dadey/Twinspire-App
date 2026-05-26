@@ -28,7 +28,7 @@ export function AddressCard({ address, onEdit }: AddressCardProps) {
   const remove = useDeleteAddress();
 
   return (
-    <article className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
+    <article className="flex flex-col gap-3 rounded-lg border border-border bg-card p-5">
       <header className="flex items-start justify-between gap-2">
         <div className="space-y-1">
           <p className="flex items-center gap-2 text-sm font-semibold">

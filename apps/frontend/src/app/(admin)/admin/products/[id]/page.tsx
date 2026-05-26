@@ -24,16 +24,16 @@ export default function AdminEditProductPage({ params }: { params: Promise<{ id:
       {productQuery.isLoading ? (
         <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
           <div className="space-y-4">
-            <Skeleton className="h-64 w-full rounded-2xl" />
-            <Skeleton className="h-40 w-full rounded-2xl" />
-            <Skeleton className="h-40 w-full rounded-2xl" />
+            <Skeleton className="h-64 w-full rounded-lg" />
+            <Skeleton className="h-40 w-full rounded-lg" />
+            <Skeleton className="h-40 w-full rounded-lg" />
           </div>
-          <Skeleton className="h-96 w-full rounded-2xl" />
+          <Skeleton className="h-96 w-full rounded-lg" />
         </div>
       ) : productQuery.data?.product ? (
         <ProductForm mode="edit" product={productQuery.data.product} />
       ) : (
-        <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+        <div className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
           Product not found.
         </div>
       )}

@@ -56,11 +56,11 @@ export default function CategoriesPage() {
               <Link
                 href={`/${category.slug}`}
                 className={cn(
-                  'group flex h-full items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all',
+                  'group flex h-full items-start gap-4 rounded-lg border border-border bg-card p-5 transition-all',
                   'hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg',
                 )}
               >
-                <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon className="size-5" aria-hidden />
                 </span>
                 <div className="min-w-0">

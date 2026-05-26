@@ -37,7 +37,7 @@ export function AccountQuickLinks() {
           <Link
             key={link.href}
             href={link.href}
-            className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/40 hover:shadow-sm"
+            className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-all hover:border-primary/40 hover:shadow-sm"
           >
             <span aria-hidden className="rounded-lg bg-primary/10 p-3 text-primary">
               <Icon className="size-5" />

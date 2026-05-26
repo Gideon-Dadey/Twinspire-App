@@ -114,16 +114,21 @@ export function ProductCard({
   const promo = pickPromoBadge(product, price);
 
   const bodyPad = {
-    sm: 'px-3 pb-3 pt-2 gap-1.5',
-    md: 'px-4 pb-4 pt-3 gap-2',
-    lg: 'px-5 pb-5 pt-3 gap-2',
+    sm: 'px-3 pb-3 pt-2 gap-1',
+    md: 'px-3.5 pb-3.5 pt-2.5 gap-1.5',
+    lg: 'px-4 pb-4 pt-3 gap-2',
   } as const;
 
   const imagePad = {
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
+    sm: 'p-2.5',
+    md: 'p-4',
+    lg: 'p-5',
   } as const;
+
+  // Cards use a wider-than-tall image area (4:3) to keep the overall height
+  // compact like the Vatan reference. Add-to-cart slides up as an absolute
+  // overlay on hover so it never adds to the resting card height.
+  const aspect = 4 / 3;
 
   return (
     <Card
@@ -138,12 +143,12 @@ export function ProductCard({
         <div
           aria-hidden
           className={cn(
-            'pointer-events-none absolute left-3 top-3 z-10 flex size-14 flex-col items-center justify-center rounded-full text-center text-[10px] font-semibold uppercase leading-tight tracking-tight text-primary-foreground shadow-sm',
+            'pointer-events-none absolute left-3 top-3 z-10 flex size-12 flex-col items-center justify-center rounded-full text-center text-[10px] font-semibold uppercase leading-tight tracking-tight text-primary-foreground shadow-sm',
             'bg-primary',
           )}
         >
-          <span className="text-[13px] font-bold leading-none">{promo.label}</span>
-          {promo.sublabel && <span className="mt-0.5 text-[9px] font-medium opacity-90">{promo.sublabel}</span>}
+          <span className="text-[12px] font-bold leading-none">{promo.label}</span>
+          {promo.sublabel && <span className="mt-0.5 text-[8.5px] font-medium opacity-90">{promo.sublabel}</span>}
         </div>
       )}
 
@@ -154,23 +159,23 @@ export function ProductCard({
           aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
           onClick={() => onAddToWishlist?.(product)}
           className={cn(
-            'absolute right-3 top-3 z-10 inline-flex size-9 items-center justify-center rounded-full bg-background/70 text-muted-foreground backdrop-blur transition-colors',
+            'absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-full bg-background/70 text-muted-foreground backdrop-blur transition-colors',
             'hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
             inWishlist && 'text-destructive',
           )}
         >
-          <Heart className={cn('size-[18px] transition-colors', inWishlist && 'fill-destructive')} aria-hidden />
+          <Heart className={cn('size-4 transition-colors', inWishlist && 'fill-destructive')} aria-hidden />
         </button>
       )}
 
       <LinkComp href={linkHref} className="block" aria-label={`View ${product.name}`}>
-        <AspectRatio ratio={1} className={cn('overflow-hidden bg-white', imagePad[size])}>
+        <AspectRatio ratio={aspect} className={cn('overflow-hidden bg-white', imagePad[size])}>
           {image ? (
             <ImgComp
               src={image.url}
               alt={image.alt ?? product.name}
               width={image.width ?? 600}
-              height={image.height ?? 600}
+              height={image.height ?? 450}
               sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
               className="h-full w-full object-contain transition-transform duration-moderate ease-out group-hover/card:scale-[1.04]"
             />
@@ -182,46 +187,53 @@ export function ProductCard({
         </AspectRatio>
       </LinkComp>
 
-      <div className={cn('flex flex-1 flex-col border-t border-border/60 bg-card', bodyPad[size])}>
+      <div className={cn('relative flex flex-1 flex-col border-t border-border/60 bg-card', bodyPad[size])}>
         {product.sku && (
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground/80">
+          <p className="truncate text-[10.5px] font-medium uppercase tracking-wide text-muted-foreground/80">
             {product.sku}
           </p>
         )}
 
         <LinkComp
           href={linkHref}
-          className="line-clamp-2 min-h-[2.5rem] text-[13.5px] font-medium leading-snug text-foreground transition-colors hover:text-primary"
+          className="line-clamp-2 text-[13px] font-medium leading-snug text-foreground transition-colors hover:text-primary"
         >
           {product.name}
         </LinkComp>
 
         {rating && rating.count > 0 && (
-          <RatingStars value={rating.value} count={rating.count} size="xs" className="mt-1" />
+          <RatingStars value={rating.value} count={rating.count} size="xs" className="mt-0.5" />
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-3">
+        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
           <PriceTag price={price} size={size === 'sm' ? 'md' : 'lg'} tone="primary" />
-          <StockBadge status={product.stockStatus} size="sm" className="mb-1 shrink-0" />
+          {product.stockStatus !== 'in_stock' && (
+            <StockBadge status={product.stockStatus} size="sm" className="mb-0.5 shrink-0" />
+          )}
         </div>
 
         {showAddToCart && (
-          <Button
-            type="button"
-            variant={outOfStock ? 'outline' : 'default'}
-            size="sm"
-            disabled={outOfStock}
-            loading={loadingAddToCart}
-            leftIcon={<ShoppingCart aria-hidden />}
-            onClick={() => onAddToCart?.(product)}
+          <div
             className={cn(
-              'mt-3 w-full opacity-0 transition-opacity duration-fast',
-              'group-hover/card:opacity-100 group-focus-within/card:opacity-100',
-              outOfStock && 'opacity-100',
+              'absolute inset-x-2 bottom-2 translate-y-2 opacity-0 transition-all duration-fast',
+              'group-hover/card:translate-y-0 group-hover/card:opacity-100',
+              'group-focus-within/card:translate-y-0 group-focus-within/card:opacity-100',
+              outOfStock && 'translate-y-0 opacity-100',
             )}
           >
-            {outOfStock ? 'Notify me' : 'Add to cart'}
-          </Button>
+            <Button
+              type="button"
+              variant={outOfStock ? 'outline' : 'default'}
+              size="sm"
+              disabled={outOfStock}
+              loading={loadingAddToCart}
+              leftIcon={<ShoppingCart aria-hidden />}
+              onClick={() => onAddToCart?.(product)}
+              className="w-full shadow-md"
+            >
+              {outOfStock ? 'Notify me' : 'Add to cart'}
+            </Button>
+          </div>
         )}
       </div>
     </Card>

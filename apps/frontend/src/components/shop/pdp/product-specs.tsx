@@ -31,7 +31,7 @@ export function ProductSpecs({ specifications }: ProductSpecsProps) {
   const grouped = groupSpecs(specifications);
   if (grouped.length === 0) return null;
   return (
-    <Accordion type="multiple" defaultValue={grouped.map((g) => g.group)} className="rounded-2xl border border-border bg-card">
+    <Accordion type="multiple" defaultValue={grouped.map((g) => g.group)} className="rounded-lg border border-border bg-card">
       {grouped.map((group) => (
         <AccordionItem key={group.group} value={group.group} className="border-b border-border last:border-b-0">
           <AccordionTrigger className="px-5 py-4 text-sm font-semibold uppercase tracking-wide">

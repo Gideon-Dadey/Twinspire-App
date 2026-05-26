@@ -193,7 +193,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
       className="grid gap-6 lg:grid-cols-[1fr_320px]"
     >
       <div className="space-y-6">
-        <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
           <div>
             <h2 className="text-sm font-semibold">Basic info</h2>
             <p className="text-xs text-muted-foreground">Required for storefront listing.</p>
@@ -220,7 +220,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           </FormField>
         </section>
 
-        <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
           <div>
             <h2 className="text-sm font-semibold">Pricing</h2>
             <p className="text-xs text-muted-foreground">Storefront price + optional compare-at.</p>
@@ -238,7 +238,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           </div>
         </section>
 
-        <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
           <div>
             <h2 className="text-sm font-semibold">Media</h2>
             <p className="text-xs text-muted-foreground">Primary image used in listings and cards.</p>
@@ -252,7 +252,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
                 <Input placeholder="Aurora X Pro headphones in matte black" {...form.register('imageAlt')} />
               </FormField>
             </div>
-            <div className="flex h-44 items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-background">
+            <div className="flex h-44 items-center justify-center overflow-hidden rounded-lg border border-dashed border-border bg-background">
               {imageUrl ? (
                 <span className="relative block h-full w-full">
                   <Image src={imageUrl} alt={form.watch('imageAlt') || 'Preview'} fill sizes="180px" className="object-contain" />
@@ -266,7 +266,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
       </div>
 
       <div className="space-y-6">
-        <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
           <div>
             <h2 className="text-sm font-semibold">Organisation</h2>
           </div>
@@ -304,7 +304,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           />
         </section>
 
-        <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
+        <section className="space-y-4 rounded-lg border border-border bg-card p-5">
           <div>
             <h2 className="text-sm font-semibold">Status & inventory</h2>
           </div>
@@ -358,7 +358,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           />
         </section>
 
-        <section className="space-y-3 rounded-2xl border border-border bg-card p-5">
+        <section className="space-y-3 rounded-lg border border-border bg-card p-5">
           <h2 className="text-sm font-semibold">Storefront badges</h2>
           {(['isFeatured', 'isBestSeller', 'isNewArrival'] as const).map((key) => (
             <Controller
@@ -381,7 +381,7 @@ export function ProductForm({ mode, product }: ProductFormProps) {
           ))}
         </section>
 
-        <div className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-5">
+        <div className="flex flex-col gap-2 rounded-lg border border-border bg-card p-5">
           <Button type="submit" disabled={isSubmitting} fullWidth>
             {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
             {mode === 'create' ? 'Create product' : 'Save changes'}

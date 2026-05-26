@@ -43,7 +43,7 @@ export function PaymentForm({ defaultValues, onSubmit, onBack }: PaymentFormProp
         >
           <Label
             htmlFor="payment-card"
-            className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 has-[input:checked]:border-primary"
+            className="flex cursor-pointer items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 has-[input:checked]:border-primary"
           >
             <RadioGroupItem id="payment-card" value="card" />
             <CreditCard className="size-4 text-muted-foreground" aria-hidden />
@@ -52,7 +52,7 @@ export function PaymentForm({ defaultValues, onSubmit, onBack }: PaymentFormProp
           </Label>
           <Label
             htmlFor="payment-paypal"
-            className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 has-[input:checked]:border-primary"
+            className="flex cursor-pointer items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 has-[input:checked]:border-primary"
           >
             <RadioGroupItem id="payment-paypal" value="paypal" />
             <span className="inline-flex h-5 w-12 items-center justify-center rounded-sm bg-primary text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
@@ -122,7 +122,7 @@ export function PaymentForm({ defaultValues, onSubmit, onBack }: PaymentFormProp
         </fieldset>
       )}
 
-      <div className="flex items-center gap-2 rounded-2xl border border-success/30 bg-success/10 p-3 text-xs text-success">
+      <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/10 p-3 text-xs text-success">
         <ShieldCheck className="size-4 shrink-0" aria-hidden />
         <span>
           Your payment information is encrypted in transit and never stored on TwinSpire servers.

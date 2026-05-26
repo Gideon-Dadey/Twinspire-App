@@ -24,7 +24,7 @@ export function CartSummary({
   children,
 }: CartSummaryProps): React.JSX.Element {
   return (
-    <aside className={cn('flex flex-col gap-4 rounded-2xl border border-border bg-card p-6', className)}>
+    <aside className={cn('flex flex-col gap-4 rounded-lg border border-border bg-card p-6', className)}>
       <h2 className="font-display text-lg font-semibold tracking-tight">Order summary</h2>
 
       <dl className="space-y-2 text-sm">
