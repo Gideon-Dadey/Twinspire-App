@@ -39,7 +39,7 @@
     --input: 220 13% 91%;
     --ring: 220 100% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
   }
 
   * {
@@ -57,10 +57,21 @@
 
   body {
     @apply min-h-screen bg-background text-foreground font-sans antialiased;
+    font-size: 15px;
+    line-height: 1.55;
     font-feature-settings: 'rlig' 1, 'calt' 1, 'ss01' 1, 'cv11' 1;
-    background-image:
-      radial-gradient(800px 400px at 50% -10%, hsl(var(--primary) / 0.08), transparent 60%),
-      radial-gradient(600px 300px at 100% 0%, hsl(var(--accent) / 0.06), transparent 70%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-foreground;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  h1 {
+    font-weight: 500;
+    letter-spacing: -0.03em;
   }
 
   ::selection {
