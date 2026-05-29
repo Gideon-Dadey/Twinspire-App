@@ -10,15 +10,6 @@ import { useSession } from '@/lib/hooks/use-session';
 
 const STAFF_ROLES = new Set(['admin', 'superadmin', 'manager', 'staff', 'support']);
 
-/**
- * Client-side guard for every /admin/* route.
- *
- * 1. While the session is hydrating we show a centered spinner.
- * 2. If the user is not signed in we redirect to /login with a returnTo.
- * 3. If the user is signed in but lacks staff privileges we render an
- *    accessible 403 panel instead of redirecting — that way the user can
- *    still navigate back to the storefront without losing their tab.
- */
 export function AdminGuard({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, hasHydrated } = useSession();
   const router = useRouter();
@@ -49,11 +40,11 @@ export function AdminGuard({ children }: { children: ReactNode }) {
   if (!isStaff) {
     return (
       <div className="container mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-4 text-center">
-        <span className="mb-4 inline-flex size-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+        <span className="bg-destructive/10 text-destructive mb-4 inline-flex size-12 items-center justify-center rounded-full">
           <ShieldAlert className="size-6" aria-hidden />
         </span>
-        <h1 className="text-2xl font-semibold text-foreground">Restricted area</h1>
-        <p className="mt-2 max-w-md text-sm text-muted-foreground">
+        <h1 className="text-foreground text-2xl font-semibold">Restricted area</h1>
+        <p className="text-muted-foreground mt-2 max-w-md text-sm">
           You’re signed in as <strong>{user?.email}</strong>, but this section is reserved for
           TwinSpire staff. If you believe this is a mistake, contact your administrator.
         </p>

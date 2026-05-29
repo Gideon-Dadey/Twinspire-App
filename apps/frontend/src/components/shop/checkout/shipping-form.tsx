@@ -11,15 +11,6 @@ export interface ShippingFormProps {
   onSubmit: (values: ShippingFormValues) => void | Promise<void>;
 }
 
-/**
- * Delivery details — collected so our team can call the customer after payment
- * and arrange local delivery anywhere in Ghana. Intentionally has no shipping-
- * rate picker (the Ghana operating model: in-store stock, phone-coordinated
- * delivery, no carriers).
- *
- * The component is still named `ShippingForm` for source-compatibility with the
- * checkout flow; all UI copy says "delivery".
- */
 const GHANA_REGIONS = [
   'Greater Accra',
   'Ashanti',

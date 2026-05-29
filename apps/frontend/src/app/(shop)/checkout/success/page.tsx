@@ -20,31 +20,29 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const orderNumber = sp.order ?? 'TS-DEMO';
   return (
-    <div className="container mx-auto max-w-2xl px-4 pb-20 pt-8 md:pt-12">
+    <div className="container mx-auto max-w-2xl px-3 pb-20 pt-8 sm:px-4 md:pt-12">
       <Breadcrumb
         items={[{ label: 'Home', href: '/' }, { label: 'Order confirmation' }]}
         linkComponent={NextLinkBreadcrumb}
         className="mb-6"
       />
 
-      <div className="rounded-lg border border-border bg-card p-8 text-center md:p-12">
-        <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-success/15 text-success">
+      <div className="border-border bg-card rounded-lg border p-8 text-center md:p-12">
+        <div className="bg-success/15 text-success mx-auto flex size-16 items-center justify-center rounded-full">
           <CheckCircle2 className="size-8" aria-hidden />
         </div>
-        <h1 className="mt-6 font-display text-3xl font-bold tracking-tight md:text-4xl">
+        <h1 className="font-display mt-6 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
           Thank you for your order!
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           We've sent a confirmation to your inbox. You'll get another note as soon as your package
           ships.
         </p>
 
-        <div className="mx-auto mt-8 inline-flex items-center gap-3 rounded-lg border border-border bg-background px-5 py-4">
-          <Package className="size-5 text-primary" aria-hidden />
+        <div className="border-border bg-background mx-auto mt-8 inline-flex items-center gap-3 rounded-lg border px-5 py-4">
+          <Package className="text-primary size-5" aria-hidden />
           <div className="text-left">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">
-              Order number
-            </p>
+            <p className="text-muted-foreground text-xs uppercase tracking-wider">Order number</p>
             <p className="font-mono text-lg font-semibold">{orderNumber}</p>
           </div>
         </div>

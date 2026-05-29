@@ -6,12 +6,6 @@ import { type ReactNode, useEffect } from 'react';
 
 import { useSession } from '@/lib/hooks/use-session';
 
-/**
- * Client-side guard for authenticated routes. While bootstrapping the
- * session we render a centered spinner; when unauthenticated we redirect
- * to /login with a `returnTo` query so the user lands back on the page
- * they originally requested.
- */
 export function AuthGuard({ children, redirectTo }: { children: ReactNode; redirectTo?: string }) {
   const { isAuthenticated, hasHydrated } = useSession();
   const router = useRouter();

@@ -11,7 +11,23 @@
 
 import type { Address, Order, OrderStatus, Product, PublicUser } from '@twinspire/types';
 
-import { getProductById } from '@/data/products';
+import { getProductById as getStaticProductById } from '@/data/products';
+
+async function resolveProductById(id: string): Promise<Product | undefined> {
+  try {
+    const res = await fetch(`/api/mock/catalog/products/${encodeURIComponent(id)}`, {
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const data = (await res.json()) as { product?: Product };
+      const product = data.product;
+      if (product && product.status === 'published' && !product.deletedAt) return product;
+    }
+  } catch {
+    /* fall back to static seed */
+  }
+  return getStaticProductById(id);
+}
 
 import { ADMIN_PASSWORD, STAFF_SEED_USERS } from './admin-mock-data';
 import {
@@ -232,7 +248,10 @@ function readPendingTwoFactor(userId: string): { secret: string; backupCodes: st
   );
 }
 
-function writePendingTwoFactor(userId: string, payload: { secret: string; backupCodes: string[] } | null): void {
+function writePendingTwoFactor(
+  userId: string,
+  payload: { secret: string; backupCodes: string[] } | null,
+): void {
   if (payload === null) {
     removeKey(mockKeys.pendingTwoFactor(userId));
   } else {
@@ -241,10 +260,16 @@ function writePendingTwoFactor(userId: string, payload: { secret: string; backup
 }
 
 function readTwoFactor(userId: string): { secret: string; backupCodes: string[] } | null {
-  return readJson<{ secret: string; backupCodes: string[] } | null>(mockKeys.twoFactor(userId), null);
+  return readJson<{ secret: string; backupCodes: string[] } | null>(
+    mockKeys.twoFactor(userId),
+    null,
+  );
 }
 
-function writeTwoFactor(userId: string, payload: { secret: string; backupCodes: string[] } | null): void {
+function writeTwoFactor(
+  userId: string,
+  payload: { secret: string; backupCodes: string[] } | null,
+): void {
   if (payload === null) {
     removeKey(mockKeys.twoFactor(userId));
   } else {
@@ -520,7 +545,9 @@ export const mockBackend = {
     return { secret, otpauthUrl, backupCodes };
   },
 
-  async confirm2faSetup(totpCode: string): Promise<{ twoFactorEnabled: boolean; backupCodes: string[] }> {
+  async confirm2faSetup(
+    totpCode: string,
+  ): Promise<{ twoFactorEnabled: boolean; backupCodes: string[] }> {
     await delay();
     const userId = getCurrentSessionUserId();
     if (!userId) throw new MockApiError(401, 'UNAUTHENTICATED', 'Not authenticated');
@@ -736,7 +763,9 @@ export const mockBackend = {
   },
 
   // ---- orders ----
-  async listOrders(options: { page?: number; perPage?: number; status?: OrderStatus } = {}): Promise<OrderListResponse> {
+  async listOrders(
+    options: { page?: number; perPage?: number; status?: OrderStatus } = {},
+  ): Promise<OrderListResponse> {
     await delay(80);
     const userId = getCurrentSessionUserId();
     if (!userId) throw new MockApiError(401, 'UNAUTHENTICATED', 'Not authenticated');
@@ -790,7 +819,7 @@ export const mockBackend = {
     const ids = readWishlist(userId);
     const items: WishlistItem[] = [];
     for (const id of ids) {
-      const product = getProductById(id);
+      const product = await resolveProductById(id);
       if (product) {
         items.push({ id: `wi-${id}`, productId: id, product, addedAt: nowIso() });
       }
@@ -829,14 +858,16 @@ export const mockBackend = {
     await delay(40);
     const userId = getCurrentSessionUserId();
     if (!userId) return { items: [] };
-    const items = readRecent(userId)
-      .map((entry) => {
-        const product: Product | undefined = getProductById(entry.productId);
-        return product ? { ...entry, product } : null;
-      })
-      .filter(
-        (entry): entry is { productId: string; viewedAt: string; product: Product } => entry !== null,
-      );
+    const items = (
+      await Promise.all(
+        readRecent(userId).map(async (entry) => {
+          const product = await resolveProductById(entry.productId);
+          return product ? { ...entry, product } : null;
+        }),
+      )
+    ).filter(
+      (entry): entry is { productId: string; viewedAt: string; product: Product } => entry !== null,
+    );
     return { items };
   },
 

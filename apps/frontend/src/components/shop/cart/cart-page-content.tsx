@@ -1,10 +1,11 @@
 'use client';
 
 import { Button, EmptyState } from '@twinspire/ui';
-import { ShoppingBag, Truck } from 'lucide-react';
+import { Truck } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
 
+import { CartOutlineIcon } from '@/components/icons/cart-outline-icon';
 import { CartLineItem } from './cart-line-item';
 import { CartSummary } from './cart-summary';
 import { CouponForm } from './coupon-form';
@@ -21,7 +22,7 @@ export function CartPageContent(): React.JSX.Element {
     return (
       <EmptyState
         className="max-w-xl"
-        icon={ShoppingBag}
+        icon={CartOutlineIcon}
         title="Your cart is empty"
         description="Add a product to get started, or check out our deals."
         action={

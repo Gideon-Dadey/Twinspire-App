@@ -109,7 +109,7 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps): React.JSX.Elemen
           variant="outline"
           aria-label="Add to wishlist"
           onClick={() => toast.success('Saved to wishlist')}
-          className="sm:w-auto"
+          className="w-full sm:w-auto"
           leftIcon={<Heart aria-hidden />}
         >
           Save

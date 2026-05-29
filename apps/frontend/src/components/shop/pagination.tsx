@@ -10,7 +10,11 @@ export interface PaginationProps {
   className?: string;
 }
 
-function buildHref(basePath: string, params: Record<string, string | string[] | undefined>, nextPage: number): string {
+function buildHref(
+  basePath: string,
+  params: Record<string, string | string[] | undefined>,
+  nextPage: number,
+): string {
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (value == null) continue;
@@ -42,21 +46,38 @@ export function Pagination({ meta, basePath, searchParams, className }: Paginati
   const pages = pageList(page, totalPages);
 
   return (
-    <nav className={cn('flex items-center justify-between gap-2 pt-8', className)} aria-label="Pagination">
+    <nav
+      className={cn('flex items-center justify-between gap-2 pt-8', className)}
+      aria-label="Pagination"
+    >
       <Button asChild variant="outline" size="sm" disabled={!hasPrev}>
         <Link
           href={buildHref(basePath, searchParams, Math.max(1, page - 1))}
           aria-disabled={!hasPrev}
           tabIndex={hasPrev ? undefined : -1}
+          aria-label="Previous page"
         >
-          <ChevronLeft className="size-4" aria-hidden /> Previous
+          <ChevronLeft className="size-4" aria-hidden />
+          {/* Label hidden on mobile — the chevron alone communicates direction
+              and saves ~60px of horizontal real estate so the page list +
+              Next button can fit on a 360px viewport without overflowing. */}
+          <span className="hidden sm:inline">Previous</span>
         </Link>
       </Button>
 
-      <ul className="flex items-center gap-1">
+      {/*
+        Two layouts: a compact "page X of Y" indicator on mobile (single
+        line, never overflows) and the full numbered page list on sm+ where
+        there is room to render it.
+      */}
+      <p className="text-muted-foreground text-sm tabular-nums sm:hidden" aria-hidden>
+        Page <span className="text-foreground font-semibold">{page}</span> of {totalPages}
+      </p>
+
+      <ul className="hidden items-center gap-1 sm:flex">
         {pages.map((p, idx) =>
           p === 'gap' ? (
-            <li key={`gap-${idx}`} className="px-2 text-sm text-muted-foreground" aria-hidden>
+            <li key={`gap-${idx}`} className="text-muted-foreground px-2 text-sm" aria-hidden>
               …
             </li>
           ) : (
@@ -83,8 +104,10 @@ export function Pagination({ meta, basePath, searchParams, className }: Paginati
           href={buildHref(basePath, searchParams, Math.min(totalPages, page + 1))}
           aria-disabled={!hasNext}
           tabIndex={hasNext ? undefined : -1}
+          aria-label="Next page"
         >
-          Next <ChevronRight className="size-4" aria-hidden />
+          <span className="hidden sm:inline">Next</span>
+          <ChevronRight className="size-4" aria-hidden />
         </Link>
       </Button>
     </nav>

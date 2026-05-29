@@ -4,7 +4,7 @@ import { ProductGridSkeleton } from '@/components/shop/product-grid';
 
 export default function Loading() {
   return (
-    <div className="container mx-auto px-4 pb-16 pt-8 md:pt-12">
+    <div className="container mx-auto px-3 pb-16 pt-8 sm:px-4 md:pt-12">
       <Skeleton className="mb-6 h-4 w-40" />
       <div className="mb-8 flex flex-col gap-3 md:flex-row md:justify-between">
         <div className="space-y-2">

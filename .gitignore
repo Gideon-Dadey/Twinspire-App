@@ -9,6 +9,7 @@ build
 out
 .next
 .turbo
+.catalog-store
 *.tsbuildinfo
 
 # Test artifacts

@@ -2,7 +2,7 @@ import { Skeleton } from '@twinspire/ui';
 
 export default function Loading() {
   return (
-    <div className="container mx-auto px-4 pb-16 pt-8 md:pt-12">
+    <div className="container mx-auto px-3 pb-16 pt-8 sm:px-4 md:pt-12">
       <Skeleton className="mb-6 h-4 w-60" />
       <div className="grid gap-10 lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)] lg:gap-12 xl:gap-16">
         <div className="mx-auto w-full max-w-[520px] space-y-3 lg:mx-0">

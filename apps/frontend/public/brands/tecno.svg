@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 48" fill="none" role="img" aria-label="Tecno">
+  <rect x="8" y="14" width="32" height="20" rx="4" fill="#0066cc" opacity="0.12"/>
+  <text x="24" y="28" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="800" fill="#0066cc">T</text>
+  <text x="48" y="32" font-family="system-ui,sans-serif" font-size="15" font-weight="800" fill="#0066cc" letter-spacing="0.08em">TECNO</text>
+</svg>

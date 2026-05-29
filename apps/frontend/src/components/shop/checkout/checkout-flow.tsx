@@ -1,12 +1,12 @@
 'use client';
 
 import { Button, EmptyState } from '@twinspire/ui';
-import { ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { toast } from 'sonner';
 
+import { CartOutlineIcon } from '@/components/icons/cart-outline-icon';
 import { computeTotals } from '@/lib/helpers/cart-math';
 import { useAddressesQuery } from '@/lib/hooks/use-addresses';
 import { useSession } from '@/lib/hooks/use-session';
@@ -93,7 +93,7 @@ export function CheckoutFlow(): React.JSX.Element {
   if (items.length === 0 && step !== 'review') {
     return (
       <EmptyState
-        icon={ShoppingBag}
+        icon={CartOutlineIcon}
         title="Your cart is empty"
         description="Add a product before checking out."
         action={

@@ -1,11 +1,10 @@
 'use client';
 
+import type { Brand } from '@twinspire/types';
 import { Badge, cn } from '@twinspire/ui';
 import { X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
-
-import { brands } from '@/data/brands';
 
 interface Chip {
   key: string;
@@ -15,10 +14,15 @@ interface Chip {
 
 export interface ActiveFiltersProps {
   basePath: string;
+  brands: Brand[];
   className?: string;
 }
 
-export function ActiveFilters({ basePath, className }: ActiveFiltersProps): React.JSX.Element | null {
+export function ActiveFilters({
+  basePath,
+  brands,
+  className,
+}: ActiveFiltersProps): React.JSX.Element | null {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -88,7 +92,7 @@ export function ActiveFilters({ basePath, className }: ActiveFiltersProps): Reac
     }
 
     return list;
-  }, [searchParams, router, basePath]);
+  }, [searchParams, router, basePath, brands]);
 
   if (chips.length === 0) return null;
 
@@ -101,7 +105,7 @@ export function ActiveFilters({ basePath, className }: ActiveFiltersProps): Reac
             type="button"
             aria-label={`Remove filter: ${chip.label}`}
             onClick={chip.onRemove}
-            className="ml-0.5 inline-flex size-4 items-center justify-center rounded-full text-muted-foreground hover:bg-background hover:text-foreground"
+            className="text-muted-foreground hover:bg-background hover:text-foreground ml-0.5 inline-flex size-4 items-center justify-center rounded-full"
           >
             <X className="size-3" aria-hidden />
           </button>

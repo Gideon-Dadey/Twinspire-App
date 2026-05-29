@@ -21,14 +21,16 @@ export function StubPage({
   primaryAction,
 }: StubPageProps) {
   return (
-    <div className="container mx-auto max-w-4xl px-4 pb-16 pt-8 md:pt-12">
+    <div className="container mx-auto max-w-4xl px-3 pb-16 pt-8 sm:px-4 md:pt-12">
       <Breadcrumb items={breadcrumbs} linkComponent={NextLinkBreadcrumb} className="mb-6" />
       <header className="mb-10">
         {eyebrow && (
-          <p className="text-sm font-medium uppercase tracking-wider text-primary">{eyebrow}</p>
+          <p className="text-primary text-sm font-medium uppercase tracking-wider">{eyebrow}</p>
         )}
-        <h1 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">{title}</h1>
-        {description && <p className="mt-3 max-w-2xl text-muted-foreground">{description}</p>}
+        <h1 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
+          {title}
+        </h1>
+        {description && <p className="text-muted-foreground mt-3 max-w-2xl">{description}</p>}
         {primaryAction && (
           <Button asChild className="mt-6">
             <Link href={primaryAction.href}>{primaryAction.label}</Link>
@@ -36,7 +38,7 @@ export function StubPage({
         )}
       </header>
       {children && (
-        <div className="prose prose-sm max-w-none text-sm leading-relaxed text-muted-foreground">
+        <div className="prose prose-sm text-muted-foreground max-w-none text-sm leading-relaxed">
           {children}
         </div>
       )}

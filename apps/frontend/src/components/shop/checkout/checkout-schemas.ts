@@ -1,16 +1,5 @@
 import { z } from 'zod';
 
-/**
- * Delivery details collected at checkout.
- *
- * TwinSpire is a Ghana-only storefront with phone-coordinated local delivery,
- * so this form intentionally omits any shipping rate/method picker — the
- * customer just gives us where to deliver and we call to confirm.
- *
- * The field is kept named `shippingSchema` (and the type `ShippingFormValues`)
- * for source-compatibility with the existing checkout flow plumbing; the user-
- * facing copy says "delivery" everywhere.
- */
 export const shippingSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),

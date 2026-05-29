@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 48" fill="none" role="img" aria-label="Dell">
+  <circle cx="24" cy="24" r="16" fill="#007db8" opacity="0.1"/>
+  <text x="24" y="30" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="#007db8">DELL</text>
+  <text x="52" y="32" font-family="system-ui,sans-serif" font-size="16" font-weight="800" fill="#007db8" letter-spacing="0.04em">DELL</text>
+</svg>

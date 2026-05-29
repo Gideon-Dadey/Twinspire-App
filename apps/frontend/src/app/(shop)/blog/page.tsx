@@ -8,7 +8,8 @@ import { getAllPosts, tags } from '@/data/posts';
 
 export const metadata: Metadata = {
   title: 'Blog · Reviews, buying guides & deep dives',
-  description: 'Expert electronics reviews, buying guides, and editorial commentary from the TwinSpire team.',
+  description:
+    'Expert electronics reviews, buying guides, and editorial commentary from the TwinSpire team.',
   alternates: { canonical: '/blog' },
 };
 
@@ -17,7 +18,7 @@ export default function BlogIndexPage() {
   const [featured, ...rest] = posts;
 
   return (
-    <div className="container mx-auto px-4 pb-16 pt-8 md:pt-12">
+    <div className="container mx-auto px-3 pb-16 pt-8 sm:px-4 md:pt-12">
       <Breadcrumb
         items={[{ label: 'Home', href: '/' }, { label: 'Blog' }]}
         linkComponent={NextLinkBreadcrumb}
@@ -25,13 +26,13 @@ export default function BlogIndexPage() {
       />
 
       <header className="mb-12 max-w-2xl">
-        <p className="text-sm font-medium uppercase tracking-wider text-primary">
+        <p className="text-primary text-sm font-medium uppercase tracking-wider">
           The TwinSpire blog
         </p>
-        <h1 className="mt-2 font-display text-4xl font-bold tracking-tight md:text-5xl">
+        <h1 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
           Reviews, buying guides &amp; deep dives.
         </h1>
-        <p className="mt-3 text-muted-foreground">
+        <p className="text-muted-foreground mt-3">
           From hands-on hardware reviews to industry analysis — written by our editors, not paid by
           the brands we cover.
         </p>
@@ -40,7 +41,7 @@ export default function BlogIndexPage() {
       <ul className="mb-10 flex flex-wrap gap-2 text-xs">
         {tags.map((tag) => (
           <li key={tag.id}>
-            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">
+            <span className="border-border bg-card text-muted-foreground inline-flex items-center gap-1 rounded-full border px-3 py-1">
               #{tag.slug} · <span className="text-foreground">{tag.postCount ?? 0}</span>
             </span>
           </li>

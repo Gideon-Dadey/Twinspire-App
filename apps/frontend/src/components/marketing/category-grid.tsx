@@ -7,14 +7,14 @@ import { primaryCategories } from '@/lib/site-config';
 
 export function CategoryGrid() {
   return (
-    <section className="container mx-auto px-4 py-16 md:py-24">
+    <section className="container mx-auto px-3 py-10 sm:px-4 sm:py-14 md:py-24">
       <Reveal>
-        <header className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <header className="mb-6 flex flex-col gap-3 sm:mb-8 md:mb-10 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-primary text-sm font-medium uppercase tracking-wider">
               Shop by category
             </p>
-            <h2 className="font-display mt-2 text-3xl font-bold tracking-tight md:text-4xl">
+            <h2 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Everything you need.
             </h2>
           </div>
@@ -30,7 +30,10 @@ export function CategoryGrid() {
         </header>
       </Reveal>
 
-      <Stagger className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" stagger={0.04}>
+      <Stagger
+        className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6"
+        stagger={0.04}
+      >
         {primaryCategories.map(({ slug, name, tagline, image, imageAlt }) => (
           <StaggerItem key={slug}>
             <Link

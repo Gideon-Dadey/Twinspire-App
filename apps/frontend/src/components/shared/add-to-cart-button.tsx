@@ -2,7 +2,7 @@
 
 import type { Product } from '@twinspire/types';
 import { Button, type ButtonProps } from '@twinspire/ui';
-import { ShoppingCart } from 'lucide-react';
+import { CartOutlineIcon } from '@/components/icons/cart-outline-icon';
 import { toast } from 'sonner';
 import * as React from 'react';
 
@@ -40,7 +40,7 @@ export function AddToCartButton({
       size={size}
       variant={variant ?? (outOfStock ? 'outline' : 'default')}
       disabled={outOfStock}
-      leftIcon={showIcon ? <ShoppingCart aria-hidden /> : undefined}
+      leftIcon={showIcon ? <CartOutlineIcon className="size-4" /> : undefined}
       onClick={handleClick}
       className={className}
       {...rest}

@@ -9,11 +9,12 @@ import {
   Button,
   Separator,
 } from '@twinspire/ui';
-import { ShoppingBag, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
 
+import { CartOutlineIcon } from '@/components/icons/cart-outline-icon';
 import { computeTotals } from '@/lib/helpers/cart-math';
 import { useCartStore } from '@/lib/stores/cart-store';
 
@@ -30,9 +31,9 @@ export function CartDrawer(): React.JSX.Element {
   return (
     <Sheet open={isOpen} onOpenChange={(open) => (open ? null : close())}>
       <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
-        <SheetHeader className="border-border border-b px-6 py-4">
+        <SheetHeader className="border-border border-b px-4 py-4 sm:px-6">
           <SheetTitle className="flex items-center gap-2 text-lg">
-            <ShoppingBag className="size-5" aria-hidden /> Your cart
+            <CartOutlineIcon className="size-5" /> Your cart
             <span className="text-muted-foreground text-sm font-normal">
               · {totals.itemCount} {totals.itemCount === 1 ? 'item' : 'items'}
             </span>
@@ -40,8 +41,8 @@ export function CartDrawer(): React.JSX.Element {
         </SheetHeader>
 
         {items.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12 text-center">
-            <ShoppingBag className="text-muted-foreground/40 size-10" aria-hidden />
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 py-12 text-center sm:px-6">
+            <CartOutlineIcon className="text-muted-foreground/40 size-10" />
             <p className="text-foreground text-sm font-medium">Your cart is empty</p>
             <p className="text-muted-foreground max-w-xs text-sm">
               Add a product to get started, or browse our best sellers.
@@ -54,13 +55,13 @@ export function CartDrawer(): React.JSX.Element {
           </div>
         ) : (
           <>
-            <div className="border-border bg-muted/40 text-muted-foreground border-b px-6 py-3 text-xs">
+            <div className="border-border bg-muted/40 text-muted-foreground border-b px-4 py-3 text-xs sm:px-6">
               Free delivery in Ghana · we&apos;ll call after payment to arrange a time.
             </div>
 
             <ul className="divide-border flex-1 divide-y overflow-y-auto">
               {items.map((item) => (
-                <li key={item.id} className="flex gap-3 px-6 py-4">
+                <li key={item.id} className="flex gap-3 px-4 py-4 sm:px-6">
                   <Link
                     href={`/products/${item.slug}`}
                     onClick={close}
@@ -127,7 +128,7 @@ export function CartDrawer(): React.JSX.Element {
               ))}
             </ul>
 
-            <div className="border-border border-t px-6 py-4">
+            <div className="border-border border-t px-4 py-4 sm:px-6">
               <dl className="space-y-2 text-sm">
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Subtotal</dt>

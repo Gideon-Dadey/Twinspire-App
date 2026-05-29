@@ -1,13 +1,8 @@
 'use client';
 
-import { Badge, Button, cn } from '@twinspire/ui';
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  type PanInfo,
-} from 'framer-motion';
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { Button, cn } from '@twinspire/ui';
+import { AnimatePresence, motion, useReducedMotion, type PanInfo } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
@@ -32,11 +27,7 @@ const slideVariants = {
   }),
 };
 
-export function HeroCarousel({
-  slides = HERO_SLIDES,
-}: {
-  slides?: HeroSlide[];
-}) {
+export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] }) {
   const reducedMotion = useReducedMotion();
   const [index, setIndex] = React.useState(0);
   const [direction, setDirection] = React.useState(1);
@@ -69,8 +60,7 @@ export function HeroCarousel({
       setPaused(document.hidden);
     }
     document.addEventListener('visibilitychange', onVisibilityChange);
-    return () =>
-      document.removeEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
   }, []);
 
   function handleKey(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -95,7 +85,7 @@ export function HeroCarousel({
     <section
       aria-roledescription="carousel"
       aria-label="Featured promotions"
-      className="relative isolate w-full overflow-hidden border-b border-border bg-background"
+      className="border-border bg-background relative isolate w-full overflow-hidden border-b"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -103,16 +93,15 @@ export function HeroCarousel({
       onKeyDown={handleKey}
       tabIndex={0}
     >
-      <div
-        ref={announceRef}
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      >
+      <div ref={announceRef} aria-live="polite" aria-atomic="true" className="sr-only">
         {`Slide ${index + 1} of ${total}: ${slide.title}`}
       </div>
 
-      <div className="relative h-[520px] w-full sm:h-[560px] md:h-[600px] lg:h-[640px]">
+      {/*
+       * Hero height — mobile uses min-height so copy + CTAs fit comfortably;
+       * desktop keeps a fixed stage.
+       */}
+      <div className="relative min-h-[480px] w-full sm:min-h-[520px] md:min-h-[560px] lg:h-[600px] lg:min-h-0 xl:h-[640px]">
         <AnimatePresence initial={false} mode="popLayout" custom={direction}>
           <motion.div
             key={slide.id}
@@ -122,9 +111,7 @@ export function HeroCarousel({
             animate="center"
             exit="exit"
             transition={{
-              x: reducedMotion
-                ? { duration: 0 }
-                : { duration: 0.7, ease: [0.32, 0.72, 0, 1] },
+              x: reducedMotion ? { duration: 0 } : { duration: 0.7, ease: [0.32, 0.72, 0, 1] },
               opacity: { duration: 0.4 },
             }}
             drag={reducedMotion ? false : 'x'}
@@ -133,80 +120,82 @@ export function HeroCarousel({
             onDragEnd={handleDragEnd}
             className={cn('absolute inset-0', slide.background)}
           >
-            <div className="container mx-auto grid h-full grid-cols-1 items-center gap-8 px-4 lg:grid-cols-[1.05fr_1fr] lg:gap-12">
-              <div className="relative z-10 flex max-w-2xl flex-col items-start justify-center gap-5 py-10 text-left lg:py-0">
-                <Badge
-                  variant="muted"
-                  size="md"
-                  className="border border-border bg-background/80 px-3 py-1 backdrop-blur"
-                >
-                  <span
-                    aria-hidden
-                    className={cn(
-                      'inline-block h-1.5 w-1.5 animate-pulse-soft rounded-full bg-current',
-                      slide.accent,
-                    )}
-                  />
-                  <span className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/80">
-                    {slide.eyebrow}
-                  </span>
-                </Badge>
-
-                <h1 className="font-display text-4xl text-foreground sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem]">
-                  {slide.title}
-                </h1>
-
-                <p className="max-w-xl text-pretty text-base text-muted-foreground sm:text-lg">
-                  {slide.subtitle}
-                </p>
-
-                {slide.note ? (
-                  <p className="text-sm font-medium text-foreground/70">
-                    {slide.note}
-                  </p>
-                ) : null}
-
-                <div className="mt-2 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
-                  <Button asChild size="lg" rounded="full">
-                    <Link href={slide.cta.href}>{slide.cta.label}</Link>
-                  </Button>
-                  {slide.ctaSecondary ? (
-                    <Button asChild size="lg" rounded="full" variant="outline">
-                      <Link href={slide.ctaSecondary.href}>
-                        {slide.ctaSecondary.label}
-                      </Link>
-                    </Button>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="relative hidden h-full items-center justify-center lg:flex">
-                <div className="relative h-[80%] w-full max-w-xl">
+            {/*
+             * Slide layout
+             *
+             * Mobile (< lg): full-bleed image band (edge-to-edge, no side
+             * padding) with copy in a padded container below — matches Apple
+             * Store / Stripe / SaaS mobile hero patterns.
+             *
+             * Desktop (lg+): two-column grid with text left, product art right.
+             */}
+            <div className="flex h-full flex-col lg:container lg:mx-auto lg:grid lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-12 lg:px-4">
+              {/* IMAGE — full viewport width on mobile; column art on desktop */}
+              <div className="relative h-[200px] w-full shrink-0 overflow-hidden sm:h-[240px] md:h-[280px] lg:order-2 lg:flex lg:h-full lg:items-center lg:justify-center lg:overflow-visible">
+                <div className="relative h-full w-full lg:max-w-xl">
                   <Image
                     src={slide.image}
                     alt={slide.alt}
                     fill
-                    sizes="(min-width: 1280px) 600px, (min-width: 1024px) 500px, 100vw"
-                    className="object-contain object-center drop-shadow-2xl"
+                    sizes="(min-width: 1024px) 520px, 100vw"
+                    className="object-cover object-center lg:object-contain lg:object-center lg:drop-shadow-2xl"
                     priority={index === 0}
                   />
                 </div>
+                {/* Soft fade into content area on small screens */}
+                <div
+                  aria-hidden
+                  className="from-background/80 pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t to-transparent lg:hidden"
+                />
               </div>
 
-              {/* Mobile / tablet image: positioned absolutely as a subtle backdrop */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 opacity-50 sm:flex md:opacity-60 lg:hidden"
-              >
-                <div className="relative h-full w-full">
-                  <Image
-                    src={slide.image}
-                    alt=""
-                    fill
-                    sizes="50vw"
-                    className="object-contain object-right-bottom"
-                    priority={index === 0}
-                  />
+              {/* COPY — container-aligned on mobile; grid cell on desktop */}
+              <div className="container relative z-10 mx-auto flex w-full min-w-0 flex-1 flex-col items-start justify-start px-3 pt-4 sm:px-4 sm:pt-5 lg:order-1 lg:max-w-2xl lg:flex-none lg:justify-center lg:px-0 lg:pt-0">
+                <div className="flex w-full max-w-xl flex-col gap-3 sm:gap-3.5 lg:max-w-2xl lg:gap-5">
+                  <div className="flex w-full flex-col gap-1.5 sm:gap-2.5">
+                    {/*
+                     * Mobile headline: 24px (text-2xl) — matches Apple Store,
+                     * Amazon, and SaaS mobile hero scale. Scales up at sm/md/lg.
+                     */}
+                    <h1 className="font-display text-foreground text-balance text-2xl font-bold leading-[1.2] tracking-tight sm:text-[1.75rem] sm:leading-[1.15] md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.1] xl:text-[3.75rem] xl:leading-[1.08]">
+                      {slide.title}
+                    </h1>
+
+                    <p className="text-muted-foreground text-pretty text-sm leading-5 sm:text-base sm:leading-6 lg:max-w-xl lg:text-lg lg:leading-7">
+                      {slide.subtitle}
+                    </p>
+
+                    {slide.note ? (
+                      <p className="text-foreground/60 text-xs leading-snug sm:text-sm">
+                        {slide.note}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  {/* CTAs — full-width stacked on phone, inline from sm */}
+                  <div className="flex w-full flex-col gap-2.5 pt-0.5 sm:flex-row sm:items-center sm:gap-3 sm:pt-1">
+                    <Button
+                      asChild
+                      size="lg"
+                      rounded="full"
+                      fullWidth
+                      className="h-11 w-full font-semibold sm:w-auto sm:min-w-[9.5rem] sm:px-7"
+                    >
+                      <Link href={slide.cta.href}>{slide.cta.label}</Link>
+                    </Button>
+                    {slide.ctaSecondary ? (
+                      <Button
+                        asChild
+                        size="lg"
+                        rounded="full"
+                        variant="outline"
+                        fullWidth
+                        className="border-border bg-background/80 h-11 w-full font-semibold backdrop-blur-sm sm:w-auto sm:min-w-[9.5rem] sm:px-7"
+                      >
+                        <Link href={slide.ctaSecondary.href}>{slide.ctaSecondary.label}</Link>
+                      </Button>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>
@@ -214,15 +203,23 @@ export function HeroCarousel({
         </AnimatePresence>
       </div>
 
-      {/* Prev / Next controls — large hit targets, hidden on tiny screens */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between px-2 sm:px-4">
+      {/*
+       * Prev / Next controls.
+       *
+       * Hidden on mobile (< md): with the new stacked layout the chevrons
+       * would overlap the image card. Mobile users navigate via the bottom
+       * pagination dots and the existing swipe gesture (framer-motion drag
+       * + SWIPE_THRESHOLD handler). This matches the Amazon, Apple Store,
+       * and Jumia mobile carousel pattern.
+       */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 hidden items-center justify-between px-2 sm:px-4 md:flex">
         <button
           type="button"
           onClick={prev}
           aria-label="Previous slide"
           className={cn(
-            'pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-border/60 bg-background/80 text-foreground shadow-md backdrop-blur transition',
-            'hover:bg-background hover:shadow-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+            'border-border/60 bg-background/80 text-foreground pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border shadow-md backdrop-blur transition',
+            'hover:bg-background focus-visible:ring-ring hover:shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
           )}
         >
           <ChevronLeft className="h-5 w-5" aria-hidden />
@@ -232,53 +229,12 @@ export function HeroCarousel({
           onClick={next}
           aria-label="Next slide"
           className={cn(
-            'pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-border/60 bg-background/80 text-foreground shadow-md backdrop-blur transition',
-            'hover:bg-background hover:shadow-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+            'border-border/60 bg-background/80 text-foreground pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border shadow-md backdrop-blur transition',
+            'hover:bg-background focus-visible:ring-ring hover:shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
           )}
         >
           <ChevronRight className="h-5 w-5" aria-hidden />
         </button>
-      </div>
-
-      {/* Pagination + play/pause */}
-      <div className="absolute inset-x-0 bottom-4 z-20 flex items-center justify-center gap-4 sm:bottom-6">
-        <div
-          role="tablist"
-          aria-label="Choose a slide"
-          className="flex items-center gap-2 rounded-full border border-border/60 bg-background/80 px-3 py-2 shadow-sm backdrop-blur"
-        >
-          {slides.map((s, i) => {
-            const active = i === index;
-            return (
-              <button
-                key={s.id}
-                role="tab"
-                aria-selected={active}
-                aria-label={`Go to slide ${i + 1}: ${s.title}`}
-                type="button"
-                onClick={() => goTo(i, i > index ? 1 : -1)}
-                className={cn(
-                  'group relative h-2 rounded-full transition-all duration-300',
-                  active ? 'w-8 bg-foreground' : 'w-2 bg-foreground/30 hover:bg-foreground/60',
-                )}
-              >
-                <span className="sr-only">Slide {i + 1}</span>
-              </button>
-            );
-          })}
-          <button
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? 'Resume autoplay' : 'Pause autoplay'}
-            className="ml-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-foreground/70 transition hover:bg-muted hover:text-foreground"
-          >
-            {paused ? (
-              <Play className="h-3.5 w-3.5" aria-hidden />
-            ) : (
-              <Pause className="h-3.5 w-3.5" aria-hidden />
-            )}
-          </button>
-        </div>
       </div>
     </section>
   );

@@ -4,7 +4,9 @@ import { Breadcrumb } from '@twinspire/ui';
 
 import { NextLinkBreadcrumb } from '@/components/shared/next-adapters';
 import { ProductGrid } from '@/components/shop/product-grid';
-import { getBestSellers } from '@/data/products';
+import { getBestSellersList } from '@/lib/catalog/catalog-service';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Best sellers',
@@ -12,21 +14,23 @@ export const metadata: Metadata = {
   alternates: { canonical: '/best-sellers' },
 };
 
-export default function BestSellersPage() {
-  const items = getBestSellers(24);
+export default async function BestSellersPage() {
+  const items = await getBestSellersList(24);
   return (
-    <div className="container mx-auto px-4 pb-16 pt-8 md:pt-12">
+    <div className="container mx-auto px-3 pb-16 pt-8 sm:px-4 md:pt-12">
       <Breadcrumb
         items={[{ label: 'Home', href: '/' }, { label: 'Best sellers' }]}
         linkComponent={NextLinkBreadcrumb}
         className="mb-6"
       />
       <header className="mb-10">
-        <p className="text-sm font-medium uppercase tracking-wider text-accent">Customer favorites</p>
-        <h1 className="mt-2 font-display text-4xl font-bold tracking-tight md:text-5xl">
+        <p className="text-accent text-sm font-medium uppercase tracking-wider">
+          Customer favorites
+        </p>
+        <h1 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
           Best sellers.
         </h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mt-3 max-w-2xl">
           What everyone's buying right now — ranked by genuine recent sales, not paid placements.
         </p>
       </header>

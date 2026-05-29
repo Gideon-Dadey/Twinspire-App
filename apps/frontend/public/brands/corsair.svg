@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 48" fill="none" role="img" aria-label="Corsair">
+  <circle cx="20" cy="24" r="12" stroke="#feca00" stroke-width="3" fill="none"/>
+  <path d="M14 24h12M20 18v12" stroke="#feca00" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="38" y="32" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="#1a1a1a" letter-spacing="0.04em">CORSAIR</text>
+</svg>

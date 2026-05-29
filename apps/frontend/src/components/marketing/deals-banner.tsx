@@ -1,24 +1,30 @@
 import { Button, Reveal } from '@twinspire/ui';
-import { Sparkles, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+
+import { DealsBannerAdCarousel } from '@/components/marketing/deals-banner-ad-carousel';
 
 export function DealsBanner() {
   return (
-    <section className="container mx-auto px-4 py-16 md:py-24">
+    <section className="container mx-auto px-3 py-10 sm:px-4 sm:py-14 md:py-24">
       <Reveal>
-        <div className="relative overflow-hidden rounded-lg bg-secondary text-secondary-foreground">
-          <div className="grid items-center gap-6 px-6 py-10 md:grid-cols-2 md:px-12 md:py-16 lg:py-20">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent">
-                <Sparkles className="size-3.5" aria-hidden /> Holiday flash sale
-              </span>
-              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Save up to <span className="text-accent">40% off</span> across all of TwinSpire.
-              </h2>
-              <p className="mt-4 max-w-md text-secondary-foreground/70">
+        <div className="bg-secondary text-secondary-foreground relative overflow-hidden rounded-lg">
+          <div className="grid items-stretch md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+            <div className="flex min-w-0 flex-col justify-center px-4 py-8 sm:px-6 md:px-10 md:py-14 lg:px-12 lg:py-20">
+              <header className="max-w-xl">
+                <p className="text-secondary-foreground/75 text-xs font-semibold uppercase tracking-[0.2em] sm:text-sm">
+                  Save up to
+                </p>
+                <p className="font-display text-accent mt-2 text-[clamp(2.75rem,8vw,4.5rem)] font-bold leading-[0.95] tracking-tight">
+                  40% off
+                </p>
+                <h2 className="font-display text-secondary-foreground mt-3 text-balance text-2xl font-bold leading-snug tracking-tight sm:text-3xl md:text-[2rem] md:leading-tight lg:text-4xl">
+                  across all of TwinSpire.
+                </h2>
+              </header>
+              <p className="text-secondary-foreground/70 mt-5 max-w-md text-pretty text-sm leading-relaxed sm:text-base">
                 Use code{' '}
-                <span className="rounded-md bg-secondary-foreground/10 px-2 py-1 font-mono text-sm font-semibold text-secondary-foreground">
+                <span className="bg-secondary-foreground/10 text-secondary-foreground rounded-md px-2 py-1 font-mono text-sm font-semibold">
                   WELCOME10
                 </span>{' '}
                 at checkout for an extra 10% off your first order — stackable with sale prices.
@@ -30,21 +36,17 @@ export function DealsBanner() {
                     <ArrowRight aria-hidden />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="ghost" className="text-secondary-foreground hover:bg-secondary-foreground/10">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="ghost"
+                  className="text-secondary-foreground hover:bg-secondary-foreground/10"
+                >
                   <Link href="/new-arrivals">See new arrivals</Link>
                 </Button>
               </div>
             </div>
-            <div className="relative aspect-banner overflow-hidden rounded-lg">
-              <Image
-                src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=1800&q=70"
-                alt="Holiday deals collage"
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-secondary/40 via-transparent to-transparent" />
-            </div>
+            <DealsBannerAdCarousel />
           </div>
         </div>
       </Reveal>

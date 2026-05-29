@@ -20,9 +20,9 @@ import type {
   Review,
 } from '@twinspire/types';
 
-import { brands as seedBrands } from '@/data/brands';
-import { categories as seedCategories } from '@/data/categories';
-import { products as seedProducts } from '@/data/products';
+import { catalogApiFetch, catalogQueryString } from '@/lib/catalog/catalog-api-client';
+
+const CATALOG_SYNC_KEY = 'twinspire.catalog.server-synced';
 
 import {
   ADMIN_AUDIT_LOG,
@@ -100,15 +100,6 @@ function randomId(prefix: string): string {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}${Date.now().toString(36)}`;
 }
 
-function slugify(input: string): string {
-  return input
-    .toLowerCase()
-    .trim()
-    .replace(/&/g, ' and ')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
 function paginate<T>(items: T[], page = 1, perPage = 20) {
   const safePage = Math.max(1, page);
   const safePerPage = Math.max(1, Math.min(100, perPage));
@@ -165,25 +156,39 @@ function readWithSeed<T>(key: string, seed: T[]): T[] {
   return seed;
 }
 
-function readProducts(): Product[] {
-  return readWithSeed<Product>(ADMIN_KEYS.products, seedProducts);
-}
-function writeProducts(value: Product[]): void {
-  writeJson(ADMIN_KEYS.products, value);
+async function ensureCatalogSyncedFromLocalStorage(): Promise<void> {
+  if (typeof window === 'undefined') return;
+  if (localStorage.getItem(CATALOG_SYNC_KEY)) return;
+  const legacyProducts = readJson<Product[] | null>(ADMIN_KEYS.products, null);
+  const legacyCategories = readJson<Category[] | null>(ADMIN_KEYS.categories, null);
+  const legacyBrands = readJson<Brand[] | null>(ADMIN_KEYS.brands, null);
+  await Promise.all([
+    legacyProducts?.length
+      ? catalogApiFetch('/products', {
+          method: 'PUT',
+          body: JSON.stringify({ products: legacyProducts }),
+        })
+      : Promise.resolve(),
+    legacyCategories?.length
+      ? catalogApiFetch('/categories', {
+          method: 'PUT',
+          body: JSON.stringify({ categories: legacyCategories }),
+        })
+      : Promise.resolve(),
+    legacyBrands?.length
+      ? catalogApiFetch('/brands', {
+          method: 'PUT',
+          body: JSON.stringify({ brands: legacyBrands }),
+        })
+      : Promise.resolve(),
+  ]);
+  localStorage.setItem(CATALOG_SYNC_KEY, '1');
 }
 
-function readCategories(): Category[] {
-  return readWithSeed<Category>(ADMIN_KEYS.categories, seedCategories);
-}
-function writeCategories(value: Category[]): void {
-  writeJson(ADMIN_KEYS.categories, value);
-}
-
-function readBrands(): Brand[] {
-  return readWithSeed<Brand>(ADMIN_KEYS.brands, seedBrands);
-}
-function writeBrands(value: Brand[]): void {
-  writeJson(ADMIN_KEYS.brands, value);
+async function fetchAllProducts(): Promise<Product[]> {
+  await ensureCatalogSyncedFromLocalStorage();
+  const res = await catalogApiFetch<{ products: Product[] }>('/products');
+  return res.products;
 }
 
 function readOrders(): Order[] {
@@ -249,7 +254,11 @@ function writeUsers(value: MockUserRecord[]): void {
   writeJson(ADMIN_KEYS.users, value);
 }
 
-function logAudit(event: Omit<AuditEvent, 'id' | 'createdAt' | 'actorId' | 'actorName'> & { actor?: MockUserRecord }): void {
+function logAudit(
+  event: Omit<AuditEvent, 'id' | 'createdAt' | 'actorId' | 'actorName'> & {
+    actor?: MockUserRecord;
+  },
+): void {
   const actor = event.actor;
   if (!actor) return;
   const list = readAudit();
@@ -282,7 +291,11 @@ function toOrderListItem(order: Order, users: MockUserRecord[]): AdminOrderListI
     total: order.totals.total,
     itemCount: order.items.reduce((sum, it) => sum + it.quantity, 0),
     customer: customer
-      ? { id: customer.id, name: `${customer.firstName} ${customer.lastName}`, email: customer.email }
+      ? {
+          id: customer.id,
+          name: `${customer.firstName} ${customer.lastName}`,
+          email: customer.email,
+        }
       : { id: null, name: 'Guest', email: order.guestEmail ?? '' },
     previewImages: order.items
       .map((it) => it.image?.url)
@@ -328,118 +341,62 @@ export const adminMockBackend = {
   async listProducts(query: AdminProductListQuery = {}): Promise<AdminProductsResponse> {
     requireStaff();
     await delay(120);
-    const all = readProducts();
-    let filtered = all;
-    if (query.q) {
-      const needle = query.q.toLowerCase();
-      filtered = filtered.filter(
-        (p) =>
-          p.name.toLowerCase().includes(needle) ||
-          p.sku.toLowerCase().includes(needle) ||
-          p.slug.toLowerCase().includes(needle),
-      );
-    }
-    if (query.status && query.status !== 'all') {
-      filtered = filtered.filter((p) => p.status === query.status);
-    }
-    if (query.brandId) filtered = filtered.filter((p) => p.brandId === query.brandId);
-    if (query.categoryId) filtered = filtered.filter((p) => p.categoryIds.includes(query.categoryId!));
-    if (query.lowStock) {
-      filtered = filtered.filter((p) => p.stockStatus === 'low_stock' || p.stockStatus === 'out_of_stock');
-    }
-    const totals = {
-      active: all.filter((p) => p.status === 'published').length,
-      draft: all.filter((p) => p.status === 'draft').length,
-      archived: all.filter((p) => p.status === 'archived').length,
-      outOfStock: all.filter((p) => p.stockStatus === 'out_of_stock').length,
-      lowStock: all.filter((p) => p.stockStatus === 'low_stock').length,
-    };
-    const paged = paginate(filtered, query.page, query.perPage ?? 12);
-    return { ...paged, totals };
+    await ensureCatalogSyncedFromLocalStorage();
+    return catalogApiFetch<AdminProductsResponse>(
+      `/products${catalogQueryString({
+        page: query.page,
+        perPage: query.perPage ?? 12,
+        q: query.q,
+        status: query.status,
+        brandId: query.brandId,
+        categoryId: query.categoryId,
+        lowStock: query.lowStock ? 'true' : undefined,
+      })}`,
+    );
   },
 
   async getProduct(id: string): Promise<{ product: Product }> {
     requireStaff();
     await delay(80);
-    const product = readProducts().find((p) => p.id === id || p.slug === id);
-    if (!product) throw new MockApiError(404, 'PRODUCT_NOT_FOUND', 'Product not found');
-    return { product };
+    await ensureCatalogSyncedFromLocalStorage();
+    return catalogApiFetch<{ product: Product }>(`/products/${encodeURIComponent(id)}`);
   },
 
   async createProduct(input: AdminUpsertProductInput): Promise<{ product: Product }> {
     const actor = requireRole(['admin', 'superadmin', 'manager']);
     await delay(200);
-    const list = readProducts();
-    const slug = (input.slug ?? slugify(input.name)) || randomId('p');
-    if (list.some((p) => p.slug === slug)) {
-      throw new MockApiError(409, 'SLUG_TAKEN', 'Slug is already in use');
-    }
-    const product: Product = {
-      id: randomId('p'),
-      sku: input.sku,
-      name: input.name,
-      slug,
-      shortDescription: input.shortDescription,
-      description: input.description,
-      brandId: input.brandId,
-      brandName: readBrands().find((b) => b.id === input.brandId)?.name,
-      primaryCategoryId: input.primaryCategoryId,
-      categoryIds: input.categoryIds ?? [input.primaryCategoryId],
-      tags: input.tags ?? [],
-      condition: input.condition,
-      status: input.status,
-      stockStatus: input.stockStatus,
-      price: input.price,
-      images: input.imageUrl
-        ? [{ url: input.imageUrl, alt: input.imageAlt ?? input.name, width: 1200, height: 1500, position: 0 }]
-        : [],
-      attributes: [],
-      specifications: [],
-      variants: [],
-      hasVariants: false,
-      isFeatured: input.isFeatured,
-      isBestSeller: input.isBestSeller,
-      isNewArrival: input.isNewArrival,
-      createdAt: nowIso(),
-      updatedAt: nowIso(),
-      deletedAt: null,
-    };
-    writeProducts([product, ...list]);
-    logAudit({ actor, action: 'product.create', entity: 'product', entityId: product.id });
-    return { product };
+    await ensureCatalogSyncedFromLocalStorage();
+    const result = await catalogApiFetch<{ product: Product }>('/products', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+    logAudit({ actor, action: 'product.create', entity: 'product', entityId: result.product.id });
+    return result;
   },
 
-  async updateProduct(id: string, input: Partial<AdminUpsertProductInput>): Promise<{ product: Product }> {
+  async updateProduct(
+    id: string,
+    input: Partial<AdminUpsertProductInput>,
+  ): Promise<{ product: Product }> {
     const actor = requireRole(['admin', 'superadmin', 'manager']);
     await delay(180);
-    const list = readProducts();
-    const target = list.find((p) => p.id === id);
-    if (!target) throw new MockApiError(404, 'PRODUCT_NOT_FOUND', 'Product not found');
-    const next: Product = {
-      ...target,
-      ...input,
-      slug: input.slug ?? target.slug,
-      categoryIds: input.categoryIds ?? target.categoryIds,
-      tags: input.tags ?? target.tags,
-      price: input.price ?? target.price,
-      brandName: input.brandId ? readBrands().find((b) => b.id === input.brandId)?.name : target.brandName,
-      images: input.imageUrl
-        ? [{ url: input.imageUrl, alt: input.imageAlt ?? input.name ?? target.name, width: 1200, height: 1500, position: 0 }, ...target.images.slice(1)]
-        : target.images,
-      updatedAt: nowIso(),
-    };
-    writeProducts(list.map((p) => (p.id === id ? next : p)));
+    await ensureCatalogSyncedFromLocalStorage();
+    const result = await catalogApiFetch<{ product: Product }>(
+      `/products/${encodeURIComponent(id)}`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify(input),
+      },
+    );
     logAudit({ actor, action: 'product.update', entity: 'product', entityId: id });
-    return { product: next };
+    return result;
   },
 
   async deleteProduct(id: string): Promise<void> {
     const actor = requireRole(['admin', 'superadmin']);
     await delay(150);
-    const list = readProducts();
-    const remaining = list.filter((p) => p.id !== id);
-    if (remaining.length === list.length) throw new MockApiError(404, 'PRODUCT_NOT_FOUND', 'Product not found');
-    writeProducts(remaining);
+    await ensureCatalogSyncedFromLocalStorage();
+    await catalogApiFetch<void>(`/products/${encodeURIComponent(id)}`, { method: 'DELETE' });
     logAudit({ actor, action: 'product.delete', entity: 'product', entityId: id });
   },
 
@@ -447,73 +404,47 @@ export const adminMockBackend = {
   async listCategories(): Promise<{ items: AdminCategoryListItem[] }> {
     requireStaff();
     await delay(60);
-    const products = readProducts();
-    const items: AdminCategoryListItem[] = readCategories().map((c) => ({
-      ...c,
-      productCount: products.filter((p) => p.categoryIds.includes(c.id) || p.primaryCategoryId === c.id).length,
-    }));
-    return { items };
+    await ensureCatalogSyncedFromLocalStorage();
+    return catalogApiFetch<{ items: AdminCategoryListItem[] }>('/categories');
   },
 
   async createCategory(input: AdminUpsertCategoryInput): Promise<{ category: Category }> {
     const actor = requireRole(['admin', 'superadmin', 'manager']);
     await delay(140);
-    const list = readCategories();
-    const slug = input.slug ?? slugify(input.name);
-    if (list.some((c) => c.slug === slug)) throw new MockApiError(409, 'SLUG_TAKEN', 'Slug is in use');
-    const category: Category = {
-      id: randomId('c'),
-      name: input.name,
-      slug,
-      description: input.description,
-      image: input.image,
-      icon: input.iconUrl,
-      parentId: input.parentId ?? null,
-      ancestors: [],
-      level: input.parentId ? 1 : 0,
-      path: `/${slug}`,
-      position: list.length,
-      isFeatured: input.isFeatured ?? false,
-      isActive: input.isActive ?? true,
-      productCount: 0,
-      createdAt: nowIso(),
-      updatedAt: nowIso(),
-      deletedAt: null,
-    };
-    writeCategories([...list, category]);
-    logAudit({ actor, action: 'category.create', entity: 'category', entityId: category.id });
-    return { category };
+    await ensureCatalogSyncedFromLocalStorage();
+    const result = await catalogApiFetch<{ category: Category }>('/categories', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+    logAudit({
+      actor,
+      action: 'category.create',
+      entity: 'category',
+      entityId: result.category.id,
+    });
+    return result;
   },
 
-  async updateCategory(id: string, input: Partial<AdminUpsertCategoryInput>): Promise<{ category: Category }> {
+  async updateCategory(
+    id: string,
+    input: Partial<AdminUpsertCategoryInput>,
+  ): Promise<{ category: Category }> {
     const actor = requireRole(['admin', 'superadmin', 'manager']);
     await delay(120);
-    const list = readCategories();
-    const target = list.find((c) => c.id === id);
-    if (!target) throw new MockApiError(404, 'CATEGORY_NOT_FOUND', 'Category not found');
-    const next: Category = {
-      ...target,
-      ...input,
-      slug: input.slug ?? target.slug,
-      icon: input.iconUrl ?? target.icon,
-      image: input.image ?? target.image,
-      parentId: input.parentId ?? target.parentId ?? null,
-      isFeatured: input.isFeatured ?? target.isFeatured,
-      isActive: input.isActive ?? target.isActive,
-      updatedAt: nowIso(),
-    };
-    writeCategories(list.map((c) => (c.id === id ? next : c)));
+    await ensureCatalogSyncedFromLocalStorage();
+    const result = await catalogApiFetch<{ category: Category }>(
+      `/categories/${encodeURIComponent(id)}`,
+      { method: 'PATCH', body: JSON.stringify(input) },
+    );
     logAudit({ actor, action: 'category.update', entity: 'category', entityId: id });
-    return { category: next };
+    return result;
   },
 
   async deleteCategory(id: string): Promise<void> {
     const actor = requireRole(['admin', 'superadmin']);
     await delay(120);
-    const list = readCategories();
-    const remaining = list.filter((c) => c.id !== id);
-    if (remaining.length === list.length) throw new MockApiError(404, 'CATEGORY_NOT_FOUND', 'Category not found');
-    writeCategories(remaining);
+    await ensureCatalogSyncedFromLocalStorage();
+    await catalogApiFetch<void>(`/categories/${encodeURIComponent(id)}`, { method: 'DELETE' });
     logAudit({ actor, action: 'category.delete', entity: 'category', entityId: id });
   },
 
@@ -521,65 +452,39 @@ export const adminMockBackend = {
   async listBrands(): Promise<{ items: AdminBrandListItem[] }> {
     requireStaff();
     await delay(60);
-    const products = readProducts();
-    const items: AdminBrandListItem[] = readBrands().map((b) => ({
-      ...b,
-      productCount: products.filter((p) => p.brandId === b.id).length,
-    }));
-    return { items };
+    await ensureCatalogSyncedFromLocalStorage();
+    return catalogApiFetch<{ items: AdminBrandListItem[] }>('/brands');
   },
 
   async createBrand(input: AdminUpsertBrandInput): Promise<{ brand: Brand }> {
     const actor = requireRole(['admin', 'superadmin', 'manager']);
     await delay(140);
-    const list = readBrands();
-    const slug = input.slug ?? slugify(input.name);
-    if (list.some((b) => b.slug === slug)) throw new MockApiError(409, 'SLUG_TAKEN', 'Slug is in use');
-    const brand: Brand = {
-      id: randomId('b'),
-      name: input.name,
-      slug,
-      description: input.description,
-      logo: input.logo,
-      isFeatured: input.isFeatured ?? false,
-      isActive: input.isActive ?? true,
-      productCount: 0,
-      createdAt: nowIso(),
-      updatedAt: nowIso(),
-      deletedAt: null,
-    };
-    writeBrands([...list, brand]);
-    logAudit({ actor, action: 'brand.create', entity: 'brand', entityId: brand.id });
-    return { brand };
+    await ensureCatalogSyncedFromLocalStorage();
+    const result = await catalogApiFetch<{ brand: Brand }>('/brands', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+    logAudit({ actor, action: 'brand.create', entity: 'brand', entityId: result.brand.id });
+    return result;
   },
 
   async updateBrand(id: string, input: Partial<AdminUpsertBrandInput>): Promise<{ brand: Brand }> {
     const actor = requireRole(['admin', 'superadmin', 'manager']);
     await delay(120);
-    const list = readBrands();
-    const target = list.find((b) => b.id === id);
-    if (!target) throw new MockApiError(404, 'BRAND_NOT_FOUND', 'Brand not found');
-    const next: Brand = {
-      ...target,
-      ...input,
-      slug: input.slug ?? target.slug,
-      isFeatured: input.isFeatured ?? target.isFeatured,
-      isActive: input.isActive ?? target.isActive,
-      logo: input.logo ?? target.logo,
-      updatedAt: nowIso(),
-    };
-    writeBrands(list.map((b) => (b.id === id ? next : b)));
+    await ensureCatalogSyncedFromLocalStorage();
+    const result = await catalogApiFetch<{ brand: Brand }>(`/brands/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(input),
+    });
     logAudit({ actor, action: 'brand.update', entity: 'brand', entityId: id });
-    return { brand: next };
+    return result;
   },
 
   async deleteBrand(id: string): Promise<void> {
     const actor = requireRole(['admin', 'superadmin']);
     await delay(120);
-    const list = readBrands();
-    const remaining = list.filter((b) => b.id !== id);
-    if (remaining.length === list.length) throw new MockApiError(404, 'BRAND_NOT_FOUND', 'Brand not found');
-    writeBrands(remaining);
+    await ensureCatalogSyncedFromLocalStorage();
+    await catalogApiFetch<void>(`/brands/${encodeURIComponent(id)}`, { method: 'DELETE' });
     logAudit({ actor, action: 'brand.delete', entity: 'brand', entityId: id });
   },
 
@@ -597,7 +502,11 @@ export const adminMockBackend = {
       filtered = filtered.filter((o) => {
         if (o.orderNumber.toLowerCase().includes(needle)) return true;
         const customer = users.find((u) => u.id === o.userId);
-        if (customer && (`${customer.firstName} ${customer.lastName}`.toLowerCase().includes(needle) || customer.email.toLowerCase().includes(needle))) {
+        if (
+          customer &&
+          (`${customer.firstName} ${customer.lastName}`.toLowerCase().includes(needle) ||
+            customer.email.toLowerCase().includes(needle))
+        ) {
           return true;
         }
         if (o.guestEmail && o.guestEmail.toLowerCase().includes(needle)) return true;
@@ -630,7 +539,10 @@ export const adminMockBackend = {
     const next: Order = { ...target };
     if (input.status && input.status !== target.status) {
       next.status = input.status;
-      next.timeline = [...target.timeline, { status: input.status, occurredAt: nowIso(), note: input.note, byUserId: actor.id }];
+      next.timeline = [
+        ...target.timeline,
+        { status: input.status, occurredAt: nowIso(), note: input.note, byUserId: actor.id },
+      ];
       if (input.status === 'shipped') next.shippedAt = nowIso();
       if (input.status === 'delivered') next.deliveredAt = nowIso();
       if (input.status === 'cancelled') next.cancelledAt = nowIso();
@@ -650,7 +562,13 @@ export const adminMockBackend = {
     }
     next.updatedAt = nowIso();
     writeOrders(orders.map((o) => (o.id === id ? next : o)));
-    logAudit({ actor, action: 'order.update', entity: 'order', entityId: id, metadata: { status: input.status ?? next.status } });
+    logAudit({
+      actor,
+      action: 'order.update',
+      entity: 'order',
+      entityId: id,
+      metadata: { status: input.status ?? next.status },
+    });
     return { order: next };
   },
 
@@ -663,13 +581,25 @@ export const adminMockBackend = {
     const next: Order = {
       ...target,
       status: 'refunded',
-      paymentStatus: input.amount && input.amount < target.totals.total.amount ? 'partially_refunded' : 'refunded',
+      paymentStatus:
+        input.amount && input.amount < target.totals.total.amount
+          ? 'partially_refunded'
+          : 'refunded',
       fulfillmentStatus: 'returned',
-      timeline: [...target.timeline, { status: 'refunded', occurredAt: nowIso(), note: input.reason, byUserId: actor.id }],
+      timeline: [
+        ...target.timeline,
+        { status: 'refunded', occurredAt: nowIso(), note: input.reason, byUserId: actor.id },
+      ],
       updatedAt: nowIso(),
     };
     writeOrders(orders.map((o) => (o.id === id ? next : o)));
-    logAudit({ actor, action: 'order.refund', entity: 'order', entityId: id, metadata: { amount: input.amount ?? next.totals.total.amount } });
+    logAudit({
+      actor,
+      action: 'order.refund',
+      entity: 'order',
+      entityId: id,
+      metadata: { amount: input.amount ?? next.totals.total.amount },
+    });
     return { order: next };
   },
 
@@ -681,7 +611,9 @@ export const adminMockBackend = {
     if (query.q) {
       const needle = query.q.toLowerCase();
       list = list.filter(
-        (c) => c.code.toLowerCase().includes(needle) || (c.description ?? '').toLowerCase().includes(needle),
+        (c) =>
+          c.code.toLowerCase().includes(needle) ||
+          (c.description ?? '').toLowerCase().includes(needle),
       );
     }
     if (typeof query.isActive === 'boolean') {
@@ -727,11 +659,20 @@ export const adminMockBackend = {
       deletedAt: null,
     };
     writeCoupons([coupon, ...list]);
-    logAudit({ actor, action: 'coupon.create', entity: 'coupon', entityId: coupon.id, metadata: { code: coupon.code } });
+    logAudit({
+      actor,
+      action: 'coupon.create',
+      entity: 'coupon',
+      entityId: coupon.id,
+      metadata: { code: coupon.code },
+    });
     return { coupon };
   },
 
-  async updateCoupon(id: string, input: Partial<AdminUpsertCouponInput>): Promise<{ coupon: Coupon }> {
+  async updateCoupon(
+    id: string,
+    input: Partial<AdminUpsertCouponInput>,
+  ): Promise<{ coupon: Coupon }> {
     const actor = requireRole(['admin', 'superadmin', 'manager']);
     await delay(140);
     const list = readCoupons();
@@ -741,11 +682,17 @@ export const adminMockBackend = {
       ...target,
       ...input,
       code: input.code ? input.code.toUpperCase() : target.code,
-      expiresAt: input.expiresAt === null ? undefined : input.expiresAt ?? target.expiresAt,
+      expiresAt: input.expiresAt === null ? undefined : (input.expiresAt ?? target.expiresAt),
       updatedAt: nowIso(),
     };
     writeCoupons(list.map((c) => (c.id === id ? next : c)));
-    logAudit({ actor, action: 'coupon.update', entity: 'coupon', entityId: id, metadata: { code: next.code } });
+    logAudit({
+      actor,
+      action: 'coupon.update',
+      entity: 'coupon',
+      entityId: id,
+      metadata: { code: next.code },
+    });
     return { coupon: next };
   },
 
@@ -754,7 +701,8 @@ export const adminMockBackend = {
     await delay(120);
     const list = readCoupons();
     const remaining = list.filter((c) => c.id !== id);
-    if (remaining.length === list.length) throw new MockApiError(404, 'COUPON_NOT_FOUND', 'Coupon not found');
+    if (remaining.length === list.length)
+      throw new MockApiError(404, 'COUPON_NOT_FOUND', 'Coupon not found');
     writeCoupons(remaining);
     logAudit({ actor, action: 'coupon.delete', entity: 'coupon', entityId: id });
   },
@@ -769,7 +717,7 @@ export const adminMockBackend = {
     }
     if (query.rating) list = list.filter((r) => r.rating === query.rating);
     list = [...list].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-    const products = readProducts();
+    const products = await fetchAllProducts();
     const items: AdminReviewItem[] = list.map((review) => {
       const product = products.find((p) => p.id === review.productId);
       return {
@@ -793,9 +741,20 @@ export const adminMockBackend = {
     const list = readReviews();
     const target = list.find((r) => r.id === id);
     if (!target) throw new MockApiError(404, 'REVIEW_NOT_FOUND', 'Review not found');
-    const next: Review = { ...target, status: input.status, moderatorNote: input.moderatorNote, updatedAt: nowIso() };
+    const next: Review = {
+      ...target,
+      status: input.status,
+      moderatorNote: input.moderatorNote,
+      updatedAt: nowIso(),
+    };
     writeReviews(list.map((r) => (r.id === id ? next : r)));
-    logAudit({ actor, action: 'review.moderate', entity: 'review', entityId: id, metadata: { decision: input.status } });
+    logAudit({
+      actor,
+      action: 'review.moderate',
+      entity: 'review',
+      entityId: id,
+      metadata: { decision: input.status },
+    });
     return { review: next };
   },
 
@@ -804,7 +763,8 @@ export const adminMockBackend = {
     await delay(100);
     const list = readReviews();
     const remaining = list.filter((r) => r.id !== id);
-    if (remaining.length === list.length) throw new MockApiError(404, 'REVIEW_NOT_FOUND', 'Review not found');
+    if (remaining.length === list.length)
+      throw new MockApiError(404, 'REVIEW_NOT_FOUND', 'Review not found');
     writeReviews(remaining);
     logAudit({ actor, action: 'review.delete', entity: 'review', entityId: id });
   },
@@ -853,7 +813,10 @@ export const adminMockBackend = {
     };
   },
 
-  async updateCustomer(id: string, input: AdminUpdateCustomerInput): Promise<{ customer: AdminCustomerListItem }> {
+  async updateCustomer(
+    id: string,
+    input: AdminUpdateCustomerInput,
+  ): Promise<{ customer: AdminCustomerListItem }> {
     const actor = requireRole(['admin', 'superadmin']);
     await delay(120);
     const users = readUsers();
@@ -870,10 +833,21 @@ export const adminMockBackend = {
     };
     writeUsers(users.map((u) => (u.id === id ? next : u)));
     if (input.status && input.status !== target.status) {
-      logAudit({ actor, action: `user.${input.status === 'suspended' ? 'suspend' : input.status}`, entity: 'user', entityId: id });
+      logAudit({
+        actor,
+        action: `user.${input.status === 'suspended' ? 'suspend' : input.status}`,
+        entity: 'user',
+        entityId: id,
+      });
     }
     if (input.role && input.role !== target.role) {
-      logAudit({ actor, action: 'user.role.update', entity: 'user', entityId: id, metadata: { role: input.role } });
+      logAudit({
+        actor,
+        action: 'user.role.update',
+        entity: 'user',
+        entityId: id,
+        metadata: { role: input.role },
+      });
     }
     return { customer: toCustomerListItem(next, readOrders()) };
   },
@@ -906,10 +880,10 @@ export const adminMockBackend = {
     removeKey(ADMIN_KEYS.reviews);
     removeKey(ADMIN_KEYS.audit);
     removeKey(ADMIN_KEYS.users);
-    // Re-seed lazily on next read.
-    readProducts();
-    readCategories();
-    readBrands();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(CATALOG_SYNC_KEY);
+    }
+    await catalogApiFetch('/reset', { method: 'POST' });
     readOrders();
     readCoupons();
     readReviews();
