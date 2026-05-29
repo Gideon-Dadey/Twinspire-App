@@ -28,9 +28,7 @@ export default async function DealsPage() {
         <Badge variant="destructive" size="md" className="w-fit uppercase">
           Sale
         </Badge>
-        <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-          Today's best deals.
-        </h1>
+        <h1 className="type-page-heading">Today's best deals.</h1>
         <p className="text-muted-foreground max-w-2xl">
           {deals.length} curated discounts across phones, laptops, gaming, TVs, components, and
           accessories. Refreshed daily — and only listed when the savings are real.

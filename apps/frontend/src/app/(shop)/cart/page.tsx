@@ -19,9 +19,7 @@ export default function CartPage() {
         linkComponent={NextLinkBreadcrumb}
         className="mb-6"
       />
-      <h1 className="font-display mb-8 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-        Your cart
-      </h1>
+      <h1 className="type-page-heading mb-8">Your cart</h1>
 
       <CartPageContent />
     </div>

@@ -6,6 +6,10 @@ import * as React from 'react';
 
 import { NextProductCard } from '@/components/shared/product-card';
 
+/** Two columns on phones; three from md; four on desktop — retail mobile standard. */
+export const productGridClassName =
+  'grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4';
+
 export interface ProductGridProps {
   items: Product[];
   emptyTitle?: string;
@@ -39,7 +43,7 @@ export function ProductGrid({
   }
 
   return (
-    <ul className={className ?? 'grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4'}>
+    <ul className={className ?? productGridClassName}>
       {items.map((product) => (
         <li key={product.id}>
           <NextProductCard product={product} fullProduct={product} />
@@ -51,7 +55,7 @@ export function ProductGrid({
 
 export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+    <ul className={productGridClassName}>
       {Array.from({ length: count }).map((_, idx) => (
         <li key={idx}>
           <ProductCardSkeleton />

@@ -27,9 +27,7 @@ export default async function BestSellersPage() {
         <p className="text-accent text-sm font-medium uppercase tracking-wider">
           Customer favorites
         </p>
-        <h1 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-          Best sellers.
-        </h1>
+        <h1 className="type-page-heading mt-2">Best sellers.</h1>
         <p className="text-muted-foreground mt-3 max-w-2xl">
           What everyone's buying right now — ranked by genuine recent sales, not paid placements.
         </p>

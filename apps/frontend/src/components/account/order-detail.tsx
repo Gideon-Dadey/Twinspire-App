@@ -75,7 +75,7 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
           <p className="text-primary text-xs font-semibold uppercase tracking-wide">
             Order {order.orderNumber}
           </p>
-          <h1 className="font-display flex flex-wrap items-center gap-2 text-2xl font-semibold tracking-tight">
+          <h1 className="type-page-heading flex flex-wrap items-center gap-2 font-semibold">
             {order.items[0]?.name ?? 'Order details'}
             <OrderStatusBadge status={order.status} />
           </h1>

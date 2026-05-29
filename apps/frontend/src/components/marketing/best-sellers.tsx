@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { NextProductCard } from '@/components/shared/product-card';
+import { productGridClassName } from '@/components/shop/product-grid';
 import { getBestSellersList } from '@/lib/catalog/catalog-service';
 
 export async function BestSellers() {
@@ -17,9 +18,7 @@ export async function BestSellers() {
               <p className="text-accent text-sm font-medium uppercase tracking-wider">
                 Customer favorites
               </p>
-              <h2 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-                Best sellers this season.
-              </h2>
+              <h2 className="type-section-heading mt-2">Best sellers this season.</h2>
             </div>
             <Link
               href="/best-sellers"
@@ -34,7 +33,7 @@ export async function BestSellers() {
           </header>
         </Reveal>
 
-        <Stagger className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+        <Stagger className={productGridClassName}>
           {items.map((product) => (
             <StaggerItem key={product.id}>
               <NextProductCard product={product} fullProduct={product} />

@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { NextProductCard } from '@/components/shared/product-card';
+import { productGridClassName } from '@/components/shop/product-grid';
 import { getNewArrivalsList } from '@/lib/catalog/catalog-service';
 
 export async function FeaturedProducts() {
@@ -16,9 +17,7 @@ export async function FeaturedProducts() {
             <p className="text-primary text-sm font-medium uppercase tracking-wider">
               Featured this week
             </p>
-            <h2 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-              Just landed.
-            </h2>
+            <h2 className="type-section-heading mt-2">Just landed.</h2>
           </div>
           <Link
             href="/new-arrivals"
@@ -33,7 +32,7 @@ export async function FeaturedProducts() {
         </header>
       </Reveal>
 
-      <Stagger className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      <Stagger className={productGridClassName}>
         {items.map((product) => (
           <StaggerItem key={product.id}>
             <NextProductCard product={product} fullProduct={product} />

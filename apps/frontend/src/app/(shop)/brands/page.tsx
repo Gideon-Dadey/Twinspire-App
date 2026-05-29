@@ -30,9 +30,7 @@ export default async function BrandsPage() {
         className="mb-6"
       />
       <header className="mb-10">
-        <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-          Every brand on TwinSpire.
-        </h1>
+        <h1 className="type-page-heading">Every brand on TwinSpire.</h1>
         <p className="text-muted-foreground mt-3 max-w-2xl">
           {brands.length} brands, all stocked from authorized distributors — never grey market.
         </p>

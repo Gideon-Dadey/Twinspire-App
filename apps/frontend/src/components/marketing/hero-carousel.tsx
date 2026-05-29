@@ -157,9 +157,7 @@ export function HeroCarousel({ slides = HERO_SLIDES }: { slides?: HeroSlide[] })
                      * Mobile headline: 24px (text-2xl) — matches Apple Store,
                      * Amazon, and SaaS mobile hero scale. Scales up at sm/md/lg.
                      */}
-                    <h1 className="font-display text-foreground text-balance text-2xl font-bold leading-[1.2] tracking-tight sm:text-[1.75rem] sm:leading-[1.15] md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.1] xl:text-[3.75rem] xl:leading-[1.08]">
-                      {slide.title}
-                    </h1>
+                    <h1 className="type-hero-heading">{slide.title}</h1>
 
                     <p className="text-muted-foreground text-pretty text-sm leading-5 sm:text-base sm:leading-6 lg:max-w-xl lg:text-lg lg:leading-7">
                       {slide.subtitle}

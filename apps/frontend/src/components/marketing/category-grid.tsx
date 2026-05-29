@@ -14,9 +14,7 @@ export function CategoryGrid() {
             <p className="text-primary text-sm font-medium uppercase tracking-wider">
               Shop by category
             </p>
-            <h2 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-              Everything you need.
-            </h2>
+            <h2 className="type-section-heading mt-2">Everything you need.</h2>
           </div>
           <Link
             href="/categories"

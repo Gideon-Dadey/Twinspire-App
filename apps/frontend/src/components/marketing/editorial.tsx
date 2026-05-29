@@ -16,9 +16,7 @@ export function EditorialStrip() {
             <p className="text-primary text-sm font-medium uppercase tracking-wider">
               From the editors
             </p>
-            <h2 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-              Reviews, buying guides &amp; deep dives.
-            </h2>
+            <h2 className="type-section-heading mt-2">Reviews, buying guides &amp; deep dives.</h2>
           </div>
           <Link
             href="/blog"

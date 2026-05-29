@@ -27,9 +27,7 @@ export function StubPage({
         {eyebrow && (
           <p className="text-primary text-sm font-medium uppercase tracking-wider">{eyebrow}</p>
         )}
-        <h1 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-          {title}
-        </h1>
+        <h1 className="type-page-heading mt-2">{title}</h1>
         {description && <p className="text-muted-foreground mt-3 max-w-2xl">{description}</p>}
         {primaryAction && (
           <Button asChild className="mt-6">

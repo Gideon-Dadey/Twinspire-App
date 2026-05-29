@@ -156,7 +156,7 @@ export function Markdown({ body, className }: MarkdownProps): React.JSX.Element 
             <h2
               key={key}
               id={slugifyHeading(text)}
-              className="font-display text-foreground mt-12 scroll-mt-24 text-2xl font-bold tracking-tight first:mt-0 md:text-3xl"
+              className="type-section-heading mt-12 scroll-mt-24 first:mt-0"
             >
               {renderInline(text, key)}
             </h2>

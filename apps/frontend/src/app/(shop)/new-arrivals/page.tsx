@@ -26,9 +26,7 @@ export default async function NewArrivalsPage() {
       />
       <header className="mb-10">
         <p className="text-primary text-sm font-medium uppercase tracking-wider">Just landed</p>
-        <h1 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-          New arrivals.
-        </h1>
+        <h1 className="type-page-heading mt-2">New arrivals.</h1>
         <p className="text-muted-foreground mt-3 max-w-2xl">
           Fresh products from the brands you trust. New drops added every Tuesday.
         </p>

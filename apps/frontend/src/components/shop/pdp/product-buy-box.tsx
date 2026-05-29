@@ -64,9 +64,7 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps): React.JSX.Elemen
             {product.brandName}
           </p>
         )}
-        <h1 className="font-display mt-1 text-2xl font-bold tracking-tight md:text-3xl">
-          {product.name}
-        </h1>
+        <h1 className="type-page-heading mt-1">{product.name}</h1>
         {product.shortDescription && (
           <p className="text-muted-foreground mt-2">{product.shortDescription}</p>
         )}

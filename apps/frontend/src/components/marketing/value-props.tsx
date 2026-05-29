@@ -54,7 +54,7 @@ export function ValueProps() {
             <p className="text-primary text-xs font-semibold uppercase tracking-[0.18em]">
               Why TwinSpire
             </p>
-            <h2 className="font-display text-foreground mt-2 text-2xl font-bold tracking-tight md:text-3xl">
+            <h2 className="type-section-heading text-foreground mt-2">
               Service that lives up to the hardware.
             </h2>
           </header>

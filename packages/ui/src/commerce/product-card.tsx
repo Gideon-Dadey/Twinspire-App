@@ -180,7 +180,7 @@ export function ProductCard({
           aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
           onClick={() => onAddToWishlist?.(product)}
           className={cn(
-            'bg-background/70 text-muted-foreground absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-full backdrop-blur transition-colors',
+            'bg-background/70 text-muted-foreground absolute right-3 top-3 z-10 size-8 items-center justify-center rounded-full backdrop-blur transition-colors max-md:hidden md:inline-flex',
             'hover:bg-background hover:text-foreground focus-visible:ring-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
             inWishlist && 'text-destructive',
           )}
@@ -200,7 +200,7 @@ export function ProductCard({
               alt={image.alt ?? product.name}
               width={image.width ?? 600}
               height={image.height ?? 450}
-              sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+              sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
               className="duration-moderate h-full w-full object-contain transition-transform ease-out group-hover/card:scale-[1.04]"
             />
           ) : (
