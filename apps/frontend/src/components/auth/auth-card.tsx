@@ -41,9 +41,7 @@ export function AuthCard({
         {eyebrow ? (
           <p className="text-primary text-xs font-semibold uppercase tracking-wide">{eyebrow}</p>
         ) : null}
-        <h1 className="font-display text-foreground mt-1 text-2xl font-semibold tracking-tight">
-          {title}
-        </h1>
+        <h1 className="type-page-heading text-foreground mt-1 font-semibold">{title}</h1>
         {description ? <p className="text-muted-foreground mt-2 text-sm">{description}</p> : null}
         <div className="mt-6">{children}</div>
       </div>

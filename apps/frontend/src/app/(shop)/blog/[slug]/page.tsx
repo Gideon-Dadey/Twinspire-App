@@ -85,9 +85,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               {post.categorySlug.replace('-', ' ')}
             </Badge>
           )}
-          <h1 className="font-display mt-4 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-            {post.title}
-          </h1>
+          <h1 className="type-page-heading mt-4">{post.title}</h1>
           {post.excerpt && (
             <p className="text-muted-foreground mt-4 text-pretty text-base md:text-lg">
               {post.excerpt}
@@ -150,9 +148,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {related.length > 0 && (
           <section className="mt-20">
-            <h2 className="font-display mb-6 text-2xl font-bold tracking-tight md:text-3xl">
-              Keep reading
-            </h2>
+            <h2 className="type-section-heading mb-6">Keep reading</h2>
             <ul className="grid gap-6 md:grid-cols-3">
               {related.map((rel) => (
                 <li key={rel.id}>

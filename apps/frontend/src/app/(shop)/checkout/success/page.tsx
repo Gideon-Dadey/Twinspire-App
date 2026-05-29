@@ -31,9 +31,7 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
         <div className="bg-success/15 text-success mx-auto flex size-16 items-center justify-center rounded-full">
           <CheckCircle2 className="size-8" aria-hidden />
         </div>
-        <h1 className="font-display mt-6 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-          Thank you for your order!
-        </h1>
+        <h1 className="type-page-heading mt-6">Thank you for your order!</h1>
         <p className="text-muted-foreground mt-2">
           We've sent a confirmation to your inbox. You'll get another note as soon as your package
           ships.

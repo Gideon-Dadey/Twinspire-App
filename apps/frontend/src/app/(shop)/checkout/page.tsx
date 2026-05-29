@@ -23,9 +23,7 @@ export default function CheckoutPage() {
         linkComponent={NextLinkBreadcrumb}
         className="mb-6"
       />
-      <h1 className="font-display mb-8 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-        Checkout
-      </h1>
+      <h1 className="type-page-heading mb-8">Checkout</h1>
 
       <CheckoutFlow />
     </div>

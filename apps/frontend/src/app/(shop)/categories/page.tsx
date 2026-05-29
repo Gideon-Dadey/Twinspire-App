@@ -43,9 +43,7 @@ export default async function CategoriesPage() {
         className="mb-6"
       />
       <header className="mb-10">
-        <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-          Every category on TwinSpire.
-        </h1>
+        <h1 className="type-page-heading">Every category on TwinSpire.</h1>
         <p className="text-muted-foreground mt-3 max-w-2xl">
           From phones to RAM, browse the full catalog by category.
         </p>

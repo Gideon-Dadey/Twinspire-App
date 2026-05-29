@@ -18,7 +18,7 @@ export function DealsBanner() {
                 <p className="font-display text-accent mt-2 text-[clamp(2.75rem,8vw,4.5rem)] font-bold leading-[0.95] tracking-tight">
                   40% off
                 </p>
-                <h2 className="font-display text-secondary-foreground mt-3 text-balance text-2xl font-bold leading-snug tracking-tight sm:text-3xl md:text-[2rem] md:leading-tight lg:text-4xl">
+                <h2 className="type-section-heading text-secondary-foreground mt-3 text-balance leading-snug sm:leading-tight">
                   across all of TwinSpire.
                 </h2>
               </header>

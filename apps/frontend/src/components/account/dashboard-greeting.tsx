@@ -17,11 +17,9 @@ export function DashboardGreeting() {
   const name = user?.firstName ?? 'there';
   return (
     <header className="space-y-1">
-      <p className="text-xs font-semibold uppercase tracking-wide text-primary">{greeting}</p>
-      <h1 className="text-2xl font-display font-semibold tracking-tight text-foreground sm:text-3xl">
-        Welcome back, {name}
-      </h1>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-primary text-xs font-semibold uppercase tracking-wide">{greeting}</p>
+      <h1 className="type-page-heading font-semibold">Welcome back, {name}</h1>
+      <p className="text-muted-foreground text-sm">
         Manage your orders, addresses, wishlist, and security — all from one place.
       </p>
     </header>

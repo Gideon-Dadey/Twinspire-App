@@ -54,9 +54,7 @@ export default async function BrandDetailPage({ params }: PageProps) {
         className="mb-6"
       />
       <header className="mb-10">
-        <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-          {brand.name}
-        </h1>
+        <h1 className="type-page-heading">{brand.name}</h1>
         {brand.description && (
           <p className="text-muted-foreground mt-3 max-w-2xl">{brand.description}</p>
         )}

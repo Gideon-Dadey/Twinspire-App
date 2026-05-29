@@ -29,9 +29,7 @@ export default function BlogIndexPage() {
         <p className="text-primary text-sm font-medium uppercase tracking-wider">
           The TwinSpire blog
         </p>
-        <h1 className="font-display mt-2 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-          Reviews, buying guides &amp; deep dives.
-        </h1>
+        <h1 className="type-page-heading mt-2">Reviews, buying guides &amp; deep dives.</h1>
         <p className="text-muted-foreground mt-3">
           From hands-on hardware reviews to industry analysis — written by our editors, not paid by
           the brands we cover.

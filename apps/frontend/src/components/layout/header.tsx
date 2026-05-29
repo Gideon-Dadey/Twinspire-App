@@ -65,7 +65,7 @@ export function SiteHeader() {
           <AccountMenu />
           <Link
             href="/wishlist"
-            className="text-muted-foreground hover:bg-muted hover:text-foreground inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
+            className="text-muted-foreground hover:bg-muted hover:text-foreground hidden h-10 w-10 items-center justify-center rounded-lg transition-colors md:inline-flex"
             aria-label="Wishlist"
           >
             <FontAwesomeIcon icon={faHeart} className="h-[18px] w-[18px]" aria-hidden />

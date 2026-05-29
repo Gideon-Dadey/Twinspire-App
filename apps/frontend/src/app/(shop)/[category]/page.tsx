@@ -129,9 +129,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
         <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
-              {category.name}
-            </h1>
+            <h1 className="type-page-heading">{category.name}</h1>
             {category.description && (
               <p className="text-muted-foreground mt-2 max-w-prose">{category.description}</p>
             )}

@@ -60,7 +60,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
     <div className="container mx-auto px-3 pb-16 pt-8 sm:px-4 md:pt-12">
       <header className="mb-8">
         <p className="text-primary text-sm font-medium uppercase tracking-wider">Search</p>
-        <h1 className="font-display mt-1 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
+        <h1 className="type-page-heading mt-1">
           {q ? <>Results for &ldquo;{q}&rdquo;</> : 'Browse the catalog'}
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">

@@ -41,9 +41,7 @@ export function PublicWishlistGate() {
         >
           <Heart className="size-7" />
         </span>
-        <h1 className="font-display mt-4 text-2xl font-semibold tracking-tight">
-          Your wishlist lives here
-        </h1>
+        <h1 className="type-page-heading mt-4 font-semibold">Your wishlist lives here</h1>
         <p className="text-muted-foreground mt-2 text-sm">
           Sign in to save products across devices, see price drop alerts, and keep your favourites
           in one place.
