@@ -5,8 +5,10 @@ import * as React from 'react';
 
 import { slideUp } from './presets';
 
-export interface RevealProps
-  extends Omit<HTMLMotionProps<'div'>, 'variants' | 'initial' | 'animate'> {
+export interface RevealProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'variants' | 'initial' | 'animate'
+> {
   /** Triggered when scrolled into view; defaults to true. */
   inView?: boolean;
   delay?: number;
@@ -23,12 +25,17 @@ export function Reveal({
   transition,
   ...props
 }: RevealProps): React.JSX.Element {
+  const [mounted, setMounted] = React.useState(false);
   const prefersReduced = useReducedMotion();
-  if (prefersReduced) {
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // SSR and the first client paint must match — motion prefs are read after mount.
+  if (!mounted || prefersReduced) {
     return (
-      <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>
-        {children as React.ReactNode}
-      </div>
+      <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children as React.ReactNode}</div>
     );
   }
   return (

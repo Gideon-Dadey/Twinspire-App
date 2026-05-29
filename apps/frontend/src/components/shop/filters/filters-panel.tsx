@@ -14,6 +14,12 @@ export interface FiltersPanelProps {
   className?: string;
   /** Override the path the filters mutate (defaults to current pathname). */
   basePath: string;
+  /** Prefix checkbox/input ids when two panels coexist (desktop sidebar + mobile sheet). */
+  idPrefix?: string;
+}
+
+function fieldId(prefix: string | undefined, name: string): string {
+  return prefix ? `${prefix}-${name}` : name;
 }
 
 const RATING_OPTIONS = [
@@ -23,11 +29,19 @@ const RATING_OPTIONS = [
   { value: 3, label: '3★ & up' },
 ];
 
-export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps): React.JSX.Element {
+export function FiltersPanel({
+  facets,
+  basePath,
+  className,
+  idPrefix,
+}: FiltersPanelProps): React.JSX.Element {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const selectedBrands = React.useMemo(() => readArrayParam(searchParams.getAll('brand')), [searchParams]);
+  const selectedBrands = React.useMemo(
+    () => readArrayParam(searchParams.getAll('brand')),
+    [searchParams],
+  );
   const minPrice = searchParams.get('minPrice') ?? '';
   const maxPrice = searchParams.get('maxPrice') ?? '';
   const minRating = searchParams.get('rating');
@@ -71,7 +85,7 @@ export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps)
 
   return (
     <aside className={className}>
-      <div className="flex items-center justify-between border-b border-border pb-3">
+      <div className="border-border flex items-center justify-between border-b pb-3">
         <h2 className="font-display text-base font-semibold">Filters</h2>
         <Button variant="ghost" size="sm" onClick={clearAll}>
           Reset
@@ -81,7 +95,7 @@ export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps)
       <FilterSection title="Brand">
         <ul className="space-y-2">
           {facets.brands.map((brand) => {
-            const id = `brand-${brand.value}`;
+            const id = fieldId(idPrefix, `brand-${brand.value}`);
             const checked = selectedBrands.includes(brand.value);
             return (
               <li key={brand.value} className="flex items-center gap-2">
@@ -92,7 +106,7 @@ export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps)
                 />
                 <Label htmlFor={id} className="flex-1 text-sm font-normal">
                   {brand.label}
-                  <span className="ml-2 text-xs text-muted-foreground">({brand.count})</span>
+                  <span className="text-muted-foreground ml-2 text-xs">({brand.count})</span>
                 </Label>
               </li>
             );
@@ -121,7 +135,7 @@ export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps)
               className="h-9"
               aria-label="Minimum price"
             />
-            <span className="text-xs text-muted-foreground">to</span>
+            <span className="text-muted-foreground text-xs">to</span>
             <Input
               type="number"
               min={0}
@@ -135,7 +149,7 @@ export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps)
           <Button type="submit" size="sm" variant="outline">
             Apply
           </Button>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             Range in catalog: ${facets.priceRange.min} – ${facets.priceRange.max}
           </p>
         </form>
@@ -144,7 +158,7 @@ export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps)
       <FilterSection title="Rating">
         <ul className="space-y-2">
           {RATING_OPTIONS.map((opt) => {
-            const id = `rating-${opt.value}`;
+            const id = fieldId(idPrefix, `rating-${opt.value}`);
             const checked = minRating === String(opt.value);
             return (
               <li key={opt.value} className="flex items-center gap-2">
@@ -171,7 +185,7 @@ export function FiltersPanel({ facets, basePath, className }: FiltersPanelProps)
             checked={inStockOnly}
             onCheckedChange={(state) => commit({ inStock: state === true ? 'true' : undefined })}
           />
-          <Label htmlFor="in-stock" className="text-sm font-normal">
+          <Label htmlFor={fieldId(idPrefix, 'in-stock')} className="text-sm font-normal">
             In stock only
           </Label>
         </div>

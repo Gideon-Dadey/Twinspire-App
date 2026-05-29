@@ -20,7 +20,7 @@ export function SiteHeader() {
     // the custom token. Background bumped from /90 to /95 + a hard fallback
     // so content can't bleed visually through the blur during fast scrolls.
     <header className="z-sticky border-border bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 isolate border-b backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center gap-2 px-4 sm:gap-3 md:gap-4 xl:gap-6">
+      <div className="container mx-auto flex h-16 items-center gap-2 px-3 sm:gap-3 sm:px-4 md:gap-4 xl:gap-6">
         <MobileNav />
 
         <Link href="/" aria-label={siteConfig.name} className="flex shrink-0 items-center">

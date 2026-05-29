@@ -29,7 +29,7 @@ export function ProductGrid({
         action={
           <Link
             href="/"
-            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            className="text-primary text-sm font-medium underline-offset-4 hover:underline"
           >
             Back to home
           </Link>
@@ -39,7 +39,7 @@ export function ProductGrid({
   }
 
   return (
-    <ul className={className ?? 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4'}>
+    <ul className={className ?? 'grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4'}>
       {items.map((product) => (
         <li key={product.id}>
           <NextProductCard product={product} fullProduct={product} />
@@ -51,7 +51,7 @@ export function ProductGrid({
 
 export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
   return (
-    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
       {Array.from({ length: count }).map((_, idx) => (
         <li key={idx}>
           <ProductCardSkeleton />

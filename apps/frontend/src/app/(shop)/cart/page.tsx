@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 
 export default function CartPage() {
   return (
-    <div className="container mx-auto px-4 pb-16 pt-8 md:pt-12">
+    <div className="container mx-auto px-3 pb-16 pt-8 sm:px-4 md:pt-12">
       <Breadcrumb
         items={[{ label: 'Home', href: '/' }, { label: 'Cart' }]}
         linkComponent={NextLinkBreadcrumb}
         className="mb-6"
       />
-      <h1 className="mb-8 font-display text-3xl font-bold tracking-tight md:text-4xl">
+      <h1 className="font-display mb-8 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
         Your cart
       </h1>
 

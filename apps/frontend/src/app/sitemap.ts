@@ -1,14 +1,23 @@
 import type { MetadataRoute } from 'next';
 
-import { brands } from '@/data/brands';
-import { categories } from '@/data/categories';
 import { posts } from '@/data/posts';
-import { products } from '@/data/products';
+import {
+  getStorefrontBrands,
+  getStorefrontCategories,
+  getStorefrontProducts,
+} from '@/lib/catalog/catalog-service';
 import { siteConfig } from '@/lib/site-config';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = 'force-dynamic';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url.replace(/\/$/, '');
   const now = new Date();
+  const [categories, brands, products] = await Promise.all([
+    getStorefrontCategories(),
+    getStorefrontBrands(),
+    getStorefrontProducts(),
+  ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
@@ -32,7 +41,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/legal/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
     { url: `${base}/legal/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
     { url: `${base}/legal/cookies`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
-    { url: `${base}/legal/accessibility`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    {
+      url: `${base}/legal/accessibility`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
   ];
 
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((c) => ({

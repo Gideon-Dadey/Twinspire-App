@@ -1,33 +1,17 @@
-import type { Product, ProductSpecification } from '@twinspire/types';
+import type { Product } from '@twinspire/types';
+
+import { ACCESSORY_PRODUCT_SEEDS } from './accessory-products';
+import { COMPONENT_PRODUCT_SEEDS } from './component-products';
+import { LAPTOP_PRODUCT_SEEDS } from './laptop-products';
+import { LAPTOP_IMAGES } from './laptop-images';
+import { PHONE_PRODUCT_SEEDS } from './phone-products';
+import { TV_PRODUCT_SEEDS } from './tv-products';
+import { TV_IMAGES } from './tv-images';
+import type { ProductSeed } from './product-seed';
 
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
 const now = '2026-01-01T00:00:00.000Z';
-
-interface ProductSeed {
-  id: string;
-  sku: string;
-  name: string;
-  slug: string;
-  brandId: string;
-  brandName: string;
-  primaryCategoryId: string;
-  categoryIds: string[];
-  tags: string[];
-  shortDescription: string;
-  description: string;
-  price: { amount: number; compareAtAmount?: number; currency: 'GHS' };
-  images: { url: string; alt: string }[];
-  rating: { average: number; count: number };
-  stockStatus: Product['stockStatus'];
-  condition?: Product['condition'];
-  isFeatured?: boolean;
-  isBestSeller?: boolean;
-  isNewArrival?: boolean;
-  releaseDate?: string;
-  specifications: ProductSpecification[];
-  attributes?: { name: string; value: string }[];
-}
 
 function fillRating(avg: number, count: number) {
   const fives = Math.round(count * (avg >= 4.7 ? 0.78 : avg >= 4.4 ? 0.62 : avg >= 4 ? 0.5 : 0.4));
@@ -154,20 +138,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'Built for creators who travel light. The Nimbus 14 packs a calibrated 3K OLED display, an 18-core silicon, and 22 hours of mixed-use battery into a 1.9 lb magnesium chassis. Whisper-quiet fans, MagSafe-style charging, and four Thunderbolt 4 ports.',
     price: { amount: 15588, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Open laptop',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Laptop keyboard',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Laptop side',
-      },
-    ],
+    images: LAPTOP_IMAGES.nimbus14,
     rating: { average: 4.6, count: 412 },
     stockStatus: 'low_stock',
     isFeatured: true,
@@ -340,6 +311,7 @@ const SEEDS: ProductSeed[] = [
       { group: 'Battery', key: 'Capacity', value: '5200 mAh', position: 1 },
     ],
   },
+  ...PHONE_PRODUCT_SEEDS,
   {
     id: 'p-monolith-oled',
     sku: 'MON-OLED-77',
@@ -354,16 +326,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'The Monolith 77" OLED ships pre-calibrated to Filmmaker Mode out of the box. Dolby Vision IQ, HDMI 2.1 (4× ports), 144 Hz VRR for gaming, and a Dolby Atmos 5.1.2 speaker system.',
     price: { amount: 29988, compareAtAmount: 35988, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=1200&q=70',
-        alt: 'TV in living room',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1551817958-c5b51e7b4a33?auto=format&fit=crop&w=1200&q=70',
-        alt: 'TV detail',
-      },
-    ],
+    images: TV_IMAGES.monolithOled77,
     rating: { average: 4.7, count: 188 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -484,12 +447,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'A workstation-class laptop with calibrated 16" mini-LED, RTX-class discrete GPU, and 64 GB ceiling. Color-accurate out of the box.',
     price: { amount: 27588, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Laptop closed',
-      },
-    ],
+    images: LAPTOP_IMAGES.nimbus16,
     rating: { average: 4.5, count: 86 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -636,12 +594,7 @@ const SEEDS: ProductSeed[] = [
     price: { amount: 14388, currency: 'GHS' },
     description:
       '14-channel soundbar with wireless 10" sub and rear surrounds. Trueplay room correction, eARC, Wi-Fi multi-room.',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Soundbar',
-      },
-    ],
+    images: TV_IMAGES.monolithSoundbar,
     rating: { average: 4.6, count: 102 },
     stockStatus: 'in_stock',
     specifications: [
@@ -805,12 +758,7 @@ const SEEDS: ProductSeed[] = [
     price: { amount: 11988, currency: 'GHS' },
     description:
       'A 13-inch OLED pro tablet with a haptic stylus and a detachable keyboard for creators on the move.',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Tablet',
-      },
-    ],
+    images: LAPTOP_IMAGES.nimbusTab13,
     rating: { average: 4.3, count: 47 },
     stockStatus: 'in_stock',
     specifications: [
@@ -831,12 +779,7 @@ const SEEDS: ProductSeed[] = [
     shortDescription: '4K HDR ultra-short-throw, 3,500 lumens.',
     price: { amount: 38388, compareAtAmount: 41988, currency: 'GHS' },
     description: 'Ultra-short-throw 4K HDR projector. 3,500 ANSI lumens, 120" image from 8" away.',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Projector',
-      },
-    ],
+    images: TV_IMAGES.monolithProjector,
     rating: { average: 4.4, count: 38 },
     stockStatus: 'in_stock',
     specifications: [
@@ -902,6 +845,718 @@ const SEEDS: ProductSeed[] = [
   // Specs reflect current-generation (2024–2026) flagship configurations.
   // ------------------------------------------------------------------
   {
+    id: 'p-hp-elitebook-x360-1030-g8',
+    sku: 'HP-EB-X360-1030-G8',
+    name: 'Laptop HP EliteBook x360 1030 G8 — 16 GB Intel Core i7, 512 GB SSD',
+    slug: 'hp-elitebook-x360-1030-g8',
+    brandId: 'b-hp',
+    brandName: 'HP',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'ultrabook', '2-in-1', 'business', 'touchscreen', 'elitebook'],
+    shortDescription:
+      '13.3" touchscreen convertible, 11th Gen Intel Core i7 @ 3.00 GHz, 16 GB RAM, 512 GB SSD.',
+    description:
+      'HP EliteBook x360 1030 G8 — an 11th-generation business convertible in very neat, sleek condition. Features a 13.3" touchscreen, Intel Core i7 processor at 3.00 GHz, 512 GB SSD, and 16 GB RAM. Includes fingerprint recognition, facial recognition, and keyboard backlight for secure, comfortable productivity.',
+    price: { amount: 7000, compareAtAmount: 8000, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-1/MVIMG_20260324_232603-1536x1152.jpg',
+        alt: 'HP EliteBook x360 1030 G8 — front view',
+      },
+      {
+        url: '/products/p-1/MVIMG_20260324_232619-1536x1152.jpg',
+        alt: 'HP EliteBook x360 1030 G8 — open laptop',
+      },
+      {
+        url: '/products/p-1/MVIMG_20260324_232641-1536x1152.jpg',
+        alt: 'HP EliteBook x360 1030 G8 — keyboard and display',
+      },
+      {
+        url: '/products/p-1/MVIMG_20260324_233017-1536x1152.jpg',
+        alt: 'HP EliteBook x360 1030 G8 — side profile',
+      },
+      {
+        url: '/products/p-1/MVIMG_20260324_2330171.jpg',
+        alt: 'HP EliteBook x360 1030 G8 — detail view',
+      },
+    ],
+    rating: { average: 4.7, count: 12 },
+    stockStatus: 'in_stock',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2021-03-01',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '13.3" touchscreen', position: 1 },
+      { group: 'Display', key: 'Touch', value: 'Multi-touch convertible', position: 2 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i7 (11th Generation) @ 3.00 GHz',
+        position: 1,
+      },
+      { group: 'Memory', key: 'RAM', value: '16 GB', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '512 GB', position: 1 },
+      {
+        group: 'Security',
+        key: 'Biometrics',
+        value: 'Fingerprint recognition & facial recognition',
+        position: 1,
+      },
+      { group: 'Features', key: 'Keyboard', value: 'Backlit keyboard', position: 1 },
+      { group: 'Features', key: 'Form factor', value: '360° convertible 2-in-1', position: 2 },
+      { group: 'Build', key: 'Condition', value: 'Very neat and sleek', position: 1 },
+      { group: 'Build', key: 'Model', value: 'EliteBook x360 1030 G8', position: 2 },
+    ],
+    attributes: [
+      { name: 'Generation', value: '11th Generation' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-apple-macbook-pro-2019-a2159',
+    sku: 'APL-MBP-2019-A2159',
+    name: 'Apple MacBook Pro 2019 A2159 13" — Core i5 1.4 GHz, 8 GB, 256 GB SSD',
+    slug: 'apple-macbook-pro-2019-a2159',
+    brandId: 'b-apple',
+    brandName: 'Apple',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'macbook', 'apple', 'touch-bar', 'retina'],
+    shortDescription:
+      '13" Retina True Tone, 8th Gen Core i5-8257U @ 1.4 GHz, 8 GB RAM, 256 GB SSD, Touch Bar & Touch ID.',
+    description:
+      'Apple MacBook Pro 2019 A2159 — 13" model with Touch Bar and two Thunderbolt 3 ports. Powered by an 8th Generation Intel Core i5-8257U (Coffee Lake) at 1.4 GHz with four cores, 128 MB eDRAM, and 6 MB L3 cache. Includes 8 GB of onboard 2133 MHz LPDDR3 SDRAM, 256 GB flash storage, and Intel Iris Plus Graphics 645.\n\nFeatures a 13.3" 2560×1600 Retina display with True Tone (500 nits), third-generation butterfly keyboard with Touch Bar and Touch ID, Force Touch trackpad, 720p FaceTime HD camera, T2 security chip, and up to 10 hours of battery life. Connectivity: 802.11ac Wi-Fi, Bluetooth 5.0, two Thunderbolt 3 (USB-C) ports, and a 3.5 mm headphone jack. Available in silver or Space Gray aluminum — weighs approximately 1.37 kg (3 lb).',
+    price: { amount: 5500, compareAtAmount: 6500, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-2/macbook-2019.jpg',
+        alt: 'Apple MacBook Pro 2019 A2159 13-inch',
+      },
+    ],
+    rating: { average: 4.6, count: 18 },
+    stockStatus: 'in_stock',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2019-07-09',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '13.3" Retina', position: 1 },
+      { group: 'Display', key: 'Resolution', value: '2560 × 1600 (227 ppi)', position: 2 },
+      { group: 'Display', key: 'Brightness', value: '500 nits, True Tone', position: 3 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5-8257U (8th Gen Coffee Lake) @ 1.4 GHz, 4 cores',
+        position: 1,
+      },
+      { group: 'Performance', key: 'GPU', value: 'Intel Iris Plus Graphics 645', position: 2 },
+      { group: 'Memory', key: 'RAM', value: '8 GB LPDDR3 2133 MHz (onboard)', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB flash storage', position: 1 },
+      {
+        group: 'Features',
+        key: 'Input',
+        value: 'Touch Bar, Touch ID, Force Touch trackpad',
+        position: 1,
+      },
+      {
+        group: 'Features',
+        key: 'Keyboard',
+        value: 'Third-generation butterfly mechanism',
+        position: 2,
+      },
+      { group: 'Features', key: 'Camera', value: '720p FaceTime HD', position: 3 },
+      { group: 'Features', key: 'Security', value: 'Apple T2 security chip', position: 4 },
+      { group: 'Battery', key: 'Life', value: 'Up to 10 hours (Apple estimate)', position: 1 },
+      { group: 'Connectivity', key: 'Wi-Fi', value: '802.11ac', position: 1 },
+      { group: 'Connectivity', key: 'Bluetooth', value: '5.0', position: 2 },
+      {
+        group: 'Connectivity',
+        key: 'Ports',
+        value: '2× Thunderbolt 3 (USB-C), 3.5 mm headphone jack',
+        position: 3,
+      },
+      { group: 'Build', key: 'Model', value: 'A2159 (2019, two Thunderbolt 3 ports)', position: 1 },
+      { group: 'Build', key: 'Weight', value: '1.37 kg (approx. 3 lb)', position: 2 },
+      { group: 'Build', key: 'Color', value: 'Silver or Space Gray', position: 3 },
+    ],
+    attributes: [
+      { name: 'Model number', value: 'A2159' },
+      { name: 'Year', value: '2019' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-dell-latitude-7320',
+    sku: 'DELL-LAT-7320-I5',
+    name: 'Dell Latitude 7320 Laptop Touch — Core i5-1135G7, 16 GB, 256 GB SSD',
+    slug: 'dell-latitude-7320',
+    brandId: 'b-dell',
+    brandName: 'Dell',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'business', 'touchscreen', 'latitude', 'ultrabook'],
+    shortDescription:
+      '13.3" FHD touchscreen, Intel Core i5-1135G7 (4 cores @ 4.2 GHz), 16 GB RAM, 256 GB SSD, Windows 11 Pro.',
+    description:
+      'Dell Latitude 7320 — a compact business laptop with a 13.3" 1920×1080 FHD touchscreen. Powered by an Intel Core i5-1135G7 with 4 cores up to 4.2 GHz, 16 GB RAM, and a 256 GB SSD. Ships with Windows 11 Pro in black — ideal for mobile professionals who need touch input and enterprise-grade reliability.',
+    price: { amount: 4500, compareAtAmount: 4800, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-3/dell_7320_1-1536x1152.jpg',
+        alt: 'Dell Latitude 7320 — front view',
+      },
+      {
+        url: '/products/p-3/DELL.png',
+        alt: 'Dell Latitude 7320 — product image',
+      },
+    ],
+    rating: { average: 4.5, count: 9 },
+    stockStatus: 'in_stock',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2021-05-01',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '13.3" FHD touchscreen', position: 1 },
+      { group: 'Display', key: 'Resolution', value: '1920 × 1080', position: 2 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5-1135G7 (4 cores @ up to 4.2 GHz)',
+        position: 1,
+      },
+      { group: 'Memory', key: 'RAM', value: '16 GB', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Software', key: 'OS', value: 'Windows 11 Pro', position: 1 },
+      { group: 'Build', key: 'Model', value: 'Latitude 7320', position: 1 },
+      { group: 'Build', key: 'Color', value: 'Black', position: 2 },
+    ],
+    attributes: [
+      { name: 'Form factor', value: 'Touchscreen laptop' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-hp-elitebook-830-g5',
+    sku: 'HP-EB-830-G5-I5',
+    name: 'HP Used EliteBook 830 G5 — Core i5 8th Gen, 8 GB, 256 GB SSD, 13.3″',
+    slug: 'hp-elitebook-830-g5',
+    brandId: 'b-hp',
+    brandName: 'HP',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'business', 'elitebook', 'used', 'ultrabook'],
+    shortDescription:
+      '13.3" FHD, Intel Core i5 (8th Gen), 8 GB DDR4 RAM, 256 GB SSD, Windows 10 Pro, Silver.',
+    description:
+      'HP Used EliteBook 830 G5 — designed for professionals who need a sleek, reliable laptop. Combines performance, security, and portability for business users.\n\nFeatures an 8th-generation Intel Core i5 processor, 8 GB DDR4 RAM, and a 256 GB SSD for fast boot and load times. The 13.3" Full HD (1920×1080) display delivers crisp visuals, with integrated Intel UHD Graphics for everyday tasks. Includes fingerprint reader, TPM 2.0, spill-resistant keyboard, USB Type-C, USB 3.0, HDMI, Ethernet, SD card reader, Wi-Fi, and Bluetooth. Weighs approximately 1.51 kg in professional silver.',
+    price: { amount: 2700, compareAtAmount: 3500, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-4/4-1.jpg',
+        alt: 'HP Used EliteBook 830 G5 13.3-inch — Silver',
+      },
+    ],
+    rating: { average: 4.4, count: 7 },
+    stockStatus: 'in_stock',
+    condition: 'used',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2018-04-01',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '13.3" Full HD', position: 1 },
+      { group: 'Display', key: 'Resolution', value: '1920 × 1080', position: 2 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5 (8th generation)',
+        position: 1,
+      },
+      { group: 'Performance', key: 'GPU', value: 'Intel UHD Graphics (integrated)', position: 2 },
+      { group: 'Memory', key: 'RAM', value: '8 GB DDR4', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Software', key: 'OS', value: 'Windows 10 Pro', position: 1 },
+      {
+        group: 'Security',
+        key: 'Features',
+        value: 'Fingerprint reader, TPM 2.0, Kensington lock slot',
+        position: 1,
+      },
+      {
+        group: 'Connectivity',
+        key: 'Ports',
+        value: 'USB Type-C, USB 3.0, HDMI, Ethernet, headphone/mic combo, SD card reader',
+        position: 1,
+      },
+      { group: 'Connectivity', key: 'Wireless', value: 'Wi-Fi & Bluetooth', position: 2 },
+      {
+        group: 'Features',
+        key: 'Keyboard',
+        value: 'Full-size spill-resistant keyboard',
+        position: 1,
+      },
+      { group: 'Build', key: 'Model', value: 'EliteBook 830 G5', position: 1 },
+      { group: 'Build', key: 'Color', value: 'Silver', position: 2 },
+      { group: 'Build', key: 'Weight', value: '1.51 kg', position: 3 },
+      {
+        group: 'Build',
+        key: 'Dimensions',
+        value: 'Approx. 12.18 × 8.58 × 0.72 in (W × D × H)',
+        position: 4,
+      },
+    ],
+    attributes: [
+      { name: 'Condition', value: 'Used' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-hp-elitebook-830-g6',
+    sku: 'HP-EB-830-G6-I5',
+    name: 'HP Used EliteBook 830 G6 — Core i5 8th Gen, 8 GB, 256 GB SSD, 13.3″ FHD',
+    slug: 'hp-elitebook-830-g6',
+    brandId: 'b-hp',
+    brandName: 'HP',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'business', 'elitebook', 'used', 'ultrabook'],
+    shortDescription:
+      '13.3" FHD, Intel Core i5 (8th Gen), 8 GB DDR4 RAM, 256 GB SSD, Windows 10 Pro, Silver.',
+    description:
+      'HP Used EliteBook 830 G6 — designed for professionals who need a sleek, reliable laptop. Combines performance, security, and portability for business users.\n\nFeatures an 8th-generation Intel Core i5 processor, 8 GB DDR4 RAM, and a 256 GB SSD for fast boot and load times. The 13.3" Full HD (1920×1080) display delivers crisp visuals, with integrated Intel UHD Graphics for everyday tasks. Includes fingerprint reader, TPM 2.0, spill-resistant keyboard, USB Type-C, USB 3.0, HDMI, Ethernet, SD card reader, Wi-Fi, and Bluetooth. Weighs approximately 1.51 kg in professional silver.',
+    price: { amount: 2850, compareAtAmount: 3600, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-5/3-1.jpg',
+        alt: 'HP Used EliteBook 830 G6 13.3-inch FHD — Silver',
+      },
+    ],
+    rating: { average: 4.5, count: 6 },
+    stockStatus: 'in_stock',
+    condition: 'used',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2019-04-01',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '13.3" Full HD', position: 1 },
+      { group: 'Display', key: 'Resolution', value: '1920 × 1080', position: 2 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5 (8th generation)',
+        position: 1,
+      },
+      { group: 'Performance', key: 'GPU', value: 'Intel UHD Graphics (integrated)', position: 2 },
+      { group: 'Memory', key: 'RAM', value: '8 GB DDR4', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Software', key: 'OS', value: 'Windows 10 Pro', position: 1 },
+      {
+        group: 'Security',
+        key: 'Features',
+        value: 'Fingerprint reader, TPM 2.0, Kensington lock slot',
+        position: 1,
+      },
+      {
+        group: 'Connectivity',
+        key: 'Ports',
+        value: 'USB Type-C, USB 3.0, HDMI, Ethernet, headphone/mic combo, SD card reader',
+        position: 1,
+      },
+      { group: 'Connectivity', key: 'Wireless', value: 'Wi-Fi & Bluetooth', position: 2 },
+      {
+        group: 'Features',
+        key: 'Keyboard',
+        value: 'Full-size spill-resistant keyboard',
+        position: 1,
+      },
+      { group: 'Build', key: 'Model', value: 'EliteBook 830 G6', position: 1 },
+      { group: 'Build', key: 'Color', value: 'Silver', position: 2 },
+      { group: 'Build', key: 'Weight', value: '1.51 kg', position: 3 },
+      {
+        group: 'Build',
+        key: 'Dimensions',
+        value: 'Approx. 12.18 × 8.58 × 0.72 in (W × D × H)',
+        position: 4,
+      },
+    ],
+    attributes: [
+      { name: 'Condition', value: 'Used' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-dell-latitude-7472',
+    sku: 'DELL-LAT-7472-I5',
+    name: 'Dell Latitude 7472 — Core i5-8250U, 8 GB, 256 GB SSD, 14″',
+    slug: 'dell-latitude-7472',
+    brandId: 'b-dell',
+    brandName: 'Dell',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'business', 'latitude', 'nvidia', 'used'],
+    shortDescription:
+      '14″ display, Intel Core i5-8250U, 8 GB RAM, 256 GB SSD, NVIDIA GeForce MX150 2 GB, Windows 11.',
+    description:
+      'Dell Latitude 7472 — a reliable 14-inch business laptop with Intel Core i5-8250U (8th generation), 8 GB RAM, and 256 GB SSD. Features a backlit keyboard, NVIDIA GeForce MX150 2 GB graphics, USB Type-C support, integrated webcam, Bluetooth, wireless connectivity, and quality sound. Runs Windows 11 with excellent battery life.\n\nIncludes charger, receipt, and warranty. Limited stock — 1 unit available.',
+    price: { amount: 2800, compareAtAmount: 3800, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-6/MVIMG_20260324_232442-1536x1152.jpg',
+        alt: 'Dell Latitude 7472 — front view',
+      },
+      {
+        url: '/products/p-6/MVIMG_20260324_232505-1536x1152.jpg',
+        alt: 'Dell Latitude 7472 — open laptop',
+      },
+      {
+        url: '/products/p-6/1adbd7ec9394105e2a463631cd5aca121.jpg',
+        alt: 'Dell Latitude 7472 — product detail',
+      },
+    ],
+    rating: { average: 4.5, count: 5 },
+    stockStatus: 'in_stock',
+    condition: 'used',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2017-06-01',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '14 inches', position: 1 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5-8250U (8th generation)',
+        position: 1,
+      },
+      { group: 'Performance', key: 'GPU', value: 'NVIDIA GeForce MX150 2 GB', position: 2 },
+      { group: 'Memory', key: 'RAM', value: '8 GB', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Software', key: 'OS', value: 'Windows 11', position: 1 },
+      { group: 'Features', key: 'Keyboard', value: 'Backlit keyboard', position: 1 },
+      { group: 'Features', key: 'Camera', value: 'Integrated webcam', position: 2 },
+      { group: 'Features', key: 'Audio', value: 'Quality sound', position: 3 },
+      { group: 'Battery', key: 'Life', value: 'Excellent battery performance', position: 1 },
+      { group: 'Connectivity', key: 'Ports', value: 'USB Type-C supported', position: 1 },
+      { group: 'Connectivity', key: 'Wireless', value: 'Wi-Fi & Bluetooth', position: 2 },
+      { group: 'Build', key: 'Model', value: 'Latitude 7472', position: 1 },
+      { group: 'Included', key: 'Accessories', value: 'Charger included', position: 1 },
+      { group: 'Included', key: 'Documentation', value: 'Receipt included', position: 2 },
+    ],
+    attributes: [
+      { name: 'Condition', value: 'Used' },
+      { name: 'Stock', value: '1 in stock' },
+      { name: 'Warranty', value: 'Warranty included — contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-hp-elitebook-830-g8',
+    sku: 'HP-EB-830-G8-I5',
+    name: 'HP EliteBook 830 G8 — Core i5 11th Gen, 8 GB, 256 GB SSD, 13.3″ FHD',
+    slug: 'hp-elitebook-830-g8',
+    brandId: 'b-hp',
+    brandName: 'HP',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'business', 'elitebook', 'ultrabook'],
+    shortDescription:
+      '13.3" FHD (1080p), Intel Core i5 (11th Gen), 8 GB DDR4, 256 GB SSD, Intel UHD Graphics.',
+    description:
+      'HP EliteBook 830 G8 — a compact business laptop with an 11th-generation Intel Core i5 processor, 8 GB DDR4 RAM, and a 256 GB solid state drive. Features a 13.3-inch Full HD display at 1080p resolution with Intel UHD Graphics, backlit keyboard, HD camera, and facial recognition (Face ID sensor).\n\nEquipped with Bang & Olufsen speakers, Bluetooth, USB Type-C, USB 3.0, and HDMI for versatile connectivity in a professional portable design.',
+    price: { amount: 3800, compareAtAmount: 4800, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-7/MVIMG_20260324_233225-1536x1152.jpg',
+        alt: 'HP EliteBook 830 G8 — front view',
+      },
+      {
+        url: '/products/p-7/MVIMG_20260324_233238-1536x1152.jpg',
+        alt: 'HP EliteBook 830 G8 — open laptop',
+      },
+      {
+        url: '/products/p-7/MVIMG_20260324_233302-1536x1152.jpg',
+        alt: 'HP EliteBook 830 G8 — keyboard and display',
+      },
+      {
+        url: '/products/p-7/MVIMG_20260324_233312-1536x1152.jpg',
+        alt: 'HP EliteBook 830 G8 — side profile',
+      },
+    ],
+    rating: { average: 4.6, count: 11 },
+    stockStatus: 'in_stock',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2021-01-01',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '13.3" FHD', position: 1 },
+      { group: 'Display', key: 'Resolution', value: '1920 × 1080 (1080p)', position: 2 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5 (11th generation)',
+        position: 1,
+      },
+      { group: 'Performance', key: 'GPU', value: 'Intel UHD Graphics', position: 2 },
+      { group: 'Memory', key: 'RAM', value: '8 GB DDR4', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Features', key: 'Keyboard', value: 'Backlit keyboard', position: 1 },
+      { group: 'Features', key: 'Camera', value: 'HD camera lens', position: 2 },
+      {
+        group: 'Features',
+        key: 'Security',
+        value: 'Face ID sensor (facial recognition)',
+        position: 3,
+      },
+      { group: 'Features', key: 'Audio', value: 'Bang & Olufsen speakers', position: 4 },
+      {
+        group: 'Connectivity',
+        key: 'Ports',
+        value: 'USB Type-C, USB 3.0, HDMI',
+        position: 1,
+      },
+      { group: 'Connectivity', key: 'Wireless', value: 'Bluetooth & Wi-Fi', position: 2 },
+      { group: 'Build', key: 'Model', value: 'EliteBook 830 G8', position: 1 },
+    ],
+    attributes: [
+      { name: 'Generation', value: '11th Generation' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-hp-zbook-studio-g8',
+    sku: 'HP-ZBK-STUDIO-G8-I7',
+    name: 'HP ZBook Studio G8 — Core i7 11th Gen, 16 GB, 512 GB SSD, RTX A2000',
+    slug: 'hp-zbook-studio-g8',
+    brandId: 'b-hp',
+    brandName: 'HP',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'workstation', 'zbook', 'nvidia', 'creator'],
+    shortDescription:
+      '11th Gen Intel Core i7 @ 2.50 GHz (8 cores / 16 threads), 16 GB RAM, 512 GB SSD, NVIDIA RTX A2000 4 GB.',
+    description:
+      'HP ZBook Studio G8 — an 11th-generation mobile workstation built for demanding creative and professional workloads. Powered by an Intel Core i7 processor at 2.50 GHz with 8 cores and 16 logical processors, paired with 16 GB RAM and a 512 GB SSD.\n\nFeatures a dedicated 4 GB NVIDIA RTX A2000 GPU, backlit keyboard, facial recognition, and fingerprint recognition for secure, high-performance mobile computing.',
+    price: { amount: 10000, compareAtAmount: 11000, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-8/MVIMG_20260324_233601-1536x1152.jpg',
+        alt: 'HP ZBook Studio G8 — front view',
+      },
+      {
+        url: '/products/p-8/MVIMG_20260324_233615-1536x1152.jpg',
+        alt: 'HP ZBook Studio G8 — open laptop',
+      },
+      {
+        url: '/products/p-8/MVIMG_20260324_233646-1536x1152.jpg',
+        alt: 'HP ZBook Studio G8 — side profile',
+      },
+    ],
+    rating: { average: 4.7, count: 8 },
+    stockStatus: 'in_stock',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2021-03-01',
+    specifications: [
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i7 (11th generation) @ 2.50 GHz — 8 cores, 16 logical processors',
+        position: 1,
+      },
+      { group: 'Performance', key: 'GPU', value: 'NVIDIA RTX A2000 4 GB (dedicated)', position: 2 },
+      { group: 'Memory', key: 'RAM', value: '16 GB', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '512 GB', position: 1 },
+      { group: 'Features', key: 'Keyboard', value: 'Backlit keyboard', position: 1 },
+      {
+        group: 'Security',
+        key: 'Biometrics',
+        value: 'Facial recognition & fingerprint recognition',
+        position: 1,
+      },
+      { group: 'Build', key: 'Model', value: 'ZBook Studio G8', position: 1 },
+      { group: 'Build', key: 'Generation', value: '11th Generation', position: 2 },
+    ],
+    attributes: [
+      { name: 'Generation', value: '11th Generation' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-lenovo-thinkpad-l380',
+    sku: 'LEN-TP-L380-I5',
+    name: 'Lenovo ThinkPad L380 — Core i5 8th Gen, 8 GB, 256 GB SSD, Touchscreen',
+    slug: 'lenovo-thinkpad-l380',
+    brandId: 'b-lenovo',
+    brandName: 'Lenovo',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'thinkpad', 'business', 'touchscreen', 'lenovo'],
+    shortDescription:
+      'Touchscreen, Intel Core i5 (8th Gen), 8 GB RAM, 256 GB SSD, backlit keyboard, fingerprint reader.',
+    description:
+      'Lenovo ThinkPad L380 Touchscreen — a dependable business laptop with an 8th-generation Intel Core i5 processor, 8 GB RAM, and a 256 GB SSD. Features a touchscreen display, backlit keyboard, fingerprint reader, dual USB Type-C ports, two USB ports, HDMI, Bluetooth, and quality speakers with strong battery life.',
+    price: { amount: 3000, compareAtAmount: 4500, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-9/MVIMG_20260325_000217-1536x1152.jpg',
+        alt: 'Lenovo ThinkPad L380 — front view',
+      },
+      {
+        url: '/products/p-9/MVIMG_20260325_000226-1536x1152.jpg',
+        alt: 'Lenovo ThinkPad L380 — open laptop',
+      },
+      {
+        url: '/products/p-9/MVIMG_20260325_000245-1536x1152.jpg',
+        alt: 'Lenovo ThinkPad L380 — keyboard and display',
+      },
+      {
+        url: '/products/p-9/MVIMG_20260325_000303-1536x1152.jpg',
+        alt: 'Lenovo ThinkPad L380 — side profile',
+      },
+    ],
+    rating: { average: 4.5, count: 10 },
+    stockStatus: 'in_stock',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2018-06-01',
+    specifications: [
+      { group: 'Display', key: 'Type', value: 'Touchscreen', position: 1 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5 (8th generation)',
+        position: 1,
+      },
+      { group: 'Memory', key: 'RAM', value: '8 GB', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Features', key: 'Keyboard', value: 'Backlit keyboard', position: 1 },
+      { group: 'Features', key: 'Security', value: 'Fingerprint reader', position: 2 },
+      { group: 'Features', key: 'Audio', value: 'Built-in speakers', position: 3 },
+      { group: 'Battery', key: 'Life', value: 'Strong battery performance', position: 1 },
+      {
+        group: 'Connectivity',
+        key: 'Ports',
+        value: '2× USB Type-C, 2× USB, HDMI',
+        position: 1,
+      },
+      { group: 'Connectivity', key: 'Wireless', value: 'Bluetooth & Wi-Fi', position: 2 },
+      { group: 'Build', key: 'Model', value: 'ThinkPad L380', position: 1 },
+      { group: 'Build', key: 'Generation', value: '8th Generation', position: 2 },
+    ],
+    attributes: [
+      { name: 'Generation', value: '8th Generation' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-lenovo-thinkpad-t470s',
+    sku: 'LEN-TP-T470S-I5',
+    name: 'Lenovo ThinkPad T470s 14″ FHD — Core i5-6300U, 8 GB, 256 GB SSD (Renewed)',
+    slug: 'lenovo-thinkpad-t470s',
+    brandId: 'b-lenovo',
+    brandName: 'Lenovo',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'thinkpad', 'business', 'lenovo', 'renewed'],
+    shortDescription:
+      '14″ FHD IPS, Intel Core i5-6300U, 8 GB DDR4, 256 GB SSD, Intel HD 520, Windows 10 Pro.',
+    description:
+      'Lenovo ThinkPad T470s — a renewed 14-inch business ultrabook with a Full HD (1920×1080) IPS backlit LED display. Powered by an Intel dual-core Core i5-6300U with Intel HD Graphics 520, 8 GB DDR4 RAM, and a 256 GB SSD.\n\nIncludes Thunderbolt 3, USB Type-C, HDMI, and RJ-45 Ethernet. Ships with Windows 10 Professional — professionally renewed and ready for work.',
+    price: { amount: 2800, compareAtAmount: 3100, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-10/61kgxzuMxjL._AC_SL1500_-1320x1320.jpg',
+        alt: 'Lenovo ThinkPad T470s — front view',
+      },
+      {
+        url: '/products/p-10/411qJSI1YFL._AC_SL1500_-1320x1320.jpg',
+        alt: 'Lenovo ThinkPad T470s — open laptop',
+      },
+      {
+        url: '/products/p-10/51Ono1qwGEL._AC_SL1500_-1320x1320.jpg',
+        alt: 'Lenovo ThinkPad T470s — keyboard and display',
+      },
+      {
+        url: '/products/p-10/41fYF4oE9OL._AC_SL1500_-1320x1320.jpg',
+        alt: 'Lenovo ThinkPad T470s — side profile',
+      },
+    ],
+    rating: { average: 4.4, count: 14 },
+    stockStatus: 'in_stock',
+    condition: 'refurbished',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2017-01-01',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '14" FHD IPS backlit LED', position: 1 },
+      { group: 'Display', key: 'Resolution', value: '1920 × 1080', position: 2 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i5-6300U (dual-core)',
+        position: 1,
+      },
+      { group: 'Performance', key: 'GPU', value: 'Intel HD Graphics 520', position: 2 },
+      { group: 'Memory', key: 'RAM', value: '8 GB DDR4', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Software', key: 'OS', value: 'Windows 10 Professional', position: 1 },
+      {
+        group: 'Connectivity',
+        key: 'Ports',
+        value: 'Thunderbolt 3, USB Type-C, HDMI, RJ-45 Ethernet',
+        position: 1,
+      },
+      { group: 'Build', key: 'Model', value: 'ThinkPad T470s', position: 1 },
+      { group: 'Build', key: 'Condition', value: 'Renewed', position: 2 },
+    ],
+    attributes: [
+      { name: 'Condition', value: 'Renewed' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
+    id: 'p-microsoft-surface-laptop-3',
+    sku: 'MS-SL3-13-I7',
+    name: 'Microsoft Surface Laptop 3 — 13.5″ Touch, Core i7, 16 GB, 256 GB SSD',
+    slug: 'microsoft-surface-laptop-3',
+    brandId: 'b-microsoft',
+    brandName: 'Microsoft',
+    primaryCategoryId: 'c-laptops',
+    categoryIds: ['c-laptops'],
+    tags: ['laptops', 'surface', 'touchscreen', 'ultrabook', 'microsoft'],
+    shortDescription:
+      '13.5″ touchscreen, Intel Core i7, 16 GB RAM, 256 GB SSD — sleek, light, and built for productivity.',
+    description:
+      'Microsoft Surface Laptop 3 — sleek and light, with improved speed, performance, and typing comfort. Travels with ease and makes every day more productive. Features a 13.5-inch touchscreen, Intel Core i7 processor, 16 GB RAM, and 256 GB SSD. Available in colors to match your style.',
+    price: { amount: 5000, currency: 'GHS' },
+    images: [
+      {
+        url: '/products/p-11/microsoft_3-1536x1152.jpg',
+        alt: 'Microsoft Surface Laptop 3 — 13.5-inch touchscreen',
+      },
+    ],
+    rating: { average: 4.6, count: 9 },
+    stockStatus: 'in_stock',
+    isFeatured: true,
+    isNewArrival: true,
+    releaseDate: '2019-10-02',
+    specifications: [
+      { group: 'Display', key: 'Size', value: '13.5" touchscreen', position: 1 },
+      {
+        group: 'Performance',
+        key: 'CPU',
+        value: 'Intel Core i7',
+        position: 1,
+      },
+      { group: 'Memory', key: 'RAM', value: '16 GB', position: 1 },
+      { group: 'Storage', key: 'SSD', value: '256 GB', position: 1 },
+      { group: 'Features', key: 'Design', value: 'Sleek and lightweight', position: 1 },
+      { group: 'Features', key: 'Input', value: 'Improved typing comfort', position: 2 },
+      { group: 'Build', key: 'Model', value: 'Surface Laptop 3', position: 1 },
+    ],
+    attributes: [
+      { name: 'Display', value: '13.5″ Touch-Screen' },
+      { name: 'Warranty', value: 'Contact seller for details' },
+    ],
+  },
+  {
     id: 'p-macbook-air-m3-13',
     sku: 'MBA-M3-13-512',
     name: 'MacBook Air 13" — Apple M3, 16 GB, 512 GB',
@@ -916,20 +1571,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'The MacBook Air 13" with M3 delivers next-generation Apple silicon performance in a fanless 1.24 kg chassis. The 13.6" Liquid Retina display covers P3 wide color at 500 nits, paired with up to 18 hours of battery life. Includes Wi-Fi 6E, two Thunderbolt / USB 4 ports, MagSafe 3 charging, and a 1080p FaceTime HD camera.',
     price: { amount: 15588, compareAtAmount: 17988, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
-        alt: 'MacBook Air 13 open on desk',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1611174743420-3d7df880ce32?auto=format&fit=crop&w=1200&q=70',
-        alt: 'MacBook Air keyboard close-up',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=70',
-        alt: 'MacBook Air side profile',
-      },
-    ],
+    images: LAPTOP_IMAGES.macbookAirM3,
     rating: { average: 4.8, count: 1842 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -980,20 +1622,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'MacBook Pro 14" with the M4 Pro chip — a 12-core CPU and 16-core GPU optimized for ProRes editing, code compilation, and on-device ML. The 14.2" Liquid Retina XDR display reaches 1600 nits HDR peak with ProMotion 120 Hz. Three Thunderbolt 4 ports, HDMI, SDXC, MagSafe 3, and up to 22 hours of battery life.',
     price: { amount: 23988, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
-        alt: 'MacBook Pro 14 open on desk',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1200&q=70',
-        alt: 'MacBook Pro side ports',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=70',
-        alt: 'MacBook Pro keyboard',
-      },
-    ],
+    images: LAPTOP_IMAGES.macbookPro14M4,
     rating: { average: 4.9, count: 921 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -1050,20 +1679,7 @@ const SEEDS: ProductSeed[] = [
     description:
       "HP's flagship convertible: a 360° hinge laptop with a 2.8K OLED touchscreen at 120 Hz, Intel Core Ultra 7 155H with 22 cores, and Intel Arc graphics. Ships with a tilt-and-haptic stylus, dual Thunderbolt 4, a 5 MP IR camera with AI auto-framing, and 17 hours of battery life.",
     price: { amount: 19188, compareAtAmount: 21588, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1200&q=70',
-        alt: 'HP Spectre x360 open',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1593642634402-b0eb5e2eebc9?auto=format&fit=crop&w=1200&q=70',
-        alt: 'HP Spectre tent mode',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
-        alt: 'HP Spectre keyboard',
-      },
-    ],
+    images: LAPTOP_IMAGES.hpSpectreX360,
     rating: { average: 4.6, count: 487 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -1125,20 +1741,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'The thinnest 14" OMEN ever. Combines Intel Core Ultra 9 185H with NVIDIA RTX 4070 8 GB and a 2.8K OLED 120 Hz display in a 1.6 kg chassis. Dynamic vapor chamber cooling, 1080p IR camera with Windows Hello, and HyperX Cloud II Spectral mic suite included.',
     price: { amount: 22788, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=1200&q=70',
-        alt: 'HP OMEN gaming laptop',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1200&q=70',
-        alt: 'OMEN keyboard backlight',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=1200&q=70',
-        alt: 'OMEN gaming setup',
-      },
-    ],
+    images: LAPTOP_IMAGES.hpOmenTranscend14,
     rating: { average: 4.5, count: 218 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -1196,20 +1799,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'The gold standard business ultrabook. Carbon-fiber chassis weighing just 1.09 kg, MIL-STD-810H tested, with a 2.8K OLED display, an 8-MP IR camera with Communication Bar, and dual Thunderbolt 4. Includes self-healing BIOS, ThinkShield security, and a 3-year on-site warranty.',
     price: { amount: 22188, compareAtAmount: 26388, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1200&q=70',
-        alt: 'ThinkPad X1 Carbon on desk',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=70',
-        alt: 'ThinkPad keyboard close-up',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1611078489935-0cb964de46d6?auto=format&fit=crop&w=1200&q=70',
-        alt: 'ThinkPad side ports',
-      },
-    ],
+    images: LAPTOP_IMAGES.thinkpadX1CarbonGen12,
     rating: { average: 4.7, count: 612 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -1272,20 +1862,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'No-compromise desktop replacement. Pairs Intel\'s 24-core i9-14900HX with the 175 W RTX 4090 16 GB and a 16" WQXGA 240 Hz mini-LED display. Liquid Metal cooling on CPU and GPU, per-key RGB TrueStrike keyboard, and a beefy 99.9 Wh battery.',
     price: { amount: 35388, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Legion gaming laptop with RGB',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Legion keyboard RGB',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Gaming laptop side view',
-      },
-    ],
+    images: LAPTOP_IMAGES.legionPro7iGen9,
     rating: { average: 4.6, count: 184 },
     stockStatus: 'low_stock',
     isFeatured: true,
@@ -1358,20 +1935,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'A creator-focused redesign with an InfinityEdge 14.5" 3.2K OLED touch display, the Intel Core Ultra 7 155H, and discrete RTX 4050 graphics. Capacitive touch function row, edge-to-edge keyboard, and an aluminum unibody machined to 18 mm.',
     price: { amount: 22788, compareAtAmount: 25188, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Dell XPS 14 open',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1593642634402-b0eb5e2eebc9?auto=format&fit=crop&w=1200&q=70',
-        alt: 'XPS keyboard close-up',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
-        alt: 'XPS side profile',
-      },
-    ],
+    images: LAPTOP_IMAGES.dellXps14,
     rating: { average: 4.5, count: 342 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -1443,20 +2007,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'The ultimate desktop replacement: 18-inch QHD+ 165 Hz panel, 24-core Intel Core i9, RTX 4090 175 W, and 64 GB of DDR5-5600. Cryo-Tech cooling with 7 thermal sensors, Cherry MX ultra-low-profile mechanical keyboard, and tobii eye tracking.',
     price: { amount: 47988, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Alienware gaming laptop',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1591238513004-7d75aa86c5ad?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Alienware RGB keyboard',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1542549237-a3fac32a8378?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Gaming laptop with monitor',
-      },
-    ],
+    images: LAPTOP_IMAGES.alienwareM18R2,
     rating: { average: 4.6, count: 91 },
     stockStatus: 'low_stock',
     releaseDate: '2024-03-19',
@@ -1525,20 +2076,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'Samsung\'s creator ultrabook with the brightest 14" panel in its class — a Dynamic AMOLED 2X at 500 nits and 120 Hz. Includes Galaxy ecosystem features: Quick Share with phones, Multi Control with Galaxy Tab, and on-device Galaxy AI for noise removal during calls. 21 hours of battery in a 1.23 kg magnesium chassis.',
     price: { amount: 17388, compareAtAmount: 19788, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Galaxy Book on desk',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Galaxy Book keyboard',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Galaxy Book side view',
-      },
-    ],
+    images: LAPTOP_IMAGES.galaxyBook4Pro14,
     rating: { average: 4.5, count: 268 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -1610,20 +2148,7 @@ const SEEDS: ProductSeed[] = [
     description:
       'The flagship Galaxy Book. Combines the Core Ultra 9 185H with the RTX 4070 8 GB and a 16" Dynamic AMOLED 2X 3K touch display. Includes a 1080p 5 MP IR camera, Studio Quality mic with Galaxy AI noise removal, and seamless Galaxy ecosystem handoff.',
     price: { amount: 28788, currency: 'GHS' },
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Galaxy Book Ultra',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Samsung laptop keyboard',
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=70',
-        alt: 'Premium laptop angled view',
-      },
-    ],
+    images: LAPTOP_IMAGES.galaxyBook4Ultra16,
     rating: { average: 4.6, count: 132 },
     stockStatus: 'in_stock',
     isFeatured: true,
@@ -1666,6 +2191,10 @@ const SEEDS: ProductSeed[] = [
       { name: 'Warranty', value: '1 year limited' },
     ],
   },
+  ...LAPTOP_PRODUCT_SEEDS,
+  ...TV_PRODUCT_SEEDS,
+  ...ACCESSORY_PRODUCT_SEEDS,
+  ...COMPONENT_PRODUCT_SEEDS,
   {
     id: 'p-relay-nas',
     sku: 'RLY-NAS-4',

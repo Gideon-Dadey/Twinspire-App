@@ -8,8 +8,12 @@ import { ProductGallery } from '@/components/shop/pdp/product-gallery';
 import { ProductReviews } from '@/components/shop/pdp/product-reviews';
 import { ProductSpecs } from '@/components/shop/pdp/product-specs';
 import { RelatedProducts } from '@/components/shop/pdp/related-products';
-import { getCategoryById } from '@/data/categories';
-import { getProductBySlug, getRelatedProducts, products as ALL_PRODUCTS } from '@/data/products';
+import {
+  getCategoryById,
+  getProductBySlug,
+  getRelatedProductsFor,
+  getAllProductSlugs,
+} from '@/lib/catalog/catalog-service';
 import { getReviewsByProductId } from '@/data/reviews';
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/helpers/json-ld';
 import { siteConfig } from '@/lib/site-config';
@@ -19,13 +23,16 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function generateStaticParams() {
-  return ALL_PRODUCTS.map((p) => ({ slug: p.slug }));
+  const slugs = await getAllProductSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return { title: 'Product not found' };
   return {
     title: `${product.name} — ${product.brandName ?? siteConfig.name}`,
@@ -42,14 +49,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
   const reviews = getReviewsByProductId(product.id);
-  const related = getRelatedProducts(product.id, 4);
-  const primaryCategory = getCategoryById(product.primaryCategoryId);
+  const related = await getRelatedProductsFor(product.id, 4);
+  const primaryCategory = await getCategoryById(product.primaryCategoryId);
   const rootCategory = primaryCategory?.parentId
-    ? getCategoryById(primaryCategory.parentId)
+    ? await getCategoryById(primaryCategory.parentId)
     : primaryCategory;
 
   const breadcrumbItems = [
@@ -70,7 +77,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
         )}
       />
 
-      <div className="container mx-auto px-4 pb-16 pt-8 md:pt-12">
+      <div className="container mx-auto px-3 pb-16 pt-8 sm:px-4 md:pt-12">
         <Breadcrumb items={breadcrumbItems} linkComponent={NextLinkBreadcrumb} className="mb-6" />
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)] lg:gap-12 xl:gap-16">

@@ -10,13 +10,7 @@ import { BlogToc } from '@/components/blog/blog-toc';
 import { extractToc, Markdown } from '@/components/blog/markdown';
 import { JsonLd } from '@/components/shared/json-ld';
 import { NextLinkBreadcrumb } from '@/components/shared/next-adapters';
-import {
-  getAuthorById,
-  getPostBySlug,
-  getRelatedPosts,
-  getTagById,
-  posts,
-} from '@/data/posts';
+import { getAuthorById, getPostBySlug, getRelatedPosts, getTagById, posts } from '@/data/posts';
 import { blogPostingJsonLd, breadcrumbJsonLd } from '@/lib/helpers/json-ld';
 
 interface PageProps {
@@ -82,7 +76,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         )}
       />
 
-      <article className="container mx-auto px-4 pb-20 pt-8 md:pt-12">
+      <article className="container mx-auto px-3 pb-20 pt-8 sm:px-4 md:pt-12">
         <Breadcrumb items={breadcrumbItems} linkComponent={NextLinkBreadcrumb} className="mb-6" />
 
         <header className="mx-auto max-w-3xl text-center">
@@ -91,22 +85,22 @@ export default async function BlogPostPage({ params }: PageProps) {
               {post.categorySlug.replace('-', ' ')}
             </Badge>
           )}
-          <h1 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+          <h1 className="font-display mt-4 text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
             {post.title}
           </h1>
           {post.excerpt && (
-            <p className="mt-4 text-pretty text-base text-muted-foreground md:text-lg">
+            <p className="text-muted-foreground mt-4 text-pretty text-base md:text-lg">
               {post.excerpt}
             </p>
           )}
-          <div className="mt-6 flex items-center justify-center gap-3 text-sm text-muted-foreground">
+          <div className="text-muted-foreground mt-6 flex items-center justify-center gap-3 text-sm">
             {author && (
               <span className="inline-flex items-center gap-2">
                 <Avatar size="sm">
                   <AvatarImage src={author.avatarUrl} alt={author.name} />
                   <AvatarFallback>{initials(author.name)}</AvatarFallback>
                 </Avatar>
-                <span className="font-medium text-foreground">{author.name}</span>
+                <span className="text-foreground font-medium">{author.name}</span>
               </span>
             )}
             {post.publishedAt && (
@@ -125,7 +119,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         </header>
 
         {post.coverImage && (
-          <div className="relative mx-auto mt-10 aspect-banner max-w-5xl overflow-hidden rounded-lg border border-border bg-muted">
+          <div className="aspect-banner border-border bg-muted relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-lg border">
             <Image
               src={post.coverImage.url}
               alt={post.coverImage.alt}
@@ -156,7 +150,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {related.length > 0 && (
           <section className="mt-20">
-            <h2 className="mb-6 font-display text-2xl font-bold tracking-tight md:text-3xl">
+            <h2 className="font-display mb-6 text-2xl font-bold tracking-tight md:text-3xl">
               Keep reading
             </h2>
             <ul className="grid gap-6 md:grid-cols-3">

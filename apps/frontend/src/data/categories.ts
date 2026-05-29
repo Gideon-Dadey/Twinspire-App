@@ -33,7 +33,8 @@ export const categories: Category[] = [
     id: 'c-phones',
     name: 'Phones',
     slug: 'phones',
-    description: 'Flagship Android, iOS, foldables, and feature phones.',
+    description:
+      'Latest iPhones, Samsung Galaxy, Infinix, Tecno, and Honor — flagships, foldables, and value smartphones.',
     image: {
       url: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=70',
       alt: 'Modern smartphone',
@@ -41,14 +42,14 @@ export const categories: Category[] = [
     icon: 'Smartphone',
     position: 1,
     isFeatured: true,
-    productCount: 36,
+    productCount: 27,
   }),
   makeCategory({
     id: 'c-laptops',
     name: 'Laptops',
     slug: 'laptops',
     description:
-      'MacBook, ThinkPad, XPS, Spectre, Galaxy Book, Legion, OMEN — ultrabooks, creator laptops, workstations, and gaming.',
+      'MacBook, ThinkPad, XPS, Spectre, Galaxy Book, ROG, Nitro, Legion, OMEN — ultrabooks, creator laptops, workstations, and gaming.',
     image: {
       url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=70',
       alt: 'Open laptop',
@@ -56,21 +57,22 @@ export const categories: Category[] = [
     icon: 'Laptop',
     position: 2,
     isFeatured: true,
-    productCount: 38,
+    productCount: 37,
   }),
   makeCategory({
     id: 'c-tvs',
     name: 'TVs & Audio',
     slug: 'tvs',
-    description: 'OLED · QLED · cinema audio · soundbars.',
+    description:
+      'OLED, QLED, Neo QLED, and Crystal UHD TVs plus Dolby Atmos soundbars — Samsung, LG, Sony, TCL, Hisense, Sonos, Bose, and JBL.',
     image: {
-      url: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=1200&q=70',
-      alt: 'Modern television',
+      url: 'https://images.samsung.com/is/image/samsung/p6pim/us/qn65s90dafxza/gallery/us-oled-s90d-qn65s90dafxza-550262130?$product-details-jpg$',
+      alt: 'Samsung OLED TV',
     },
     icon: 'Tv',
     position: 3,
     isFeatured: true,
-    productCount: 22,
+    productCount: 19,
   }),
   makeCategory({
     id: 'c-gaming',
@@ -98,7 +100,7 @@ export const categories: Category[] = [
     icon: 'Cpu',
     position: 5,
     isFeatured: true,
-    productCount: 41,
+    productCount: 33,
   }),
   makeCategory({
     id: 'c-accessories',
@@ -112,7 +114,7 @@ export const categories: Category[] = [
     icon: 'Headphones',
     position: 6,
     isFeatured: true,
-    productCount: 58,
+    productCount: 35,
   }),
 
   makeCategory({
@@ -123,7 +125,7 @@ export const categories: Category[] = [
     ancestors: ['c-accessories'],
     level: 1,
     position: 1,
-    productCount: 14,
+    productCount: 12,
   }),
   makeCategory({
     id: 'c-wearables',
@@ -133,7 +135,7 @@ export const categories: Category[] = [
     ancestors: ['c-accessories'],
     level: 1,
     position: 2,
-    productCount: 11,
+    productCount: 8,
   }),
   makeCategory({
     id: 'c-monitors',
@@ -163,7 +165,7 @@ export const categories: Category[] = [
     ancestors: ['c-components'],
     level: 1,
     position: 1,
-    productCount: 12,
+    productCount: 10,
   }),
   makeCategory({
     id: 'c-gpus',
@@ -173,7 +175,72 @@ export const categories: Category[] = [
     ancestors: ['c-components'],
     level: 1,
     position: 2,
-    productCount: 10,
+    productCount: 8,
+  }),
+
+  makeCategory({
+    id: 'c-phones-iphone',
+    name: 'iPhones',
+    slug: 'phones-iphone',
+    parentId: 'c-phones',
+    ancestors: ['c-phones'],
+    level: 1,
+    description: 'Latest Apple iPhone — Pro, Plus, and SE models with A-series chips and iOS.',
+    icon: 'Smartphone',
+    position: 1,
+    productCount: 6,
+  }),
+  makeCategory({
+    id: 'c-phones-samsung',
+    name: 'Samsung Phones',
+    slug: 'phones-samsung',
+    parentId: 'c-phones',
+    ancestors: ['c-phones'],
+    level: 1,
+    description:
+      'Samsung Galaxy S25, Z Fold, Z Flip, and A-series — flagship Android with Galaxy AI.',
+    icon: 'Smartphone',
+    position: 2,
+    productCount: 7,
+  }),
+  makeCategory({
+    id: 'c-phones-infinix',
+    name: 'Infinix Phones',
+    slug: 'phones-infinix',
+    parentId: 'c-phones',
+    ancestors: ['c-phones'],
+    level: 1,
+    description:
+      'Infinix GT, Note, Hot, and Smart series — high-performance and budget-friendly Android phones.',
+    icon: 'Smartphone',
+    position: 3,
+    productCount: 4,
+  }),
+  makeCategory({
+    id: 'c-phones-tecno',
+    name: 'Tecno Phones',
+    slug: 'phones-tecno',
+    parentId: 'c-phones',
+    ancestors: ['c-phones'],
+    level: 1,
+    description:
+      'Tecno Camon, Pova, Spark, and Phantom — camera-focused and gaming Android smartphones.',
+    icon: 'Smartphone',
+    position: 4,
+    productCount: 4,
+  }),
+  makeCategory({
+    id: 'c-phones-honor',
+    name: 'Honor Phones',
+    slug: 'phones-honor',
+    parentId: 'c-phones',
+    ancestors: ['c-phones'],
+    level: 1,
+    description:
+      'Honor Magic, 200, and X series — AI-powered cameras, premium displays, and strong battery life.',
+    icon: 'Smartphone',
+    position: 5,
+    productCount: 4,
   }),
 ];
 

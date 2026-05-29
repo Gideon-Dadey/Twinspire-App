@@ -1,18 +1,6 @@
 import { cn } from '@twinspire/ui';
 import * as React from 'react';
 
-/**
- * Minimal Markdown-to-React renderer for blog bodies. Supports:
- *   - h2 / h3 with auto-generated ids (used by TOC)
- *   - paragraphs
- *   - unordered lists (- / *)
- *   - blockquotes (>)
- *   - inline bold (**text**), italic (*text*), and code (`code`)
- *
- * Not a full Markdown spec — by design. The blog seeds use a constrained
- * subset to keep the bundle small.
- */
-
 export interface MarkdownProps {
   body: string;
   className?: string;
@@ -89,7 +77,7 @@ function renderInline(input: string, keyPrefix: string): React.ReactNode[] {
     return (
       <code
         key={key}
-        className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.85em] text-foreground"
+        className="bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-[0.85em]"
       >
         {token.value}
       </code>
@@ -159,12 +147,7 @@ function blockify(body: string): Block[] {
 export function Markdown({ body, className }: MarkdownProps): React.JSX.Element {
   const blocks = blockify(body);
   return (
-    <div
-      className={cn(
-        'space-y-5 text-[0.95rem] leading-[1.75] text-foreground/90',
-        className,
-      )}
-    >
+    <div className={cn('text-foreground/90 space-y-5 text-[0.95rem] leading-[1.75]', className)}>
       {blocks.map((block, idx) => {
         const key = `b-${idx}`;
         if (block.kind === 'h2') {
@@ -173,7 +156,7 @@ export function Markdown({ body, className }: MarkdownProps): React.JSX.Element 
             <h2
               key={key}
               id={slugifyHeading(text)}
-              className="mt-12 scroll-mt-24 font-display text-2xl font-bold tracking-tight text-foreground first:mt-0 md:text-3xl"
+              className="font-display text-foreground mt-12 scroll-mt-24 text-2xl font-bold tracking-tight first:mt-0 md:text-3xl"
             >
               {renderInline(text, key)}
             </h2>
@@ -185,7 +168,7 @@ export function Markdown({ body, className }: MarkdownProps): React.JSX.Element 
             <h3
               key={key}
               id={slugifyHeading(text)}
-              className="mt-8 scroll-mt-24 font-display text-xl font-semibold tracking-tight"
+              className="font-display mt-8 scroll-mt-24 text-xl font-semibold tracking-tight"
             >
               {renderInline(text, key)}
             </h3>
@@ -204,7 +187,7 @@ export function Markdown({ body, className }: MarkdownProps): React.JSX.Element 
           return (
             <blockquote
               key={key}
-              className="border-l-2 border-primary/60 bg-primary/5 px-5 py-3 italic text-muted-foreground"
+              className="border-primary/60 bg-primary/5 text-muted-foreground border-l-2 px-5 py-3 italic"
             >
               {block.lines.map((line, i) => (
                 <p key={`${key}-${i}`}>{renderInline(line, `${key}-${i}`)}</p>

@@ -1,9 +1,8 @@
 'use client';
 
-import { faBagShopping } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 
+import { CartOutlineIcon } from '@/components/icons/cart-outline-icon';
 import { useCartStore } from '@/lib/stores/cart-store';
 
 export function CartIcon(): React.JSX.Element {
@@ -13,10 +12,10 @@ export function CartIcon(): React.JSX.Element {
     <button
       type="button"
       onClick={open}
-      className="text-muted-foreground hover:bg-muted hover:text-foreground relative inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
+      className="text-foreground hover:bg-muted relative inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
       aria-label={`Cart, ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`}
     >
-      <FontAwesomeIcon icon={faBagShopping} className="h-[18px] w-[18px]" aria-hidden />
+      <CartOutlineIcon />
       {itemCount > 0 && (
         <span
           aria-hidden

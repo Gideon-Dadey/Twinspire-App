@@ -14,19 +14,38 @@ module.exports = {
   theme: {
     container: {
       center: true,
+      /**
+       * Container side padding scale.
+       *
+       * Mobile-first sizing tuned for Ghana e-commerce traffic patterns
+       * (~90% mobile). Tighter than the Tailwind default so product cards,
+       * cart line items, and form fields get more horizontal real estate
+       * on phones in the 360–414 px width band. Matches the visual density
+       * of Jumia / Konga / Apple Shop on small screens (12 px / 16 px).
+       */
       padding: {
-        DEFAULT: '1rem',
-        sm: '1.25rem',
-        md: '2rem',
-        lg: '2.5rem',
+        DEFAULT: '0.75rem',
+        sm: '1rem',
+        md: '1.5rem',
+        lg: '2rem',
         xl: '3rem',
         '2xl': '4rem',
       },
+      /**
+       * Container max-widths.
+       *
+       * Previously listed every breakpoint, which made Tailwind cap the
+       * container at each one — so a 750 px tablet viewport hit the `sm`
+       * cap of 375 px and the layout collapsed into a 375 px column with
+       * ~190 px of dead space on each side. The hero, product grid, and
+       * checkout flow all suffered.
+       *
+       * Modern e-commerce (Amazon, Apple, Jumia, Konga, Stripe) uses a
+       * fully fluid container until a single hard cap at the design
+       * width. We do the same: fluid below 1440 px, capped at 1440 px on
+       * ultra-wide monitors so the layout doesn't stretch unreasonably.
+       */
       screens: {
-        sm: '375px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
         '2xl': '1440px',
       },
     },

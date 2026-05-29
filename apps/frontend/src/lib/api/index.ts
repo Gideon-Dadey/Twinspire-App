@@ -60,11 +60,30 @@ import type {
   WishlistResponse,
 } from './types';
 
-import type { Address, Brand, Category, Coupon, Order, OrderStatus, Product, PublicUser, Review } from '@twinspire/types';
+import type {
+  Address,
+  Brand,
+  Category,
+  Coupon,
+  Order,
+  OrderStatus,
+  Product,
+  PublicUser,
+  Review,
+} from '@twinspire/types';
 
 type QueryRecord = Record<string, string | number | boolean | undefined | null>;
 
 const isMockMode = (): boolean => env.NEXT_PUBLIC_USE_MOCK_API;
+
+async function revalidateStorefrontAfterCatalogChange(): Promise<void> {
+  if (typeof window === 'undefined') return;
+  try {
+    await fetch('/api/catalog/revalidate', { method: 'POST' });
+  } catch {
+    /* non-fatal */
+  }
+}
 
 export const api = {
   auth: {
@@ -123,9 +142,14 @@ export const api = {
       if (isMockMode()) return mockBackend.begin2faSetup();
       return authedApi.post<TwoFactorSetupResult>('/auth/2fa/setup');
     },
-    async confirm2faSetup(totpCode: string): Promise<{ twoFactorEnabled: boolean; backupCodes: string[] }> {
+    async confirm2faSetup(
+      totpCode: string,
+    ): Promise<{ twoFactorEnabled: boolean; backupCodes: string[] }> {
       if (isMockMode()) return mockBackend.confirm2faSetup(totpCode);
-      return authedApi.post<{ twoFactorEnabled: boolean; backupCodes: string[] }>('/auth/2fa/confirm', { totpCode });
+      return authedApi.post<{ twoFactorEnabled: boolean; backupCodes: string[] }>(
+        '/auth/2fa/confirm',
+        { totpCode },
+      );
     },
     async disable2fa(password: string): Promise<void> {
       if (isMockMode()) return mockBackend.disable2fa(password);
@@ -183,7 +207,9 @@ export const api = {
     },
   },
   orders: {
-    async list(options: { page?: number; perPage?: number; status?: OrderStatus } = {}): Promise<OrderListResponse> {
+    async list(
+      options: { page?: number; perPage?: number; status?: OrderStatus } = {},
+    ): Promise<OrderListResponse> {
       if (isMockMode()) return mockBackend.listOrders(options);
       return authedApi.get<OrderListResponse>('/orders', { query: options });
     },
@@ -204,7 +230,9 @@ export const api = {
     products: {
       async list(query: AdminProductListQuery = {}): Promise<AdminProductsResponse> {
         if (isMockMode()) return adminMockBackend.listProducts(query);
-        return authedApi.get<AdminProductsResponse>('/admin/products', { query: query as QueryRecord });
+        return authedApi.get<AdminProductsResponse>('/admin/products', {
+          query: query as QueryRecord,
+        });
       },
       async get(id: string): Promise<{ product: Product }> {
         if (isMockMode()) return adminMockBackend.getProduct(id);
@@ -212,15 +240,26 @@ export const api = {
       },
       async create(input: AdminUpsertProductInput): Promise<{ product: Product }> {
         if (isMockMode()) return adminMockBackend.createProduct(input);
-        return authedApi.post<{ product: Product }>('/catalog/admin/products', input);
+        const result = await authedApi.post<{ product: Product }>('/catalog/admin/products', input);
+        await revalidateStorefrontAfterCatalogChange();
+        return result;
       },
-      async update(id: string, input: Partial<AdminUpsertProductInput>): Promise<{ product: Product }> {
+      async update(
+        id: string,
+        input: Partial<AdminUpsertProductInput>,
+      ): Promise<{ product: Product }> {
         if (isMockMode()) return adminMockBackend.updateProduct(id, input);
-        return authedApi.patch<{ product: Product }>(`/catalog/admin/products/${id}`, input);
+        const result = await authedApi.patch<{ product: Product }>(
+          `/catalog/admin/products/${id}`,
+          input,
+        );
+        await revalidateStorefrontAfterCatalogChange();
+        return result;
       },
       async remove(id: string): Promise<void> {
         if (isMockMode()) return adminMockBackend.deleteProduct(id);
         await authedApi.delete<void>(`/catalog/admin/products/${id}`);
+        await revalidateStorefrontAfterCatalogChange();
       },
     },
     categories: {
@@ -230,15 +269,29 @@ export const api = {
       },
       async create(input: AdminUpsertCategoryInput): Promise<{ category: Category }> {
         if (isMockMode()) return adminMockBackend.createCategory(input);
-        return authedApi.post<{ category: Category }>('/catalog/admin/categories', input);
+        const result = await authedApi.post<{ category: Category }>(
+          '/catalog/admin/categories',
+          input,
+        );
+        await revalidateStorefrontAfterCatalogChange();
+        return result;
       },
-      async update(id: string, input: Partial<AdminUpsertCategoryInput>): Promise<{ category: Category }> {
+      async update(
+        id: string,
+        input: Partial<AdminUpsertCategoryInput>,
+      ): Promise<{ category: Category }> {
         if (isMockMode()) return adminMockBackend.updateCategory(id, input);
-        return authedApi.patch<{ category: Category }>(`/catalog/admin/categories/${id}`, input);
+        const result = await authedApi.patch<{ category: Category }>(
+          `/catalog/admin/categories/${id}`,
+          input,
+        );
+        await revalidateStorefrontAfterCatalogChange();
+        return result;
       },
       async remove(id: string): Promise<void> {
         if (isMockMode()) return adminMockBackend.deleteCategory(id);
         await authedApi.delete<void>(`/catalog/admin/categories/${id}`);
+        await revalidateStorefrontAfterCatalogChange();
       },
     },
     brands: {
@@ -248,31 +301,54 @@ export const api = {
       },
       async create(input: AdminUpsertBrandInput): Promise<{ brand: Brand }> {
         if (isMockMode()) return adminMockBackend.createBrand(input);
-        return authedApi.post<{ brand: Brand }>('/catalog/admin/brands', input);
+        const result = await authedApi.post<{ brand: Brand }>('/catalog/admin/brands', input);
+        await revalidateStorefrontAfterCatalogChange();
+        return result;
       },
       async update(id: string, input: Partial<AdminUpsertBrandInput>): Promise<{ brand: Brand }> {
         if (isMockMode()) return adminMockBackend.updateBrand(id, input);
-        return authedApi.patch<{ brand: Brand }>(`/catalog/admin/brands/${id}`, input);
+        const result = await authedApi.patch<{ brand: Brand }>(
+          `/catalog/admin/brands/${id}`,
+          input,
+        );
+        await revalidateStorefrontAfterCatalogChange();
+        return result;
       },
       async remove(id: string): Promise<void> {
         if (isMockMode()) return adminMockBackend.deleteBrand(id);
         await authedApi.delete<void>(`/catalog/admin/brands/${id}`);
+        await revalidateStorefrontAfterCatalogChange();
       },
     },
     orders: {
       async list(query: AdminOrderListQuery = {}): Promise<AdminOrdersResponse> {
         if (isMockMode()) return adminMockBackend.listOrders(query);
-        return authedApi.get<AdminOrdersResponse>('/orders/admin/all', { query: query as QueryRecord });
+        return authedApi.get<AdminOrdersResponse>('/orders/admin/all', {
+          query: query as QueryRecord,
+        });
       },
-      async get(id: string): Promise<{ order: Order; customer?: { firstName: string; lastName: string; email: string; id: string } | undefined }> {
+      async get(id: string): Promise<{
+        order: Order;
+        customer?: { firstName: string; lastName: string; email: string; id: string } | undefined;
+      }> {
         if (isMockMode()) {
           const res = await adminMockBackend.getOrder(id);
           return {
             order: res.order,
-            customer: res.customer ? { id: res.customer.id, firstName: res.customer.firstName, lastName: res.customer.lastName, email: res.customer.email } : undefined,
+            customer: res.customer
+              ? {
+                  id: res.customer.id,
+                  firstName: res.customer.firstName,
+                  lastName: res.customer.lastName,
+                  email: res.customer.email,
+                }
+              : undefined,
           };
         }
-        return authedApi.get<{ order: Order; customer?: { id: string; firstName: string; lastName: string; email: string } }>(`/orders/admin/all/${id}`);
+        return authedApi.get<{
+          order: Order;
+          customer?: { id: string; firstName: string; lastName: string; email: string };
+        }>(`/orders/admin/all/${id}`);
       },
       async update(id: string, input: AdminOrderUpdateInput): Promise<{ order: Order }> {
         if (isMockMode()) return adminMockBackend.updateOrder(id, input);
@@ -286,7 +362,9 @@ export const api = {
     coupons: {
       async list(query: AdminCouponListQuery = {}): Promise<AdminCouponsResponse> {
         if (isMockMode()) return adminMockBackend.listCoupons(query);
-        return authedApi.get<AdminCouponsResponse>('/coupons/admin', { query: query as QueryRecord });
+        return authedApi.get<AdminCouponsResponse>('/coupons/admin', {
+          query: query as QueryRecord,
+        });
       },
       async get(id: string): Promise<{ coupon: Coupon }> {
         if (isMockMode()) return adminMockBackend.getCoupon(id);
@@ -296,7 +374,10 @@ export const api = {
         if (isMockMode()) return adminMockBackend.createCoupon(input);
         return authedApi.post<{ coupon: Coupon }>('/coupons/admin', input);
       },
-      async update(id: string, input: Partial<AdminUpsertCouponInput>): Promise<{ coupon: Coupon }> {
+      async update(
+        id: string,
+        input: Partial<AdminUpsertCouponInput>,
+      ): Promise<{ coupon: Coupon }> {
         if (isMockMode()) return adminMockBackend.updateCoupon(id, input);
         return authedApi.patch<{ coupon: Coupon }>(`/coupons/admin/${id}`, input);
       },
@@ -308,7 +389,9 @@ export const api = {
     reviews: {
       async list(query: AdminReviewListQuery = {}): Promise<AdminReviewsResponse> {
         if (isMockMode()) return adminMockBackend.listReviews(query);
-        return authedApi.get<AdminReviewsResponse>('/reviews/admin', { query: query as QueryRecord });
+        return authedApi.get<AdminReviewsResponse>('/reviews/admin', {
+          query: query as QueryRecord,
+        });
       },
       async moderate(id: string, input: AdminModerateReviewInput): Promise<{ review: Review }> {
         if (isMockMode()) return adminMockBackend.moderateReview(id, input);
@@ -322,15 +405,23 @@ export const api = {
     customers: {
       async list(query: AdminCustomerListQuery = {}): Promise<AdminCustomersResponse> {
         if (isMockMode()) return adminMockBackend.listCustomers(query);
-        return authedApi.get<AdminCustomersResponse>('/admin/customers', { query: query as QueryRecord });
+        return authedApi.get<AdminCustomersResponse>('/admin/customers', {
+          query: query as QueryRecord,
+        });
       },
       async get(id: string): Promise<{ customer: AdminCustomerDetail }> {
         if (isMockMode()) return adminMockBackend.getCustomer(id);
         return authedApi.get<{ customer: AdminCustomerDetail }>(`/admin/customers/${id}`);
       },
-      async update(id: string, input: AdminUpdateCustomerInput): Promise<{ customer: AdminCustomerListItem }> {
+      async update(
+        id: string,
+        input: AdminUpdateCustomerInput,
+      ): Promise<{ customer: AdminCustomerListItem }> {
         if (isMockMode()) return adminMockBackend.updateCustomer(id, input);
-        return authedApi.patch<{ customer: AdminCustomerListItem }>(`/admin/customers/${id}`, input);
+        return authedApi.patch<{ customer: AdminCustomerListItem }>(
+          `/admin/customers/${id}`,
+          input,
+        );
       },
     },
     audit: {

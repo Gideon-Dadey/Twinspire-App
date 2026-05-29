@@ -1,8 +1,10 @@
-import type { PaginatedResult, Product } from '@twinspire/types';
+import type { Brand, Category, PaginatedResult, Product } from '@twinspire/types';
 
-import { brands as ALL_BRANDS } from '@/data/brands';
-import { categories as ALL_CATEGORIES, getCategoryBySlug } from '@/data/categories';
-import { products as ALL_PRODUCTS } from '@/data/products';
+import {
+  getStorefrontBrands,
+  getStorefrontCategories,
+  getStorefrontProducts,
+} from '@/lib/catalog/catalog-service';
 
 export type SortKey =
   | 'relevance'
@@ -69,14 +71,19 @@ function inPriceRange(p: Product, min?: number, max?: number): boolean {
   return true;
 }
 
-function applyFilters(input: Product[], query: CatalogQuery): Product[] {
+function applyFilters(
+  input: Product[],
+  query: CatalogQuery,
+  categories: Category[],
+  brands: Brand[],
+): Product[] {
   let result = input;
 
   if (query.categorySlug) {
-    const category = getCategoryBySlug(query.categorySlug);
+    const category = categories.find((c) => c.slug === query.categorySlug);
     if (category) {
       const ids = new Set([category.id]);
-      ALL_CATEGORIES.filter((c) => c.parentId === category.id).forEach((c) => ids.add(c.id));
+      categories.filter((c) => c.parentId === category.id).forEach((c) => ids.add(c.id));
       result = result.filter((p) => p.categoryIds.some((cid) => ids.has(cid)));
     } else {
       result = [];
@@ -85,7 +92,7 @@ function applyFilters(input: Product[], query: CatalogQuery): Product[] {
 
   if (query.brandSlugs && query.brandSlugs.length > 0) {
     const brandIds = new Set(
-      ALL_BRANDS.filter((b) => query.brandSlugs?.includes(b.slug)).map((b) => b.id),
+      brands.filter((b) => query.brandSlugs?.includes(b.slug)).map((b) => b.id),
     );
     result = result.filter((p) => brandIds.has(p.brandId));
   }
@@ -117,9 +124,7 @@ function applySort(input: Product[], sort: SortKey | undefined): Product[] {
     case 'rating_desc':
       return list.sort((a, b) => (b.rating?.average ?? 0) - (a.rating?.average ?? 0));
     case 'newest':
-      return list.sort(
-        (a, b) => (b.releaseDate ?? '').localeCompare(a.releaseDate ?? ''),
-      );
+      return list.sort((a, b) => (b.releaseDate ?? '').localeCompare(a.releaseDate ?? ''));
     case 'popularity':
       return list.sort((a, b) => (b.rating?.count ?? 0) - (a.rating?.count ?? 0));
     case 'relevance':
@@ -128,16 +133,17 @@ function applySort(input: Product[], sort: SortKey | undefined): Product[] {
   }
 }
 
-function computeFacets(forFacets: Product[]): CatalogFacets {
+function computeFacets(forFacets: Product[], brands: Brand[]): CatalogFacets {
   const brandCounts = new Map<string, number>();
   forFacets.forEach((p) => {
     brandCounts.set(p.brandId, (brandCounts.get(p.brandId) ?? 0) + 1);
   });
-  const brandFacets: FacetOption[] = ALL_BRANDS.map((b) => ({
-    value: b.slug,
-    label: b.name,
-    count: brandCounts.get(b.id) ?? 0,
-  }))
+  const brandFacets: FacetOption[] = brands
+    .map((b) => ({
+      value: b.slug,
+      label: b.name,
+      count: brandCounts.get(b.id) ?? 0,
+    }))
     .filter((f) => f.count > 0)
     .sort((a, b) => b.count - a.count);
 
@@ -147,11 +153,13 @@ function computeFacets(forFacets: Product[]): CatalogFacets {
     count: forFacets.filter((p) => (p.rating?.average ?? 0) >= min).length,
   }));
 
-  const conditionFacets: FacetOption[] = ['new', 'refurbished', 'open_box', 'used'].map((c) => ({
-    value: c,
-    label: c.replace('_', ' '),
-    count: forFacets.filter((p) => p.condition === c).length,
-  })).filter((f) => f.count > 0);
+  const conditionFacets: FacetOption[] = ['new', 'refurbished', 'open_box', 'used']
+    .map((c) => ({
+      value: c,
+      label: c.replace('_', ' '),
+      count: forFacets.filter((p) => p.condition === c).length,
+    }))
+    .filter((f) => f.count > 0);
 
   const prices = forFacets.map((p) => p.price.amount);
   const priceRange = {
@@ -162,22 +170,25 @@ function computeFacets(forFacets: Product[]): CatalogFacets {
   return { brands: brandFacets, ratings: ratingFacets, priceRange, conditions: conditionFacets };
 }
 
-export function queryCatalog(query: CatalogQuery = {}): CatalogResult {
+export async function queryCatalog(query: CatalogQuery = {}): Promise<CatalogResult> {
+  const [ALL_PRODUCTS, ALL_CATEGORIES, ALL_BRANDS] = await Promise.all([
+    getStorefrontProducts(),
+    getStorefrontCategories(),
+    getStorefrontBrands(),
+  ]);
+
   const page = Math.max(1, query.page ?? 1);
   const limit = Math.min(MAX_LIMIT, Math.max(1, query.limit ?? DEFAULT_LIMIT));
 
-  /**
-   * For each facet, we compute counts excluding that facet's own filter,
-   * but for simplicity & determinism we compute facets on the categorySlug-only
-   * subset. This matches the UX of "narrowing within a category".
-   */
-  const baseForFacets = applyFilters(ALL_PRODUCTS, {
-    categorySlug: query.categorySlug,
-    q: query.q,
-  });
-  const facets = computeFacets(baseForFacets);
+  const baseForFacets = applyFilters(
+    ALL_PRODUCTS,
+    { categorySlug: query.categorySlug, q: query.q },
+    ALL_CATEGORIES,
+    ALL_BRANDS,
+  );
+  const facets = computeFacets(baseForFacets, ALL_BRANDS);
 
-  const filtered = applyFilters(ALL_PRODUCTS, query);
+  const filtered = applyFilters(ALL_PRODUCTS, query, ALL_CATEGORIES, ALL_BRANDS);
   const sorted = applySort(filtered, query.sort);
 
   const total = sorted.length;

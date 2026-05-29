@@ -69,12 +69,14 @@ export function PaymentForm({ defaultValues, onSubmit, onBack }: PaymentFormProp
           {/* Paystack — Ghana primary */}
           <Label
             htmlFor="payment-paystack"
-            className="border-border bg-card hover:border-primary/40 has-[input:checked]:border-primary flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition-colors"
+            className="border-border bg-card hover:border-primary/40 has-[input:checked]:border-primary flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border px-4 py-3 transition-colors"
           >
             <RadioGroupItem id="payment-paystack" value="paystack" />
-            <Smartphone className="text-muted-foreground size-4" aria-hidden />
-            <span className="text-sm font-medium">Mobile money &amp; local card</span>
-            <span className="bg-primary/10 text-primary ml-auto inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider">
+            <Smartphone className="text-muted-foreground size-4 shrink-0" aria-hidden />
+            <span className="min-w-0 flex-1 text-sm font-medium">
+              Mobile money &amp; local card
+            </span>
+            <span className="bg-primary/10 text-primary inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider">
               Paystack
             </span>
           </Label>
@@ -82,25 +84,25 @@ export function PaymentForm({ defaultValues, onSubmit, onBack }: PaymentFormProp
           {/* Stripe card */}
           <Label
             htmlFor="payment-card"
-            className="border-border bg-card hover:border-primary/40 has-[input:checked]:border-primary flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition-colors"
+            className="border-border bg-card hover:border-primary/40 has-[input:checked]:border-primary flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border px-4 py-3 transition-colors"
           >
             <RadioGroupItem id="payment-card" value="card" />
-            <CreditCard className="text-muted-foreground size-4" aria-hidden />
-            <span className="text-sm font-medium">International card</span>
-            <span className="text-muted-foreground ml-auto text-xs">Visa · Mastercard · Amex</span>
+            <CreditCard className="text-muted-foreground size-4 shrink-0" aria-hidden />
+            <span className="min-w-0 flex-1 text-sm font-medium">International card</span>
+            <span className="text-muted-foreground shrink-0 text-xs">Visa · Mastercard · Amex</span>
           </Label>
 
           {/* PayPal */}
           <Label
             htmlFor="payment-paypal"
-            className="border-border bg-card hover:border-primary/40 has-[input:checked]:border-primary flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition-colors"
+            className="border-border bg-card hover:border-primary/40 has-[input:checked]:border-primary flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border px-4 py-3 transition-colors"
           >
             <RadioGroupItem id="payment-paypal" value="paypal" />
-            <span className="bg-secondary text-secondary-foreground inline-flex h-5 w-12 items-center justify-center rounded-sm text-[10px] font-bold uppercase tracking-wider">
+            <span className="bg-secondary text-secondary-foreground inline-flex h-5 w-12 shrink-0 items-center justify-center rounded-sm text-[10px] font-bold uppercase tracking-wider">
               PayPal
             </span>
-            <span className="text-sm font-medium">Pay with PayPal</span>
-            <span className="text-muted-foreground ml-auto text-xs">Redirected on next step</span>
+            <span className="min-w-0 flex-1 text-sm font-medium">Pay with PayPal</span>
+            <span className="text-muted-foreground shrink-0 text-xs">Redirected on next step</span>
           </Label>
         </RadioGroup>
       </fieldset>
