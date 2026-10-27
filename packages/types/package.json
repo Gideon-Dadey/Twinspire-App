@@ -23,6 +23,6 @@
     "@twinspire/config": "workspace:*",
     "eslint": "^9.13.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.6.3"
+    "typescript": "^7.0.2"
   }
 }
