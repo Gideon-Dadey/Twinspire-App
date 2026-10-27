@@ -27,7 +27,7 @@
     "infra:reset": "docker compose -f docker-compose.yml down -v"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.5.0",
+    "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^19.5.0",
     "@types/node": "^22.7.5",
     "husky": "^9.1.6",
